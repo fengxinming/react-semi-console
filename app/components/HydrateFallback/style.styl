@@ -1,0 +1,231 @@
+.hf-stage
+  --hf-bg-1 #050a16
+  --hf-bg-2 #0b1830
+  --hf-grid rgba(120, 180, 255, 0.07)
+  --hf-glow rgba(0, 112, 204, 0.28)
+  --hf-ring rgba(0, 112, 204, 0.22)
+  --hf-track rgba(140, 180, 255, 0.14)
+  --hf-fg #eaf3ff
+  --hf-muted #8aa4c8
+  --hf-accent #0070cc
+  --hf-accent-2 #4ad9ff
+  position relative
+  display flex
+  align-items center
+  justify-content center
+  min-height 100vh
+  overflow hidden
+  background linear-gradient(155deg, var(--hf-bg-1), var(--hf-bg-2))
+  color var(--hf-fg)
+  font-family Inter, system-ui, -apple-system, 'Segoe UI', sans-serif
+
+@media (prefers-color-scheme light)
+  .hf-stage
+    --hf-bg-1 #f7faff
+    --hf-bg-2 #e4eeff
+    --hf-grid rgba(0, 112, 204, 0.08)
+    --hf-glow rgba(0, 112, 204, 0.16)
+    --hf-ring rgba(0, 112, 204, 0.18)
+    --hf-track rgba(0, 112, 204, 0.14)
+    --hf-fg #10233f
+    --hf-muted #5b7396
+    --hf-accent-2 #0091ff
+
+.hf-stage::before
+  content ''
+  position absolute
+  inset -20%
+  pointer-events none
+  background-image linear-gradient(var(--hf-grid) 1px, transparent 1px), linear-gradient(90deg, var(--hf-grid) 1px, transparent 1px)
+  background-size 42px 42px
+  -webkit-mask-image radial-gradient(ellipse at center, #000 20%, transparent 72%)
+  mask-image radial-gradient(ellipse at center, #000 20%, transparent 72%)
+  animation hf-drift 18s linear infinite
+
+.hf-stage::after
+  content ''
+  position absolute
+  inset 0
+  pointer-events none
+  background radial-gradient(circle at 50% 44%, var(--hf-glow), transparent 58%)
+  animation hf-breathe 4s ease-in-out infinite
+
+.hf-panel
+  position relative
+  z-index 1
+  display flex
+  flex-direction column
+  align-items center
+  gap 22px
+
+.hf-emblem
+  overflow visible
+  filter drop-shadow(0 0 18px var(--hf-glow))
+
+.hf-stop-start
+  stop-color var(--hf-accent)
+
+.hf-stop-end
+  stop-color var(--hf-accent-2)
+
+.hf-ring
+  transform-box view-box
+  transform-origin 60px 60px
+  animation hf-spin 14s linear infinite
+
+.hf-ring circle
+  stroke var(--hf-ring)
+  stroke-width 1
+  stroke-dasharray 2 8
+
+.hf-hex-base
+  stroke var(--hf-ring)
+
+.hf-hex-trace
+  stroke url('#hf-beam')
+  stroke-dasharray 100
+  stroke-dashoffset 0
+  animation hf-draw 1.1s ease-out both
+
+.hf-hex-sweep
+  stroke var(--hf-accent-2)
+  stroke-dasharray 10 90
+  stroke-dashoffset 100
+  filter drop-shadow(0 0 6px var(--hf-accent-2))
+  animation hf-sweep 3s linear infinite
+
+.hf-core
+  fill var(--hf-accent-2)
+  transform-box view-box
+  transform-origin 60px 60px
+  animation hf-pulse 2.4s ease-in-out infinite
+
+.hf-mark
+  stroke var(--hf-fg)
+  stroke-dasharray 100
+  stroke-dashoffset 0
+  animation hf-draw 0.8s ease-out 0.5s both, hf-mark-glow 2.8s ease-in-out 1.5s infinite
+
+.hf-title
+  margin 0
+  color var(--hf-fg)
+  font-size 17px
+  font-weight 600
+  letter-spacing 0.34em
+  text-indent 0.34em
+  animation hf-rise 0.8s ease-out 0.3s both
+
+.hf-sub
+  margin 8px 0 0
+  color var(--hf-muted)
+  font-size 11px
+  letter-spacing 0.18em
+  text-align center
+  text-transform uppercase
+  animation hf-rise 0.8s ease-out 0.5s both
+
+.hf-dots
+  display flex
+  gap 6px
+
+.hf-dots span
+  width 5px
+  height 5px
+  border-radius 50%
+  background var(--hf-accent-2)
+  animation hf-blink 1.2s ease-in-out infinite
+
+.hf-dots span:nth-child(2)
+  animation-delay 0.16s
+
+.hf-dots span:nth-child(3)
+  animation-delay 0.32s
+
+.hf-track
+  width 180px
+  height 2px
+  overflow hidden
+  border-radius 2px
+  background var(--hf-track)
+
+.hf-bar
+  width 40%
+  height 100%
+  border-radius 2px
+  background linear-gradient(90deg, transparent, var(--hf-accent-2), transparent)
+  animation hf-progress 1.6s ease-in-out infinite
+
+@keyframes hf-draw
+  from
+    stroke-dashoffset 100
+
+  to
+    stroke-dashoffset 0
+
+@keyframes hf-sweep
+  from
+    stroke-dashoffset 100
+
+  to
+    stroke-dashoffset 0
+
+@keyframes hf-spin
+  to
+    transform rotate(360deg)
+
+@keyframes hf-pulse
+  0%, 100%
+    transform scale(1)
+    opacity 0.55
+
+  50%
+    transform scale(1.9)
+    opacity 1
+
+@keyframes hf-breathe
+  0%, 100%
+    opacity 0.6
+
+  50%
+    opacity 1
+
+@keyframes hf-drift
+  to
+    transform translate3d(42px, 42px, 0)
+
+@keyframes hf-blink
+  0%, 100%
+    opacity 0.25
+    transform scale(0.8)
+
+  50%
+    opacity 1
+    transform scale(1.25)
+
+@keyframes hf-rise
+  from
+    opacity 0
+    transform translateY(10px)
+
+  to
+    opacity 1
+    transform translateY(0)
+
+@keyframes hf-mark-glow
+  0%, 100%
+    filter drop-shadow(0 0 2px var(--hf-accent))
+
+  50%
+    filter drop-shadow(0 0 10px var(--hf-accent-2))
+
+@keyframes hf-progress
+  from
+    transform translateX(-100%)
+
+  to
+    transform translateX(350%)
+
+@media (prefers-reduced-motion reduce)
+  .hf-stage *, .hf-stage *::before, .hf-stage *::after, .hf-stage::before, .hf-stage::after
+    animation none !important
+    transition none !important

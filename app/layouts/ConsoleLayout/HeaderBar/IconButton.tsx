@@ -1,5 +1,5 @@
 import { forwardRef } from 'react';
-import { Button, Tooltip } from '@arco-design/web-react';
+import { Button, Tooltip } from 'antd';
 import styles from './style.module.styl';
 import type { IconButtonProps } from './types';
 
@@ -29,13 +29,12 @@ const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
         ref={ref}
         icon={icon}
         shape="circle"
-        type="secondary"
         className={cs(styles['icon-button'], className)}
         onClick={onClick}
         {...rest}
       />
     );
-    return tooltip ? <Tooltip content={tooltip}>{btn}</Tooltip> : btn;
+    return tooltip ? <Tooltip title={tooltip}>{btn}</Tooltip> : btn;
   },
 );
 

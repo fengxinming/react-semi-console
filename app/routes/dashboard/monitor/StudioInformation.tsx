@@ -1,4 +1,4 @@
-import { Card, Typography, Form, Input, Button } from '@arco-design/web-react';
+import { Card, Typography, Form, Input, Button } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { useUserStore } from '~/store';
 
@@ -7,8 +7,8 @@ export default function StudioInformation() {
   const user = useUserStore((s) => s.user);
 
   return (
-    <Card bordered={false}>
-      <Typography.Title heading={6}>{t('monitor.title.studioInfo')}</Typography.Title>
+    <Card variant="borderless">
+      <Typography.Title level={5}>{t('monitor.title.studioInfo')}</Typography.Title>
       <Form layout="vertical">
         <Form.Item label={t('monitor.studioInfo.label.studioTitle')} required>
           <Input

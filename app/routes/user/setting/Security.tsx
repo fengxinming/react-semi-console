@@ -1,4 +1,4 @@
-import { Button } from '@arco-design/web-react';
+import { Button } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { useUserStore } from '~/store';
 import styles from './style.module.styl';

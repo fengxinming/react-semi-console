@@ -5,8 +5,12 @@
   left 0
   z-index 99
   box-sizing border-box
-  padding-top 60px
-  background-color var(--color-bg-2)
+  // padding-top 60px
+  background-color var(--ant-color-bg-layout)
+
+  &.no-header
+    padding-top 0
+    min-height 100vh
 
   ::-webkit-scrollbar
     width 12px
@@ -16,10 +20,10 @@
     border 4px solid transparent
     background-clip padding-box
     border-radius 7px
-    background-color var(--color-text-4)
+    background-color var(--ant-color-text-quaternary)
 
   ::-webkit-scrollbar-thumb:hover
-    background-color var(--color-text-3)
+    background-color var(--ant-color-text-tertiary)
 
   &::after
     content ''
@@ -29,16 +33,17 @@
     right -1px
     width 1px
     height 100%
-    background-color var(--color-border)
+    background-color var(--ant-color-border-secondary)
 
-  > :global(.arco-layout-sider-children)
+  // antd Sider 的内容容器 / antd Sider content wrapper
+  > :global(.ant-layout-sider-children)
     overflow-y hidden
 
   .collapse-btn
     height 24px
     width 24px
-    background-color var(--color-fill-1)
-    color var(--color-text-3)
+    background-color var(--ant-color-fill)
+    color var(--ant-color-text-tertiary)
     border-radius 2px
     cursor pointer
     display flex
@@ -49,22 +54,13 @@
     right 12px
 
     &:hover
-      background-color var(--color-fill-3)
+      background-color var(--ant-color-fill-tertiary)
 
 .menu-wrapper
   overflow auto
   height 100%
 
-  :global(.arco-menu-item-inner > a::after), :global(.arco-menu-item > a::after)
-    content ''
-    display block
-    position absolute
-    width 100%
-    height 100%
-    left 0
-    right 0
-    top 0
-    bottom 0
-
-  :global(.arco-menu-inline-header)
+  // antd 子菜单标题 = .ant-menu-submenu-title（原 arco-menu-inline-header 的等价节点）
+  // / antd submenu title = .ant-menu-submenu-title
+  :global(.ant-menu-submenu-title)
     font-weight 500

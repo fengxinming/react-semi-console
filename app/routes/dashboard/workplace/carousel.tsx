@@ -1,4 +1,4 @@
-import { Carousel } from '@arco-design/web-react';
+import { Carousel } from 'antd';
 import styles from './style.module.styl';
 
 const imageSrc = [
@@ -10,7 +10,7 @@ const imageSrc = [
 
 export default function CarouselWidget() {
   return (
-    <Carousel indicatorType="slider" showArrow="never" autoPlay className={styles.carousel}>
+    <Carousel autoplay className={styles.carousel}>
       {imageSrc.map((src) => (
         <div key={src}>
           <img src={src} className={styles['carousel-img']} />

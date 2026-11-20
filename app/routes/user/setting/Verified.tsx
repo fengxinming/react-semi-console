@@ -1,13 +1,4 @@
-import {
-  Descriptions,
-  Table,
-  Typography,
-  Skeleton,
-  Tag,
-  Space,
-  Button,
-  Badge,
-} from '@arco-design/web-react';
+import { Descriptions, Table, Typography, Skeleton, Tag, Space, Button, Badge } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { useEnterpriseQuery, useAuthListQuery } from '~/hooks/api/useUser';
 import type { VerifiedInfo, AuthRecord } from '~/api/types';
@@ -31,20 +22,22 @@ export default function Verified() {
   const { data: enterprise = DEFAULT_ENTERPRISE, isLoading: loading } = useEnterpriseQuery();
   const { data: tableData = [], isLoading: tableLoading } = useAuthListQuery();
 
-  const loadingNode = <Skeleton text={{ rows: 1 }} animation />;
+  const loadingNode = <Skeleton paragraph={{ rows: 1 }} title={false} active />;
 
   return (
     <div className={styles['verified']}>
-      <Typography.Title heading={6}>{t('userSetting.verified.enterprise')}</Typography.Title>
+      <Typography.Title level={5}>{t('userSetting.verified.enterprise')}</Typography.Title>
       <Descriptions
         className={styles['verified-enterprise']}
-        labelStyle={{ textAlign: 'right' }}
-        layout="inline-horizontal"
-        colon="："
+        // antd v6：labelStyle 已废弃，改用 styles.label
+        // / antd v6: labelStyle is deprecated; use styles.label instead
+        styles={{ label: { textAlign: 'right' } }}
+        layout="horizontal"
         column={3}
-        data={Object.entries(enterprise).map(([key, value]) => ({
+        items={Object.entries(enterprise).map(([key, value]) => ({
+          key,
           label: t(`userSetting.verified.label.${key}`),
-          value: loading ? (
+          children: loading ? (
             loadingNode
           ) : typeof value === 'boolean' ? (
             value ? (
@@ -57,7 +50,7 @@ export default function Verified() {
           ),
         }))}
       />
-      <Typography.Title heading={6}>{t('userSetting.verified.records')}</Typography.Title>
+      <Typography.Title level={5}>{t('userSetting.verified.records')}</Typography.Title>
       <Table<AuthRecord>
         rowKey="createdTime"
         columns={[
@@ -72,7 +65,7 @@ export default function Verified() {
           {
             title: t('userSetting.verified.authStatus'),
             dataIndex: 'authStatus',
-            render: (val) =>
+            render: (val: AuthRecord['authStatus']) =>
               val ? (
                 <Badge status="success" text={t('userSetting.verified.status.success')} />
               ) : (
@@ -85,19 +78,18 @@ export default function Verified() {
           },
           {
             title: t('userSetting.verified.operation'),
-            headerCellStyle: { paddingLeft: '15px' },
-            render: (_, record) =>
-              record.authStatus ? (
-                <Button type="text">{t('userSetting.verified.operation.view')}</Button>
-              ) : (
-                <Space>
-                  <Button type="text">{t('userSetting.verified.operation.view')}</Button>
-                  <Button type="text">{t('userSetting.verified.operation.revoke')}</Button>
-                </Space>
-              ),
+            onHeaderCell: () => ({ style: { paddingLeft: '15px' } }),
+            render: (_: unknown, record: AuthRecord) => (
+              <Space>
+                <Button type="link">{t('userSetting.verified.operation.view')}</Button>
+                {record.authStatus ? null : (
+                  <Button type="link">{t('userSetting.verified.operation.revoke')}</Button>
+                )}
+              </Space>
+            ),
           },
         ]}
-        data={tableData}
+        dataSource={tableData}
         loading={tableLoading}
         pagination={false}
       />

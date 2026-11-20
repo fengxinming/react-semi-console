@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Card, Tabs } from '@arco-design/web-react';
+import { Card, Tabs } from 'antd';
 import { useTranslation } from 'react-i18next';
 import InfoHeader from './InfoHeader';
 import InfoForm from './InfoForm';
@@ -13,21 +13,19 @@ export default function UserSetting() {
 
   return (
     <div>
-      <Card bordered={false} className="px-[20px] py-[14px]">
+      <Card variant="borderless" className="px-[20px] py-[14px]">
         <InfoHeader />
       </Card>
-      <Card bordered={false} className="mt-[16px]">
-        <Tabs activeTab={activeTab} onChange={setActiveTab} type="rounded">
-          <Tabs.TabPane key="basic" title={t('userSetting.title.basicInfo')}>
-            <InfoForm />
-          </Tabs.TabPane>
-          <Tabs.TabPane key="security" title={t('userSetting.title.security')}>
-            <Security />
-          </Tabs.TabPane>
-          <Tabs.TabPane key="verified" title={t('userSetting.label.verified')}>
-            <Verified />
-          </Tabs.TabPane>
-        </Tabs>
+      <Card variant="borderless" className="mt-[16px]">
+        <Tabs
+          activeKey={activeTab}
+          onChange={setActiveTab}
+          items={[
+            { key: 'basic', label: t('userSetting.title.basicInfo'), children: <InfoForm /> },
+            { key: 'security', label: t('userSetting.title.security'), children: <Security /> },
+            { key: 'verified', label: t('userSetting.label.verified'), children: <Verified /> },
+          ]}
+        />
       </Card>
     </div>
   );

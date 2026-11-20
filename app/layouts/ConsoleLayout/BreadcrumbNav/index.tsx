@@ -1,21 +1,25 @@
-import { Breadcrumb } from '@arco-design/web-react';
+import { Breadcrumb } from 'antd';
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLayoutStore } from '~/store';
 
 function BreadcrumbNav() {
   const { t } = useTranslation();
-  let menuTrail = useLayoutStore((s) => s.menuTrail);
-  let icon = menuTrail[0]?.icon;
+  const menuTrail = useLayoutStore((s) => s.menuTrail);
+  const icon = menuTrail[0]?.icon;
+
+  // antd v6 已废弃 Breadcrumb.Item / Breadcrumb.Separator（控制台会报 deprecated），
+  // 统一改用 items 数据驱动 API；首项仍是「图标」面包屑，分隔符交给 antd 默认渲染。
+  // / antd v6 deprecates Breadcrumb.Item / Breadcrumb.Separator (logs a deprecation warning);
+  // switch to the `items` API. The first crumb stays the icon-only entry.
+  const items = [
+    ...(icon ? [{ key: menuTrail[0]?.name, title: icon }] : []),
+    ...menuTrail.map(({ name, path }) => ({ key: path, title: t(name) || name })),
+  ];
 
   return (
     <div className="py-[16px]">
-      <Breadcrumb>
-        {icon && <Breadcrumb.Item key={menuTrail[0]?.name}>{icon}</Breadcrumb.Item>}
-        {menuTrail.map(({ name, path }) => (
-          <Breadcrumb.Item key={path}>{t(name) || name}</Breadcrumb.Item>
-        ))}
-      </Breadcrumb>
+      <Breadcrumb items={items} />
     </div>
   );
 }

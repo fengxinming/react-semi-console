@@ -1,5 +1,5 @@
-import { Typography, Result, Button, Link } from '@arco-design/web-react';
-import { IconLink } from '@arco-design/web-react/icon';
+import { Typography, Result, Button } from 'antd';
+import { LinkOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import styles from './style.module.styl';
@@ -19,8 +19,7 @@ export default function ResultError() {
           extra={[
             <Button
               key="back"
-              type="secondary"
-              style={{ marginRight: 16 }}
+              className="mr-[16px]"
               onClick={() => navigate('/dashboard/workplace')}
             >
               {t('error.result.goBack')}
@@ -31,21 +30,21 @@ export default function ResultError() {
           ]}
         />
         <div className={styles['details-wrapper']}>
-          <Typography.Title heading={6} style={{ marginTop: 0 }}>
+          <Typography.Title level={5} className="mt-0">
             {t('error.detailTitle')}
           </Typography.Title>
-          <Typography.Paragraph style={{ marginBottom: 0 }}>
+          <Typography.Paragraph className="mb-0">
             <ol>
               <li>
                 {t('error.detailLine.record')}
-                <Link>
-                  <IconLink />
+                <Typography.Link>
+                  <LinkOutlined />
                   {t('error.detailLine.record.link')}
-                </Link>
+                </Typography.Link>
               </li>
               <li>
                 {t('error.detailLine.auth')}
-                <Link>{t('error.detailLine.auth.link')}</Link>
+                <Typography.Link>{t('error.detailLine.auth.link')}</Typography.Link>
               </li>
             </ol>
           </Typography.Paragraph>

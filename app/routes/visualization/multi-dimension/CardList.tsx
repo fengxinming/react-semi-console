@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
-import { Statistic, Typography, Grid, Card, Skeleton } from '@arco-design/web-react';
-import { IconArrowRise, IconArrowFall } from '@arco-design/web-react/icon';
+import { Statistic, Typography, Row, Col, Card, Skeleton } from 'antd';
+import { RiseOutlined, FallOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import { useLoaderData, useNavigation } from 'react-router';
 import { Column, Line } from '@ant-design/charts';
@@ -10,7 +10,6 @@ import type { CardBlockData } from '~/api/types';
 import type { MultiDimensionLoaderData } from './types';
 import styles from './style.module.styl';
 
-const { Row, Col } = Grid;
 const { Title } = Typography;
 
 function CardBlock(props: CardBlockData) {
@@ -49,29 +48,29 @@ function CardBlock(props: CardBlockData) {
   };
 
   return (
-    <Card bordered={false} className={styles['card-block']}>
+    <Card variant="borderless" className={styles['card-block']}>
       <div className="flex">
         <Statistic
           title={
-            <Title heading={6} className="!m-0">
+            <Title level={5} className="!m-0">
               {title}
             </Title>
           }
           loading={loading}
           value={count}
-          extra={
-            <Skeleton loading={loading} text={{ rows: 1 }} className="w-[100px]" animation>
+          prefix={
+            <Skeleton loading={loading} paragraph={{ rows: 1 }} className="w-[100px]" active>
               <span
                 className={cs(styles['diff'], {
                   [styles['diff-increment']]: increment,
                 })}
               >
                 {diff}
-                {increment ? <IconArrowRise /> : <IconArrowFall />}
+                {increment ? <RiseOutlined /> : <FallOutlined />}
               </span>
             </Skeleton>
           }
-          groupSeparator
+          groupSeparator=","
         />
       </div>
       <div className="w-full h-[80px]">
@@ -85,7 +84,7 @@ function CardBlock(props: CardBlockData) {
   );
 }
 
-/** 内容消费趋势四卡:条目卡 CardBlock 走 props,数据由 clientLoader 提供。 */
+/** 内容消费趋势四卡:条目卡 CardBlock 走 props,数据由路由 loader 提供。 */
 export default function CardList() {
   const { t } = useTranslation();
   const { cardList: data } = useLoaderData<MultiDimensionLoaderData>();

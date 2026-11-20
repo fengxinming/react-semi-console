@@ -4,6 +4,7 @@ import Notification from './Notification';
 import ThemeToggle from './ThemeToggle';
 import FullscreenToggle from './FullscreenToggle';
 import SettingButton from './SettingButton';
+import GithubLink from './GithubLink';
 import UserMenu from './UserMenu';
 import styles from './style.module.styl';
 import Logo from './Logo';
@@ -32,6 +33,9 @@ export default function HeaderBar() {
         </li>
         <li>
           <SettingButton />
+        </li>
+        <li>
+          <GithubLink />
         </li>
         <li>
           <UserMenu />

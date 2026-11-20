@@ -1,5 +1,6 @@
-import { Column, ColumnConfig } from '@ant-design/charts';
-import { Card, Spin, Typography } from '@arco-design/web-react';
+import { Column } from '@ant-design/charts';
+import type { ColumnConfig } from '@ant-design/charts';
+import { Card, Spin, Typography } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { useSettingsStore } from '~/store';
 import { useLoaderData, useNavigation } from 'react-router';
@@ -44,9 +45,9 @@ export default function PublishingRate() {
   };
 
   return (
-    <Card bordered={false} className="w-full">
-      <Title heading={6}>{t('dataAnalysis.title.publishingRate')}</Title>
-      <Spin loading={loading} block className="w-full">
+    <Card variant="borderless" className="w-full">
+      <Title level={5}>{t('dataAnalysis.title.publishingRate')}</Title>
+      <Spin spinning={loading} className="w-full">
         <div className="w-full h-[378px]">
           <Column {...config} theme={theme} />
         </div>

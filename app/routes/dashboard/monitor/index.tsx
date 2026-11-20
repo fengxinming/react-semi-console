@@ -1,4 +1,4 @@
-import { Space } from '@arco-design/web-react';
+import { Space } from 'antd';
 import ChatPanel from './ChatPanel';
 import Studio from './Studio';
 import DataStatistic from './DataStatistic';
@@ -13,13 +13,13 @@ export default function Monitor() {
         <ChatPanel />
       </div>
       <div className="flex-1 px-[16px]">
-        <Space size={16} direction="vertical" className="w-full">
+        <Space size={16} orientation="vertical" className="w-full">
           <Studio />
           <DataStatistic />
         </Space>
       </div>
       <div className="basis-[280px]">
-        <Space size={16} direction="vertical" className="w-full">
+        <Space size={16} orientation="vertical" className="w-full">
           <StudioStatus />
           <QuickOperation />
           <StudioInformation />

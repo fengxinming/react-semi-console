@@ -1,6 +1,6 @@
 import { Bar } from '@ant-design/charts';
 import type { BarConfig } from '@ant-design/charts';
-import { Typography, Card } from '@arco-design/web-react';
+import { Typography, Card } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { useLoaderData } from 'react-router';
 import { useSettingsStore } from '~/store';
@@ -8,7 +8,7 @@ import type { MultiDimensionLoaderData } from './types';
 
 const { Title } = Typography;
 
-/** 今日转赞评:横向条形(参考 HorizontalInterval,单色圆角条)。数据由 clientLoader 提供。 */
+/** 今日转赞评:横向条形(参考 HorizontalInterval,单色圆角条)。数据由路由 loader 提供。 */
 export default function ActivityBar() {
   const theme = useSettingsStore((s) => s.theme);
   const { t } = useTranslation();
@@ -27,8 +27,8 @@ export default function ActivityBar() {
   };
 
   return (
-    <Card bordered={false} className="w-full">
-      <Title heading={6}>{t('multiDAnalysis.card.title.todayActivity')}</Title>
+    <Card variant="borderless" className="w-full">
+      <Title level={5}>{t('multiDAnalysis.card.title.todayActivity')}</Title>
       <div className="w-full h-[176px]">
         <Bar {...config} theme={theme} />
       </div>

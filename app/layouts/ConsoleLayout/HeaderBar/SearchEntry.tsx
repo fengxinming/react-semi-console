@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router';
-import { Input, Modal } from '@arco-design/web-react';
+import { Input, Modal } from 'antd';
+import { SearchOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import { menuRoutes } from '~/config/menu';
 import type { SearchResult } from './types';
@@ -57,18 +58,22 @@ export default function SearchEntry() {
     navigate(key);
   };
 
+  // 只在点击时打开搜索弹窗。Modal 关闭时 rc-dialog 会把焦点还给触发元素，
+  // 若同时监听 onFocus，关闭后焦点回落会立刻再次打开弹窗（表现为点关闭没反应）。
+  // / Open the search modal on click only. rc-dialog restores focus to the trigger element when the
+  // modal closes, so an onFocus handler would reopen it right away (the close button looks dead).
   return (
     <>
-      <Input.Search
+      <Input
         className={`${styles['search-box']}`}
         placeholder={t('navbar.search.placeholder')}
         allowClear
         onClick={() => setSearchOpen(true)}
-        onFocus={() => setSearchOpen(true)}
+        prefix={<SearchOutlined />}
       />
       <Modal
         title={t('navbar.search.title')}
-        visible={searchOpen}
+        open={searchOpen}
         footer={null}
         onCancel={() => setSearchOpen(false)}
         className="w-[520px]"
@@ -78,8 +83,9 @@ export default function SearchEntry() {
           autoFocus
           placeholder={t('navbar.search.placeholder')}
           value={keyword}
-          onChange={setKeyword}
+          onChange={(e) => setKeyword(e.target.value)}
           className="mb-[12px]"
+          prefix={<SearchOutlined />}
         />
         <div className="max-h-[320px] overflow-auto">
           {searchResults.map((r) => (

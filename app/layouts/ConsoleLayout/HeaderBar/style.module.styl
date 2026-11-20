@@ -1,9 +1,9 @@
 .navbar
   display flex
   justify-content space-between
-  border-bottom 1px solid var(--color-border)
+  border-bottom 1px solid var(--ant-color-border-secondary)
   box-sizing border-box
-  background-color var(--color-bg-2)
+  background-color var(--ant-color-bg-layout)
   height 100%
   width 100%
 
@@ -20,7 +20,7 @@
   box-sizing border-box
 
 .logo-name
-  color var(--color-text-1)
+  color var(--ant-color-text)
   font-weight 500
   font-size 20px
   margin-left 10px
@@ -33,12 +33,12 @@
   height 32px
   border-radius 4px
   cursor pointer
-  color var(--color-text-2)
+  color var(--ant-color-text-secondary)
   margin-left 20px
 
   &:hover
-    background var(--color-fill-2)
-    color s('rgb(var(--primary-6))')
+    background var(--ant-color-fill-secondary)
+    color var(--ant-color-primary)
 
 .username
   cursor pointer
@@ -56,52 +56,91 @@
 
   a
     text-decoration none
-    color var(--color-text-1)
+    color var(--ant-color-text)
 
 .menu-wide
   width 640px
 
 .icon-button
   font-size 16px
-  border 1px solid var(--color-border-2)
+  border 1px solid var(--ant-color-border-secondary)
 
   > svg
     vertical-align -3px
 
-// 消息浮层
+// 消息浮层：外框（背景/圆角/阴影）由 antd Popover 容器提供，这里只负责尺寸与滚动，
+// 否则会形成内外两层框，中间多出一圈空白
+// / Notice popup: the outer frame (background/radius/shadow) comes from antd's Popover container;
+// this only handles size and scrolling, otherwise you get a double frame with a blank gutter.
 .notice-panel
   width 400px
   max-height 800px
   overflow-y auto
-  background-color var(--color-bg-popup)
-  border 1px solid var(--color-border-2)
-  border-radius var(--border-radius-medium)
-  box-shadow var(--shadow2-down, 0 4px 10px rgba(0, 0, 0, 0.1))
 
-  :global(.arco-tabs-header-nav)
+  // antd Tabs：头部导航 .ant-tabs-nav，面板区 .ant-tabs-body
+  // / antd Tabs: header nav .ant-tabs-nav, panel area .ant-tabs-body
+  :global(.ant-tabs-nav)
     padding 8px 16px
-    border-bottom 1px solid var(--color-border-2)
+    // .ant-tabs-nav::before 已画好 1px 分隔线，不再重复描边；
+    // 另外清掉 antd 自带的 16px 下外边距，否则标签分隔线与列表之间会空出一条
+    // / .ant-tabs-nav::before already draws the 1px divider, so no extra border;
+    // also clear antd's 16px bottom margin, which would leave a gap above the list
+    margin 0
 
-  :global(.arco-tabs-content)
+  :global(.ant-tabs-body)
     padding-top 0
 
-  :global(.arco-list-item-meta)
-    align-items flex-start
+  // 列表项左右留白与 Tabs 的 16px 对齐（Listy 默认 padding 为 12px 16px，
+  // 这里显式写出来，避免 token 变化后内容贴到弹层边缘）
+  // / Align the list item's horizontal padding with the Tabs' 16px (Listy defaults to
+  // 12px 16px; written out explicitly so a token change cannot push content to the edge)
+  :global(.ant-listy-item)
+    padding 12px 16px
 
-  :global(.arco-list-item-meta-content)
-    width 100%
+    // Listy 默认带 hover 底色与末项分隔线，原 List 没有，这里还原
+    // / Listy ships a hover background and a trailing divider by default, while the previous
+    // List had neither, so both are reverted
+    &:hover
+      background-color transparent
+
+    &:last-child
+      border-bottom none
+
+// Listy 的 itemRender 里自己拼的两栏布局，取代原 List.Item.Meta
+// / Two-column layout composed inside Listy's itemRender, replacing List.Item.Meta
+.notice-item
+  display flex
+  align-items flex-start
+  gap 16px
+  cursor pointer
+
+.notice-item-content
+  flex 1
+  min-width 0
+
+// 取代原 .ant-list-item-meta-title（antd 用 h4，自带 4px 下外边距）
+// / Replaces .ant-list-item-meta-title (antd uses an h4 with a 4px bottom margin)
+.notice-item-title
+  margin 0 0 4px
 
 .notice-empty
   padding 24px 0
   text-align center
-  color var(--color-text-3)
+  color var(--ant-color-text-tertiary)
 
 .notice-content
   white-space nowrap
   overflow hidden
   text-overflow ellipsis
-  color var(--color-text-2)
+  color var(--ant-color-text-secondary)
   font-size 13px
+
+// 取代原 antd 的 .ant-list-footer（它自带 12px 上下内边距，Listy 没有 footer 插槽）
+// / Replaces antd's .ant-list-footer, which carried a 12px vertical padding (Listy has no
+// footer slot)
+.notice-footer
+  display flex
+  padding 12px 0
 
 .notice-footer-item
   display flex
@@ -109,16 +148,15 @@
   width 50%
 
   &:first-child
-    border-right 1px solid var(--color-border-2)
+    border-right 1px solid var(--ant-color-border-secondary)
 
-// 搜索框
+// 搜索框：className 直接落在 antd Input 的根节点上（带 prefix 时即 .ant-input-affix-wrapper），
+// 因此背景与圆角写在 .search-box 自身；内部 input 由 antd 置为 transparent
+// / search input: className lands on antd Input's root (.ant-input-affix-wrapper when it has a
+// prefix), so the background/radius go on .search-box itself; antd keeps the inner input transparent
 .search-box
-  :global(.arco-input-wrapper)
-    background-color var(--color-fill-2)
-    border-radius 16px
-
-  :global(.arco-input-inner-wrapper)
-    border-radius 16px
+  background-color var(--ant-color-fill-secondary)
+  border-radius 16px
 
   svg
     font-size 16px
@@ -129,12 +167,12 @@
   cursor pointer
 
   &:hover
-    background var(--color-fill-2)
+    background var(--ant-color-fill-secondary)
 
 .search-empty
   padding 24px 0
   text-align center
-  color var(--color-text-3)
+  color var(--ant-color-text-tertiary)
 
 .dropdown-icon
   margin-right 8px

@@ -1,5 +1,5 @@
-import { Avatar, Space, Skeleton } from '@arco-design/web-react';
-import { IconCamera, IconLocation, IconUser, IconHome } from '@arco-design/web-react/icon';
+import { Avatar, Space, Skeleton } from 'antd';
+import { EnvironmentOutlined, HomeOutlined, UserOutlined } from '@ant-design/icons';
 import { useUserStore } from '~/store';
 import type { UserText } from './types';
 import styles from './style.module.styl';
@@ -10,12 +10,9 @@ function Text({ loading, children }: UserText) {
       <Skeleton
         className="inline-block"
         loading={loading}
-        text={{
-          rows: 1,
-          style: { width: '100px', height: '20px', marginBottom: '-4px' },
-          width: ['100%'],
-        }}
-        animation
+        paragraph={{ rows: 1, width: ['100%'] }}
+        title={false}
+        active
       >
         {children}
       </Skeleton>
@@ -30,40 +27,32 @@ export default function UserInfoHeader() {
 
   return (
     <div className={styles.header}>
-      <Space size={8} direction="vertical" align="center" className={styles['header-content']}>
-        <Skeleton
-          loading={loading}
-          text={{ rows: 0 }}
-          image={{ style: { width: '64px', height: '64px' }, shape: 'circle' }}
-          animation
-        >
-          <Avatar size={64} triggerIcon={<IconCamera />}>
+      <Space size={8} orientation="vertical" align="center" className={styles['header-content']}>
+        <Skeleton loading={loading} avatar={{ shape: 'circle', size: 64 }} title={false} paragraph={false} active>
+          <Avatar size={64}>
             <img src={userInfo?.avatar} alt="avatar" />
           </Avatar>
         </Skeleton>
         <Skeleton
           loading={loading}
-          text={{
-            rows: 1,
-            style: { width: '100px', height: '24px' },
-            width: ['100%'],
-          }}
-          animation
+          paragraph={{ rows: 1, width: ['100%'] }}
+          title={false}
+          active
         >
           <div className="font-medium text-[16px]/[24px]">{userInfo?.name}</div>
         </Skeleton>
         <div className={styles['user-msg']}>
           <Space size={18}>
             <div className={styles['user-msg']}>
-              <IconUser />
+              <UserOutlined />
               <Text loading={loading}>{userInfo?.jobName}</Text>
             </div>
             <div className={styles['user-msg']}>
-              <IconHome />
+              <HomeOutlined />
               <Text loading={loading}>{userInfo?.organizationName}</Text>
             </div>
             <div className={styles['user-msg']}>
-              <IconLocation />
+              <EnvironmentOutlined />
               <Text loading={loading}>{userInfo?.locationName}</Text>
             </div>
           </Space>

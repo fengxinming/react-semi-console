@@ -1,4 +1,4 @@
-import { Grid, Space } from '@arco-design/web-react';
+import { Row, Col, Space } from 'antd';
 import {
   fetchMultiOverview,
   fetchMultiActivity,
@@ -14,10 +14,8 @@ import ThemeRadar from './ThemeRadar';
 import SourcePie from './SourcePie';
 import styles from './style.module.styl';
 
-const { Row, Col } = Grid;
-
-// 无操作查询：clientLoader 直接拉数据并 return，区块子组件用 useLoaderData 读取
-export async function clientLoader(): Promise<MultiDimensionLoaderData> {
+// 无操作查询：loader 直接拉数据并 return，区块子组件用 useLoaderData 读取
+export async function loader(): Promise<MultiDimensionLoaderData> {
   const [overview, interval, polar, multiPie, cardList] = await Promise.all([
     fetchMultiOverview(),
     fetchMultiActivity(),
@@ -30,7 +28,7 @@ export async function clientLoader(): Promise<MultiDimensionLoaderData> {
 
 export default function MultiDimension() {
   return (
-    <Space size={16} direction="vertical" className="w-full">
+    <Space size={16} orientation="vertical" className="w-full">
       <div className={styles['top-row']}>
         <Row gutter={20}>
           <Col span={16}>

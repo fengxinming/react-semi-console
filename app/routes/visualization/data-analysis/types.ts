@@ -23,7 +23,7 @@ export interface MiniChartProps {
 export const CARD_KEYS = ['visitor', 'content', 'comment', 'share'] as const;
 export const CARD_TYPES = ['line', 'interval', 'line', 'pie'] as const;
 
-/** data-analysis 路由 clientLoader 返回的数据结构，子组件用 useLoaderData 取用。 */
+/** data-analysis 路由 loader 返回的数据结构，子组件用 useLoaderData 取用。 */
 export interface DataAnalysisLoaderData {
   publicOpinion: OverviewItem[];
   contentPublishing: ContentPublishingItem[];

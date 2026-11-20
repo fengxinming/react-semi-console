@@ -1,5 +1,5 @@
 import { Line } from '@ant-design/charts';
-import { Card, Typography, Spin } from '@arco-design/web-react';
+import { Card, Typography, Spin } from 'antd';
 import type { LineConfig } from '@ant-design/charts';
 import { useTranslation } from 'react-i18next';
 import { useSettingsStore } from '~/store';
@@ -32,9 +32,9 @@ export default function PeriodLine() {
   };
 
   return (
-    <Card bordered={false}>
-      <Title heading={6}>{t('dataAnalysis.title.publishingTiming')}</Title>
-      <Spin loading={loading} block={true} className="w-full">
+    <Card variant="borderless">
+      <Title level={5}>{t('dataAnalysis.title.publishingTiming')}</Title>
+      <Spin spinning={loading} className="w-full">
         <div className="w-full h-[370px]">
           <Line {...config} theme={theme} />
         </div>

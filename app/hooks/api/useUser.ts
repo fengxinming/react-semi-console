@@ -27,6 +27,7 @@ export function useSwitchRole() {
     mutationFn: (role: UserRole) => switchRole(role),
     onSuccess: (res, role) => {
       useUserStore.getState().setRole(role, res.permissions);
+      useUserStore.getState().setToken(res.token);
     },
   });
 }

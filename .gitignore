@@ -4,8 +4,10 @@
 
 # React Router
 /.react-router/
-/build/
+/dist/
 
 /.workbuddy/
 /.trae/
 /.qoder/
+
+pnpm-lock.yaml

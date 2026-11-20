@@ -1,6 +1,6 @@
 .search-form-wrapper
   display flex
-  border-bottom 1px solid var(--color-border-1)
+  border-bottom 1px solid var(--ant-color-border-secondary)
   margin-bottom 20px
 
   .right-button
@@ -9,13 +9,15 @@
     justify-content space-between
     padding-left 20px
     margin-bottom 20px
-    border-left 1px solid var(--color-border-2)
+    border-left 1px solid var(--ant-color-border-secondary)
     box-sizing border-box
 
 .search-form
   padding-right 20px
 
-  :global(.arco-form-label-item-left)
+  // antd Form.Item 左对齐标签 = .ant-form-item-label-left
+  // / antd left-aligned form label = .ant-form-item-label-left
+  :global(.ant-form-item-label-left)
     > label
       white-space nowrap
 

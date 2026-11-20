@@ -13,7 +13,7 @@ interface MenuNode {
 }
 
 export interface MenuLeaf extends MenuNode {
-  view?: string;
+  view?: string | ReactNode;
 }
 
 export interface MenuBranch extends MenuNode {

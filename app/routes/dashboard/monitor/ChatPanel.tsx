@@ -7,8 +7,8 @@ import {
   Typography,
   Spin,
   Result,
-} from '@arco-design/web-react';
-import { IconDownload, IconFaceSmileFill } from '@arco-design/web-react/icon';
+} from 'antd';
+import { DownloadOutlined, SmileFilled } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import MessageList from './MessageList';
 import styles from './style.module.styl';
@@ -20,21 +20,23 @@ export default function ChatPanel() {
   const { data: messageList = [], isLoading: loading } = useChatListQuery();
 
   return (
-    <Card bordered={false} className={styles['chat-panel']}>
+    <Card variant="borderless" className={styles['chat-panel']}>
       <div className={styles['chat-panel-header']}>
-        <Typography.Title heading={6}>{t('monitor.title.chatPanel')}</Typography.Title>
+        <Typography.Title level={5}>{t('monitor.title.chatPanel')}</Typography.Title>
         <Space size={8}>
-          <Select className="w-80px" defaultValue="all">
-            <Select.Option value="all">{t('monitor.chat.options.all')}</Select.Option>
-          </Select>
+          <Select
+            className="w-80px"
+            defaultValue="all"
+            // antd v6 废弃了 Select.Option 子组件，改用 options 属性
+            // / antd v6 deprecates the Select.Option child; use the options prop instead
+            options={[{ value: 'all', label: t('monitor.chat.options.all') }]}
+          />
           <Input.Search placeholder={t('monitor.chat.placeholder.searchCategory')} />
-          <Button type="text" iconOnly>
-            <IconDownload />
-          </Button>
+          <Button type="text" icon={<DownloadOutlined />} />
         </Space>
       </div>
       <div className="flex-1 box-border overflow-y-auto my-[20px]">
-        <Spin loading={loading} className="w-full">
+        <Spin spinning={loading} className="w-full">
           {messageList.length === 0 && !loading ? (
             <Result status="404" />
           ) : (
@@ -44,7 +46,7 @@ export default function ChatPanel() {
       </div>
       <div className={styles['chat-panel-footer']}>
         <Space size={8}>
-          <Input suffix={<IconFaceSmileFill />} />
+          <Input suffix={<SmileFilled />} />
           <Button type="primary">{t('monitor.chat.update')}</Button>
         </Space>
       </div>

@@ -1,4 +1,4 @@
-import { Grid, Space } from '@arco-design/web-react';
+import { Row, Col, Space } from 'antd';
 import {
   fetchPopularContents,
   fetchContentPercentage,
@@ -14,10 +14,8 @@ import Announcement from './Announcement';
 import Docs from './Docs';
 import styles from './style.module.styl';
 
-const { Row, Col } = Grid;
-
-// 无操作查询：clientLoader 直接拉数据并 return；Announcement 走 10s 轮询（见 Announcement.tsx）
-export async function clientLoader(): Promise<WorkplaceLoaderData> {
+// 无操作查询：loader 直接拉数据并 return；Announcement 走 10s 轮询（见 Announcement.tsx）
+export async function loader(): Promise<WorkplaceLoaderData> {
   const [popularContents, contentPercentage, overview] = await Promise.all([
     fetchPopularContents(),
     fetchContentPercentage(),
@@ -29,7 +27,7 @@ export async function clientLoader(): Promise<WorkplaceLoaderData> {
 export default function Workplace() {
   return (
     <div className="flex w-full">
-      <Space size={16} direction="vertical" className={styles.left}>
+      <Space size={16} orientation="vertical" className={styles.left}>
         <Overview />
         <Row gutter={16}>
           <Col span={12}>
@@ -40,7 +38,7 @@ export default function Workplace() {
           </Col>
         </Row>
       </Space>
-      <Space className={styles.right} size={16} direction="vertical">
+      <Space className={styles.right} size={16} orientation="vertical">
         <Shortcuts />
         <CarouselWidget />
         <Announcement />

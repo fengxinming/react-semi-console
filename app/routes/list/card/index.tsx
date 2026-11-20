@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Card, Tabs, Input, Typography, Grid } from '@arco-design/web-react';
+import { Card, Tabs, Input, Typography, Row, Col } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { useLoaderData, useNavigation } from 'react-router';
 import { fetchCardList } from '~/api/list';
@@ -10,7 +10,6 @@ import type { CardListData, CardType } from '~/api/types';
 import styles from './style.module.styl';
 
 const { Title } = Typography;
-const { Row, Col } = Grid;
 
 const defaultList: CardItem[] = Array.from({ length: 10 }, () => ({}));
 
@@ -21,8 +20,8 @@ const DEFAULT_DATA: CardListData = {
   rules: defaultList,
 };
 
-// 无操作查询：clientLoader 直接拉数据并 return，组件用 useLoaderData 读取
-export async function clientLoader(): Promise<CardListData> {
+// 无操作查询：loader 直接拉数据并 return，组件用 useLoaderData 读取
+export async function loader(): Promise<CardListData> {
   return fetchCardList();
 }
 
@@ -48,29 +47,29 @@ export default function CardList() {
   );
 
   return (
-    <Card bordered={false}>
-      <Title heading={6}>{t('menu.list.cardList')}</Title>
+    <Card variant="borderless">
+      <Title level={5}>{t('menu.list.cardList')}</Title>
       <Tabs
-        activeTab={activeKey}
-        type="rounded"
+        activeKey={activeKey}
         onChange={setActiveKey}
-        extra={
+        tabBarExtraContent={
           <Input.Search
             className="!w-[240px]"
             placeholder={t(`cardList.tab.${activeKey}.placeholder`)}
           />
         }
-      >
-        <Tabs.TabPane key="all" title={t('cardList.tab.title.all')} />
-        <Tabs.TabPane key="quality" title={t('cardList.tab.title.quality')} />
-        <Tabs.TabPane key="service" title={t('cardList.tab.title.service')} />
-        <Tabs.TabPane key="rules" title={t('cardList.tab.title.rules')} />
-      </Tabs>
+        items={[
+          { key: 'all', label: t('cardList.tab.title.all') },
+          { key: 'quality', label: t('cardList.tab.title.quality') },
+          { key: 'service', label: t('cardList.tab.title.service') },
+          { key: 'rules', label: t('cardList.tab.title.rules') },
+        ]}
+      />
       <div className={styles.container}>
         {activeKey === 'all' ? (
           Object.entries(data).map(([key, list]) => (
             <div key={key}>
-              <Title heading={6}>{t(`cardList.tab.title.${key}`)}</Title>
+              <Title level={5}>{t(`cardList.tab.title.${key}`)}</Title>
               {getCardList(list, key as CardType)}
             </div>
           ))

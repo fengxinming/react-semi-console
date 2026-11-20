@@ -8,6 +8,7 @@ import type {
   PolarData,
   ContentSourceItem,
   CardBlockData,
+  AuthorListResponse,
 } from '~/api/types';
 import { CARD_KEYS, CARD_TYPES } from '~/routes/visualization/data-analysis/types';
 import {
@@ -28,7 +29,7 @@ export async function fetchContentPublishing(): Promise<ContentPublishingItem[]>
   return request<ContentPublishingItem[]>('/data-analysis/content-publishing');
 }
 export async function fetchAuthorList(): Promise<AuthorItem[]> {
-  const res = await request<{ list: AuthorItem[] }>('/data-analysis/author-list');
+  const res = await request<AuthorListResponse>('/data-analysis/author-list');
   return res.list;
 }
 

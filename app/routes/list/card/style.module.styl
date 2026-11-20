@@ -1,12 +1,13 @@
 .container
   :global
-    .arco-list-content
-      overflow-x hidden
+    // arco 的 .arco-list-content / .arco-card-meta-title 在本项目没有对应的 antd 节点
+    // （本页未使用 List / Card.Meta），原规则恒不命中，已删除
+    // / arco's .arco-list-content / .arco-card-meta-title have no antd counterparts here
+    // (this page uses neither List nor Card.Meta), so those rules were removed
 
-    .arco-card-meta-title
-      font-size 14px
-
-    h6.arco-typography
+    // 分组标题由 Typography.Title level={5} 渲染，对应 h5.ant-typography（原写法为 h6）
+    // / group headings come from Typography.Title level={5} → h5.ant-typography
+    h5.ant-typography
       font-size 14px
       margin-top 16px
       margin-bottom 12px
@@ -14,7 +15,9 @@
 .card-block
   margin-bottom 16px
 
-  :global(.arco-card-header)
+  // antd Card 头部 = .ant-card-head（原 arco-card-header）
+  // / antd card head = .ant-card-head
+  :global(.ant-card-head)
     border-bottom none
     height auto
     padding 16px
@@ -37,15 +40,17 @@
     .icon
       height 24px
       width 24px
-      color var(--color-white)
-      background #626aea
+      // 圆形图标底色跟随主题主色，文字用「实底上的文本」token
+      // / icon badge follows the theme primary; text uses the on-solid text token
+      color var(--ant-color-text-light-solid)
+      background var(--ant-color-primary)
       text-align center
       line-height 24px
       border-radius 50%
       margin-right 8px
 
     .more
-      color var(--color-text-4)
+      color var(--ant-color-text-quaternary)
       font-size 16px
       position absolute
       right 16px
@@ -56,22 +61,26 @@
     .more
       opacity 1
 
-  .time, .content > :global(.arco-typography), :global(.arco-descriptions-item-label), :global(.arco-descriptions-item-value)
+  // antd Descriptions 单元格：标签 .ant-descriptions-item-label，内容 .ant-descriptions-item-content
+  // / antd Descriptions cells: label .ant-descriptions-item-label, value .ant-descriptions-item-content
+  .time, .content > :global(.ant-typography), :global(.ant-descriptions-item-label), :global(.ant-descriptions-item-content)
     font-size 12px
     font-weight 400
-    color var(--color-text-3)
+    color var(--ant-color-text-tertiary)
     padding 0
     line-height 20px
 
-  :global(.arco-descriptions-item-value)
-    color var(--color-text-2)
+  :global(.ant-descriptions-item-content)
+    color var(--ant-color-text-secondary)
     padding-left 6px
 
   .content
     height 48px
 
   &-skeleton
-    :global(.arco-skeleton-content .arco-skeleton-text-row:not(:last-child))
+    // antd Skeleton 段落占位行 = .ant-skeleton-section 下的 ul.ant-skeleton-paragraph 的 li
+    // / antd skeleton paragraph rows = li of ul.ant-skeleton-paragraph under .ant-skeleton-section
+    :global(.ant-skeleton-section .ant-skeleton-paragraph > li:not(:last-child))
       height 14px
       margin-bottom 8px
 
@@ -81,9 +90,10 @@
 
   .description
     margin-top 16px
-    color var(--color-text-3)
+    color var(--ant-color-text-tertiary)
     font-weight 400
 
-  :global(.arco-card-body)
+  // antd Card 卡体 / antd card body
+  :global(.ant-card-body)
     padding-top 52px
     padding-bottom 64px

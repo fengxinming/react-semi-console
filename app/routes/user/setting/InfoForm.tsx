@@ -1,13 +1,4 @@
-import {
-  Input,
-  Select,
-  Cascader,
-  Button,
-  Form,
-  Space,
-  Message,
-  Skeleton,
-} from '@arco-design/web-react';
+import { Input, Select, Cascader, Button, Form, Space, Skeleton, App } from 'antd';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useUserStore } from '~/store';
@@ -49,6 +40,7 @@ const cascaderOptions = [
 export default function InfoForm() {
   const { t, i18n } = useTranslation();
   const [form] = Form.useForm<BasicInfoForm>();
+  const { message } = App.useApp();
 
   const user = useUserStore((s) => s.user);
   const loading = !user;
@@ -63,9 +55,9 @@ export default function InfoForm() {
 
   const handleSave = async () => {
     try {
-      const values = await form.validate();
+      const values = await form.validateFields();
       await saveInfo(values);
-      Message.success(t('userSetting.saveSuccess'));
+      message.success(t('userSetting.saveSuccess'));
     } catch {
       /* 校验未通过,不提交 */
     }
@@ -74,7 +66,7 @@ export default function InfoForm() {
   const handleReset = () => form.resetFields();
 
   const loadingNode = (rows = 1) => (
-    <Skeleton text={{ rows, width: Array.from({ length: rows }, () => '100%') }} animation />
+    <Skeleton paragraph={{ rows, width: Array.from({ length: rows }, () => '100%') }} title={false} active />
   );
 
   const lang = i18n.language;
@@ -88,7 +80,7 @@ export default function InfoForm() {
       >
         <Form.Item
           label={t('userSetting.info.email')}
-          field="email"
+          name="email"
           rules={[
             {
               type: 'email',
@@ -105,7 +97,7 @@ export default function InfoForm() {
         </Form.Item>
         <Form.Item
           label={t('userSetting.info.nickName')}
-          field="nickName"
+          name="nickName"
           rules={[{ required: true, message: t('userSetting.info.nickName.placeholder') }]}
         >
           {loading ? (
@@ -116,38 +108,43 @@ export default function InfoForm() {
         </Form.Item>
         <Form.Item
           label={t('userSetting.info.area')}
-          field="rangeArea"
+          name="rangeArea"
           rules={[{ required: true, message: t('userSetting.info.area.placeholder') }]}
         >
           {loading ? (
             loadingNode()
           ) : (
-            <Select options={['中国']} placeholder={t('userSetting.info.area.placeholder')} />
+            <Select
+              options={[{ label: '中国', value: '中国' }]}
+              placeholder={t('userSetting.info.area.placeholder')}
+            />
           )}
         </Form.Item>
         <Form.Item
           label={t('userSetting.info.location')}
-          field="location"
+          name="location"
           initialValue={['BeiJing', 'BeiJing', 'HaiDian']}
           rules={[{ required: true }]}
         >
           {loading ? loadingNode() : <Cascader options={cascaderOptions} />}
         </Form.Item>
-        <Form.Item label={t('userSetting.info.address')} field="address">
+        <Form.Item label={t('userSetting.info.address')} name="address">
           {loading ? (
             loadingNode()
           ) : (
             <Input placeholder={t('userSetting.info.address.placeholder')} />
           )}
         </Form.Item>
-        <Form.Item label={t('userSetting.info.profile')} field="profile">
+        <Form.Item label={t('userSetting.info.profile')} name="profile">
           {loading ? (
             loadingNode(3)
           ) : (
             <Input.TextArea placeholder={t('userSetting.info.profile.placeholder')} />
           )}
         </Form.Item>
-        <Form.Item label=" ">
+        {/* 占位标签列用于对齐按钮；antd 会给 label 后追加冒号（::after），空白 label 会渲染出多余的「:」 */}
+        {/* / Placeholder label column to align the buttons; antd appends a colon via ::after, which renders a stray ":" for a blank label */}
+        <Form.Item label=" " colon={false}>
           <Space>
             <Button type="primary" loading={saving} onClick={handleSave}>
               {t('userSetting.save')}

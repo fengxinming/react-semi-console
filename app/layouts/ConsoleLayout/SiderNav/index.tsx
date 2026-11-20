@@ -1,10 +1,12 @@
-import { Layout } from '@arco-design/web-react';
-import { IconMenuFold, IconMenuUnfold } from '@arco-design/web-react/icon';
+import { Layout } from 'antd';
+import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
 import { useSettingsStore, useLayoutStore } from '~/store';
 import AppMenu from '~/components/AppMenu';
 import type { MenuRoute } from '~/config/types';
 import { memo, useEffect, useState } from 'react';
 import styles from './style.module.styl';
+import type { SiderNavProps } from './types';
+import classNames from 'classnames';
 
 const { Sider } = Layout;
 
@@ -19,7 +21,7 @@ function toOpenKeys(menuTrail: MenuRoute[], lastKeys: string[]): string[] {
   return lastKeys.concat(keys);
 }
 
-function SiderNav() {
+function SiderNav({ className, style }: SiderNavProps = {}) {
   const menuWidth = useSettingsStore((s) => s.menuWidth);
   const collapsed = useLayoutStore((s) => s.collapsed);
   const toggleCollapsed = useLayoutStore((s) => s.toggleCollapsed);
@@ -37,7 +39,8 @@ function SiderNav() {
 
   return (
     <Sider
-      className={styles['layout-sider']}
+      className={classNames(styles['layout-sider'], className)}
+      style={style}
       width={actualWidth}
       collapsed={collapsed}
       onCollapse={toggleCollapsed}
@@ -47,14 +50,14 @@ function SiderNav() {
     >
       <div className={styles['menu-wrapper']}>
         <AppMenu
-          mode="vertical"
+          mode="inline"
           collapse={collapsed}
           openKeys={openKeys}
           onOpenKeysChange={setOpenKeys}
         />
       </div>
-      <div className={styles['collapse-btn']} onClick={() => toggleCollapsed()}>
-        {collapsed ? <IconMenuUnfold /> : <IconMenuFold />}
+      <div className={styles['collapse-btn']} onClick={toggleCollapsed}>
+        {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
       </div>
     </Sider>
   );

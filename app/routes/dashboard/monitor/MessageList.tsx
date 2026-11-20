@@ -1,10 +1,10 @@
-import { Space, Typography } from '@arco-design/web-react';
-import { IconCommand, IconStar } from '@arco-design/web-react/icon';
+import { Space, Typography } from 'antd';
+import { ControlOutlined, StarOutlined } from '@ant-design/icons';
 import classnames from 'classnames';
 import styles from './style.module.styl';
-import type { ChatMessage } from '~/api/types';
+import type { MessageItemProps, MessageListProps } from './types';
 
-function MessageItem({ data }: { data: ChatMessage }) {
+function MessageItem({ data }: MessageItemProps) {
   return (
     <div
       className={classnames({
@@ -12,7 +12,7 @@ function MessageItem({ data }: { data: ChatMessage }) {
         [styles['message-item-collected']]: data.isCollect,
       })}
     >
-      <Space size={4} direction="vertical" className="w-full">
+      <Space size={4} orientation="vertical" className="w-full">
         <Typography.Text type="warning">{data.username}</Typography.Text>
         <Typography.Text>{data.content}</Typography.Text>
         <div className="flex justify-between items-center">
@@ -21,7 +21,7 @@ function MessageItem({ data }: { data: ChatMessage }) {
           </div>
           <div className={styles['message-item-actions']}>
             <div className={styles['message-item-actions-item']}>
-              <IconCommand />
+              <ControlOutlined />
             </div>
             <div
               className={classnames([
@@ -29,7 +29,7 @@ function MessageItem({ data }: { data: ChatMessage }) {
                 styles['message-item-actions-collect'],
               ])}
             >
-              <IconStar />
+              <StarOutlined />
             </div>
           </div>
         </div>
@@ -38,7 +38,7 @@ function MessageItem({ data }: { data: ChatMessage }) {
   );
 }
 
-export default function MessageList({ data }: { data: ChatMessage[] }) {
+export default function MessageList({ data }: MessageListProps) {
   return (
     <div className="h-full overflow-y-auto">
       {data && data.map((item) => <MessageItem key={item.id} data={item} />)}

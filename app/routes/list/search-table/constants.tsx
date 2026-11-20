@@ -1,6 +1,6 @@
-import type { ColumnProps } from '@arco-design/web-react/es/Table/interface';
-import { Button, Typography, Badge } from '@arco-design/web-react';
-import { IconFile, IconFileVideo, IconImage } from '@arco-design/web-react/icon';
+import type { TableColumnType } from 'antd';
+import { Button, Typography, Badge } from 'antd';
+import { FileOutlined, VideoCameraOutlined, PictureOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import styles from './style.module.styl';
 import type { T } from './types';
@@ -11,12 +11,12 @@ export const ContentType = ['图文', '横版短视频', '竖版短视频'];
 export const FilterType = ['规则筛选', '人工'];
 export const Status = ['未上线', '已上线'];
 
-const ContentIcon = [<IconFile key={0} />, <IconFileVideo key={1} />, <IconImage key={2} />];
+const ContentIcon = [<FileOutlined key={0} />, <VideoCameraOutlined key={1} />, <PictureOutlined key={2} />];
 
 export function getColumns(
   t: T,
   callback: (record: Record<string, any>, type: string) => void,
-): ColumnProps[] {
+): TableColumnType<Record<string, any>>[] {
   return [
     {
       title: t('searchTable.columns.id'),
@@ -62,9 +62,9 @@ export function getColumns(
     {
       title: t('searchTable.columns.operations'),
       dataIndex: 'operations',
-      headerCellStyle: { paddingLeft: '15px' },
+      onHeaderCell: () => ({ style: { paddingLeft: '15px' } }),
       render: (_: unknown, record: Record<string, any>) => (
-        <Button type="text" size="small" onClick={() => callback(record, 'view')}>
+        <Button type="link" size="small" onClick={() => callback(record, 'view')}>
           {t('searchTable.columns.operations.view')}
         </Button>
       ),

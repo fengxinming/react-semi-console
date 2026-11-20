@@ -1,4 +1,4 @@
-import { Card, Steps, Typography, Grid, Space, Button, Table, Badge } from '@arco-design/web-react';
+import { Card, Steps, Typography, Row, Col, Space, Button, Table, Badge } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { useLoaderData, useNavigation } from 'react-router';
 import { fetchBasicProfile, fetchAdjustment } from '~/api/profile';
@@ -7,7 +7,7 @@ import ProfileItem from './ProfileItem';
 import type { ProfileLoaderData } from './types';
 import styles from './style.module.styl';
 
-export async function clientLoader(): Promise<ProfileLoaderData> {
+export async function loader(): Promise<ProfileLoaderData> {
   const [data, preData, tableData] = await Promise.all([
     fetchBasicProfile(),
     fetchBasicProfile(),
@@ -17,7 +17,6 @@ export async function clientLoader(): Promise<ProfileLoaderData> {
 }
 
 const { Title } = Typography;
-const { Row, Col } = Grid;
 
 export default function ProfileBasic() {
   const { t } = useTranslation();
@@ -27,33 +26,37 @@ export default function ProfileBasic() {
   return (
     <div className={styles.container}>
       <Card>
-        <Row justify="space-between" align="center">
+        <Row justify="space-between" align="middle">
           <Col span={16}>
-            <Title heading={6}>{t('basicProfile.title.form')}</Title>
+            <Title level={5}>{t('basicProfile.title.form')}</Title>
           </Col>
-          <Col span={8} style={{ textAlign: 'right' }}>
-            <Space>
+          <Col span={8}>
+            <Space className="w-full flex justify-end">
               <Button>{t('basicProfile.cancel')}</Button>
               <Button type="primary">{t('basicProfile.goBack')}</Button>
             </Space>
           </Col>
         </Row>
 
-        <Steps current={data.status} lineless className={styles.steps}>
-          <Steps.Step title={t('basicProfile.steps.commit')} />
-          <Steps.Step title={t('basicProfile.steps.approval')} />
-          <Steps.Step title={t('basicProfile.steps.finish')} />
-        </Steps>
+        <Steps
+          current={data.status}
+          className={styles.steps}
+          items={[
+            { title: t('basicProfile.steps.commit') },
+            { title: t('basicProfile.steps.approval') },
+            { title: t('basicProfile.steps.finish') },
+          ]}
+        />
       </Card>
 
       <ProfileItem data={data} type="current" loading={pending} />
       <ProfileItem data={preData} type="origin" loading={pending} />
 
       <Card>
-        <Title heading={6}>{t('basicProfile.adjustment.record')}</Title>
+        <Title level={5}>{t('basicProfile.adjustment.record')}</Title>
         <Table
           loading={pending}
-          data={tableData}
+          dataSource={tableData}
           columns={[
             {
               dataIndex: 'contentId',
@@ -66,7 +69,7 @@ export default function ProfileBasic() {
             {
               dataIndex: 'status',
               title: t('basicProfile.adjustment.status'),
-              render: (record: AdjustmentItem) =>
+              render: (_: unknown, record: AdjustmentItem) =>
                 record.status ? (
                   <Badge status="success" text={t('basicProfile.adjustment.success')} />
                 ) : (
@@ -79,9 +82,9 @@ export default function ProfileBasic() {
             },
             {
               title: t('basicProfile.adjustment.operation'),
-              headerCellStyle: { paddingLeft: '15px' },
+              onHeaderCell: () => ({ style: { paddingLeft: '15px' } }),
               render: () => (
-                <Button type="text">{t('basicProfile.adjustment.operation.view')}</Button>
+                <Button type="link">{t('basicProfile.adjustment.operation.view')}</Button>
               ),
             },
           ]}

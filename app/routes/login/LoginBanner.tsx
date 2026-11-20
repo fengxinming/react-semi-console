@@ -1,4 +1,4 @@
-import { Carousel } from '@arco-design/web-react';
+import { Carousel } from 'antd';
 import { useTranslation } from 'react-i18next';
 import styles from './style.module.styl';
 import type { BannerItem } from './types';
@@ -16,7 +16,7 @@ export default function LoginBanner() {
   }));
 
   return (
-    <Carousel className={styles.carousel} animation="fade">
+    <Carousel className={styles.carousel} effect="fade">
       {data.map((item) => (
         <div key={item.slogan}>
           <div className={styles['carousel-item']}>

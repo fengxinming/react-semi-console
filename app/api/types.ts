@@ -1,6 +1,9 @@
 // 所有 API 数据契约（请求 / 响应形状）集中定义，供 app/api/* 与路由组件共享。
 // 路由 UI 类型（组件 props、表单形状等）仍留在各自 routes/*/types.ts，不在此文件。
 
+import type { PermMap } from '~/commons/types';
+import type { UserInfo } from '~/store/types';
+
 // ---- user/setting ----
 export interface SaveUserInfoPayload {
   email?: string;
@@ -58,6 +61,22 @@ export interface NewsItem {
   avatar?: string;
 }
 
+/** /user/info 响应：资料 + 身份（roles 取首个作为 role）+ 权限表
+ *  / Response of /user/info: profile + identity (the first item of `roles`) + permission map */
+export interface UserInfoResponse {
+  user: UserInfo;
+  roles: string[];
+  permissions: PermMap;
+}
+
+/** /user/switch-role 响应：切换角色后返回的新权限表
+ *  / Response of /user/switch-role: the new permission map after the role switch */
+export interface SwitchRoleResult {
+  permissions: PermMap;
+  /** 切换后重新签发 token，保证刷新后角色不丢 */
+  token: string;
+}
+
 // ---- 通用指标卡片（visualization/data-analysis + multi-dimension 共用）----
 export interface MetricCardItem {
   name: string;
@@ -90,6 +109,12 @@ export interface AuthorItem {
   time: string;
   contentCount: number;
   clickCount: number;
+}
+
+/** /data-analysis/author-list 响应：作者列表包裹在 list 字段中
+ *  / Response of /data-analysis/author-list: authors wrapped in a `list` field */
+export interface AuthorListResponse {
+  list: AuthorItem[];
 }
 
 export type ChartPoint = { x: number; y: number; name?: string };
@@ -238,6 +263,12 @@ export interface AdjustmentItem {
 export interface LoginValues {
   account: string;
   password: string;
+}
+
+/** 登录 / 注册响应：只返回 token，用户资料随后由 /user/info 拉取
+ *  / Login/register response: returns only the token; profile is fetched from /user/info afterwards */
+export interface AuthTokenResult {
+  token: string;
 }
 
 // ---- notice（顶栏消息中心）----

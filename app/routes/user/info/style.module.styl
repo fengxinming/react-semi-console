@@ -3,14 +3,14 @@
   display flex
   justify-content center
   align-items center
-  color var(--color-text-1)
+  color var(--ant-color-text)
   border-radius 4px
   position relative
 
-  :global(.arco-avatar-trigger-icon-button)
-    color s('rgb(var(--arcoblue-6))')
+  :global(.ant-avatar-trigger-icon-button)
+    color var(--ant-color-primary)
 
-    :global(.arco-icon)
+    :global(.anticon)
       vertical-align -1px
 
   .user-msg
@@ -40,34 +40,59 @@
   cursor pointer
 
   :global
-    .h6.arco-typography
+    h5.ant-typography
       margin-top 0
       margin-bottom 6px
       font-size 14px
 
-    .arco-typography-secondary
+    .ant-typography-secondary
       font-size 12px
       margin-left 12px
 
+// antd v6 起 List 废弃，改用 Listy：列表项类名由 .ant-list-item 变为 .ant-listy-item。
+// Listy 默认给每项加了 hover 底色与末项分隔线，而这两个列表没有交互语义、原 List 也没有，
+// 因此一并还原，保持视觉不变。
+// / antd v6 deprecates List in favor of Listy, whose item class is .ant-listy-item.
+// Listy adds a hover background and a trailing divider by default; these lists are not
+// interactive and the previous List had neither, so both are reverted for visual parity.
 .team-list
-  :global
-    .arco-list-content
-      .arco-list-item
-        padding 8px 0
+  :global(.ant-listy-item)
+    padding 8px 0
 
-        &:last-child
-          padding-bottom 0
+    &:hover
+      background-color transparent
+
+    &:last-child
+      padding-bottom 0
+      border-bottom none
 
 .news-list
-  :global
-    .arco-list-content
-      .arco-list-item
-        padding 24px 4px
+  :global(.ant-listy-item)
+    padding 24px 4px
 
-        &:last-child
-          padding-bottom 4px
+    &:hover
+      background-color transparent
 
-  .list-meta-ellipsis
-    :global(.arco-list-item-meta-content)
-      width 0
-      flex 1
+    &:last-child
+      padding-bottom 4px
+      border-bottom none
+
+// 取代原 List.Item.Meta 的外层：头像 + 内容两栏，间距与原 .ant-list-item-meta-avatar 一致
+// / Replaces the outer part of List.Item.Meta: avatar + content columns, spaced like the former
+// .ant-list-item-meta-avatar
+.list-item
+  display flex
+  align-items flex-start
+  gap 16px
+
+// 取代原 List.Item.Meta 的内容列：撑满剩余宽度并允许子元素收缩，标题/描述才能正常换行省略
+// / Replaces List.Item.Meta's content column: fills the remaining width and lets children
+// shrink, so the title/description can wrap or ellipsize correctly
+.list-item-content
+  flex 1
+  min-width 0
+
+// 取代原 .ant-list-item-meta-title（antd 用 h4，自带 4px 下外边距）
+// / Replaces .ant-list-item-meta-title (antd uses an h4 with a 4px bottom margin)
+.list-item-title
+  margin 0 0 4px

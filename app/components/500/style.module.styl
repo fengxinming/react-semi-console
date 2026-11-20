@@ -1,0 +1,11 @@
+// 异常页外层：让 Result 水平 + 垂直居中。
+// 原写法把 .result 绝对定位且没给 left/right，宽度会退化成内容宽度、位置停在静态左侧，整页因此左偏。
+// / Exception wrapper: center the Result on both axes.
+// The old .result was absolutely positioned without left/right, so its width shrank to its content
+// size and kept its static left position, which pushed the whole page off-center.
+.wrapper
+  display flex
+  align-items center
+  justify-content center
+  background-color var(--ant-color-bg-container)
+  height calc(100vh - 168px)

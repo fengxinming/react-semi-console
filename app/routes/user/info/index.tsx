@@ -1,4 +1,4 @@
-import { Typography, Grid, Link, Result, Card } from '@arco-design/web-react';
+import { Typography, Row, Col, Result, Card } from 'antd';
 import { useTranslation } from 'react-i18next';
 import UserInfoHeader from './UserInfoHeader';
 import MyProject from './MyProject';
@@ -6,7 +6,6 @@ import MyTeam from './MyTeam';
 import LatestNews from './LatestNews';
 
 const { Title } = Typography;
-const { Row, Col } = Grid;
 
 export default function UserInfo() {
   const { t } = useTranslation();
@@ -16,18 +15,18 @@ export default function UserInfo() {
       <UserInfoHeader />
       <Row gutter={16}>
         <Col span={16}>
-          <Card bordered={false} className="mt-[16px]">
+          <Card variant="borderless" className="mt-[16px]">
             <div className="flex justify-between">
-              <Title heading={6}>{t('userInfo.title.project')}</Title>
-              <Link>{t('userInfo.btn.more')}</Link>
+              <Title level={5}>{t('userInfo.title.project')}</Title>
+              <Typography.Link>{t('userInfo.btn.more')}</Typography.Link>
             </div>
             <MyProject />
           </Card>
         </Col>
         <Col span={8}>
-          <Card bordered={false} className="mt-[16px]">
+          <Card variant="borderless" className="mt-[16px]">
             <div className="flex justify-between">
-              <Title heading={6}>{t('userInfo.title.team')}</Title>
+              <Title level={5}>{t('userInfo.title.team')}</Title>
             </div>
             <MyTeam />
           </Card>
@@ -35,18 +34,18 @@ export default function UserInfo() {
       </Row>
       <Row gutter={16}>
         <Col span={16}>
-          <Card bordered={false} className="mt-[16px]">
+          <Card variant="borderless" className="mt-[16px]">
             <div className="flex justify-between">
-              <Title heading={6}>{t('userInfo.title.news')}</Title>
-              <Link>{t('userInfo.btn.all')}</Link>
+              <Title level={5}>{t('userInfo.title.news')}</Title>
+              <Typography.Link>{t('userInfo.btn.all')}</Typography.Link>
             </div>
             <LatestNews />
           </Card>
         </Col>
         <Col span={8}>
-          <Card bordered={false} className="mt-[16px]">
+          <Card variant="borderless" className="mt-[16px]">
             <div className="flex justify-between">
-              <Title heading={6}>{t('userInfo.title.notice')}</Title>
+              <Title level={5}>{t('userInfo.title.notice')}</Title>
             </div>
             <Result
               status="404"

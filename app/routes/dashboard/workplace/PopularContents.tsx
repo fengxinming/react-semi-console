@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { Link, Card, Radio, Table, Typography } from '@arco-design/web-react';
-import { IconCaretDown, IconCaretUp } from '@arco-design/web-react/icon';
+import { Card, Radio, Table, Typography } from 'antd';
+import { CaretDownOutlined, CaretUpOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import { useLoaderData, useNavigation } from 'react-router';
 import type { WorkplaceLoaderData } from './types';
@@ -8,7 +8,9 @@ import type { PopularItem } from '~/api/types';
 
 import styles from './style.module.styl';
 
-// 热门内容榜：由 clientLoader 提供数据，这里直接 useLoaderData 取用
+const { Title, Paragraph, Link } = Typography;
+
+// 热门内容榜：由路由 loader 提供数据，这里直接 useLoaderData 取用
 const TITLES = [
   '经济日报:财政政策要精准提升效能',
   '"双12"遇冷消费者厌倦了电商平台的促销"套路"',
@@ -37,9 +39,9 @@ export default function PopularContents() {
       title: t('workplace.column.title'),
       dataIndex: 'title',
       render: (x: string) => (
-        <Typography.Paragraph className="!m-0" ellipsis>
+        <Paragraph className="!m-0" ellipsis>
           {x}
-        </Typography.Paragraph>
+        </Paragraph>
       ),
     },
     {
@@ -58,9 +60,9 @@ export default function PopularContents() {
           {`${(text * 100).toFixed(2)}%`}
           <span className="ml-[4px]">
             {text < 0 ? (
-              <IconCaretUp className={styles['caret-green']} />
+              <CaretUpOutlined className={styles['caret-green']} />
             ) : (
-              <IconCaretDown className={styles['caret-red']} />
+              <CaretDownOutlined className={styles['caret-red']} />
             )}
           </span>
         </span>
@@ -69,15 +71,15 @@ export default function PopularContents() {
   ];
 
   return (
-    <Card bordered={false}>
+    <Card variant="borderless">
       <div className="flex justify-between">
-        <Typography.Title heading={6}>{t('workplace.popularContents')}</Typography.Title>
+        <Title level={5}>{t('workplace.popularContents')}</Title>
         <Link>{t('workplace.seeMore')}</Link>
       </div>
       <Radio.Group
-        type="button"
+        optionType="button"
         value={type}
-        onChange={setType}
+        onChange={(e) => setType(e.target.value)}
         options={[
           { label: t('workplace.text'), value: 0 },
           { label: t('workplace.image'), value: 1 },
@@ -88,9 +90,9 @@ export default function PopularContents() {
       <Table
         rowKey="rank"
         columns={columns}
-        data={filtered}
+        dataSource={filtered}
         loading={loading}
-        tableLayoutFixed
+        tableLayout="fixed"
         pagination={{ pageSize: 5, simple: true }}
       />
     </Card>

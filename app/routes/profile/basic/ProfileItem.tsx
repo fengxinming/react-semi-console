@@ -1,8 +1,8 @@
 import type { ProfileItemProps, ProfileBlockItem } from './types';
-import { Descriptions, Card, Skeleton } from '@arco-design/web-react';
+import { Descriptions, Card, Skeleton } from 'antd';
 import { useTranslation } from 'react-i18next';
 
-const skeleton = <Skeleton text={{ rows: 1, style: { width: '200px' } }} animation />;
+const skeleton = <Skeleton paragraph={{ rows: 1, style: { width: '200px' } }} active />;
 
 export default function ProfileItem({ data, type, loading }: ProfileItemProps) {
   const { t } = useTranslation();
@@ -77,11 +77,17 @@ export default function ProfileItem({ data, type, loading }: ProfileItemProps) {
         {blockDataList.map(({ title: blockTitle, data: blockData }, index) => (
           <Descriptions
             key={blockTitle}
-            colon=":"
-            labelStyle={{ textAlign: 'right', width: 200, paddingRight: 10 }}
-            valueStyle={{ width: 400 }}
+            colon
+            // antd v6：labelStyle / contentStyle 已废弃，改用 styles.label / styles.content
+            // / antd v6: labelStyle / contentStyle are deprecated; use styles.label / styles.content
+            styles={{
+              label: { textAlign: 'right', width: 200, paddingRight: 10 },
+              content: { width: 400 },
+            }}
             title={blockTitle}
-            data={loading ? blockData.map((item) => ({ ...item, value: skeleton })) : blockData}
+            items={(loading ? blockData.map((item) => ({ ...item, value: skeleton })) : blockData).map(
+              (item) => ({ label: item.label, children: item.value }),
+            )}
             style={index > 0 ? { marginTop: 20 } : {}}
           />
         ))}

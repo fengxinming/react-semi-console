@@ -1,6 +1,5 @@
 import request from '~/commons/request';
-import type { PermMap } from '~/commons/types';
-import type { UserInfo, UserFullData, UserRole } from '~/store/types';
+import type { UserFullData, UserRole } from '~/store/types';
 import type {
   SaveUserInfoPayload,
   VerifiedInfo,
@@ -8,10 +7,12 @@ import type {
   ProjectItem,
   TeamItem,
   NewsItem,
+  UserInfoResponse,
+  SwitchRoleResult,
 } from './types';
 
 export async function fetchUser(): Promise<UserFullData> {
-  const res = await request<{ user: UserInfo; roles: string[]; permissions: PermMap }>('/user/info');
+  const res = await request<UserInfoResponse>('/user/info');
   return {
     user: res.user,
     role: (res.roles?.[0] ?? 'user') as UserRole,
@@ -23,8 +24,8 @@ export async function saveInfo(values: SaveUserInfoPayload): Promise<string> {
   return request<string>('/user/saveInfo', { method: 'POST', data: values });
 }
 
-export async function switchRole(role: UserRole): Promise<{ permissions: PermMap }> {
-  return request<{ permissions: PermMap }>('/user/switch-role', {
+export async function switchRole(role: UserRole): Promise<SwitchRoleResult> {
+  return request<SwitchRoleResult>('/user/switch-role', {
     method: 'POST',
     data: { role },
   });

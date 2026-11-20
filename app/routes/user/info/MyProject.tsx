@@ -1,29 +1,34 @@
-import { Grid, Card, Avatar, Typography, Skeleton } from '@arco-design/web-react';
+import { Row, Col, Card, Avatar, Typography, Skeleton } from 'antd';
 import { useProjectsQuery } from '~/hooks/api/useUser';
 import type { ProjectItem } from '~/api/types';
 import type { ProjectCardProps } from './types';
 import styles from './style.module.styl';
 
-const { Row, Col } = Grid;
 const { Text, Title } = Typography;
 
 function ProjectCard(props: ProjectCardProps) {
   const { loading, contributors, title, enTitle, contributorsLength } = props;
 
+  // antd v6 废弃了 Card 的 bordered，平替是 variant：
+  // 裸 bordered（等价 true）→ variant="outlined"，bordered={false} → variant="borderless"。
+  // 这里原来是裸 bordered，故写 outlined。
+  // / antd v6 deprecates Card's `bordered` in favor of `variant`: a bare `bordered`
+  // (equivalent to true) maps to variant="outlined"; bordered={false} maps to
+  // variant="borderless". This was a bare `bordered`, hence outlined.
   return (
-    <Card className={styles['project-wrapper']} bordered size="small">
-      <Skeleton loading={loading} text={{ rows: 1, className: 'h-[20px]' }} animation>
-        <Title heading={6}>{title}</Title>
+    <Card variant="outlined" className={styles['project-wrapper']} size="small">
+      <Skeleton loading={loading} paragraph={{ rows: 1 }} title={false} active>
+        <Title level={5}>{title}</Title>
       </Skeleton>
 
-      <Skeleton loading={loading} text={{ rows: 1 }} animation>
+      <Skeleton loading={loading} paragraph={{ rows: 1 }} title={false} active>
         <Text ellipsis className="!m-0">
           {enTitle}
         </Text>
       </Skeleton>
 
       <div className="mt-[22px]">
-        <Skeleton loading={loading} text={{ rows: 1, style: { height: 24 } }} animation>
+        <Skeleton loading={loading} paragraph={{ rows: 1 }} title={false} active>
           <Avatar.Group size={24}>
             {(contributors ?? []).map((item) => (
               <Avatar key={item.avatar}>
@@ -46,7 +51,7 @@ export default function MyProject() {
     <Row gutter={12}>
       {list.map((item: ProjectItem, index) => (
         <Col
-          key={item.title}
+          key={item.title || index}
           span={8}
           className={index > list.length - 4 && index < list.length ? 'mt-[16px]' : undefined}
         >

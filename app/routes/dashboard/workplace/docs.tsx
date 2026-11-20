@@ -1,4 +1,4 @@
-import { Link, Card, Typography } from '@arco-design/web-react';
+import { Card, Typography } from 'antd';
 import { useTranslation } from 'react-i18next';
 import styles from './style.module.styl';
 
@@ -13,16 +13,16 @@ export default function Docs() {
   const { t } = useTranslation();
 
   return (
-    <Card bordered={false}>
+    <Card variant="borderless">
       <div className="flex justify-between">
-        <Typography.Title heading={6}>{t('workplace.docs')}</Typography.Title>
-        <Link>{t('workplace.seeMore')}</Link>
+        <Typography.Title level={5}>{t('workplace.docs')}</Typography.Title>
+        <Typography.Link>{t('workplace.seeMore')}</Typography.Link>
       </div>
       <div className={styles.docs}>
         {Object.entries(links).map(([key, href]) => (
-          <Link key={key} className={styles['doc-link']} href={href} target="_blank">
+          <Typography.Link key={key} className={styles['doc-link']} href={href} target="_blank">
             {t(`workplace.${key}`)}
-          </Link>
+          </Typography.Link>
         ))}
       </div>
     </Card>

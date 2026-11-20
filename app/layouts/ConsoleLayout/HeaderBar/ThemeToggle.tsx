@@ -1,4 +1,4 @@
-import { IconMoonFill, IconSunFill } from '@arco-design/web-react/icon';
+import { MoonFilled, SunFilled } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import { useSettingsStore } from '~/store';
 import IconButton from './IconButton';
@@ -10,7 +10,7 @@ export default function ThemeToggle() {
 
   return (
     <IconButton
-      icon={isDark ? <IconSunFill /> : <IconMoonFill />}
+      icon={isDark ? <SunFilled /> : <MoonFilled />}
       tooltip={t(isDark ? 'settings.navbar.theme.toLight' : 'settings.navbar.theme.toDark')}
       onClick={toggleDark}
     />

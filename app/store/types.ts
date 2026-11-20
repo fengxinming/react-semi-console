@@ -2,19 +2,25 @@ import type { PermMap } from '~/commons/types';
 import type { MenuRoute } from '~/config/types';
 
 export interface LayoutUiState {
+  currentURL: URL;
   collapsed: boolean;
   settingOpen: boolean;
   menuTrail: MenuRoute[];
   /** 按当前权限过滤后的可用菜单，由 rebuildMenu 重算（不再每渲染 useMemo） */
   permissionMenu: MenuRoute[];
+  tabs: TabItem[];
+  activeKey: string;
 
-  setCollapsed: (v: boolean) => void;
+  setCurrentHref: (v: string) => void;
   toggleCollapsed: () => void;
   openSetting: () => void;
   closeSetting: () => void;
-  setMenuTrail: (v: MenuRoute[]) => void;
+  updateMenuTrail: (pathname: string, menus: MenuRoute[]) => void;
   /** 获取/变更权限后调用，用最新 permissions 重算 available 菜单 */
   rebuildMenu: (permissions: PermMap) => void;
+  setActive: (key: string, title?: string) => boolean;
+  addTab: (key: string, title: string) => void;
+  removeTab: (key: string) => string;
 }
 
 export type Language = 'zh-CN' | 'en-US';
@@ -39,14 +45,6 @@ export interface TabItem {
   key: string;
   title: string;
   closable?: boolean;
-}
-
-export interface TabsState {
-  tabs: TabItem[];
-  activeKey: string;
-  setActive: (key: string, title?: string) => boolean;
-  addTab: (key: string, title: string) => void;
-  removeTab: (key: string) => string;
 }
 
 /** 纯用户资料（不含身份/权限），与 role/permissions 严格分离 */

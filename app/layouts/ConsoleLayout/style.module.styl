@@ -15,11 +15,16 @@ $layout-max-width = 1100px
     z-index 100
 
   &-content
-    background-color var(--color-fill-2)
+    background-color var(--ant-color-fill-secondary)
+    padding-top $nav-size-height
     min-height calc(100vh - $nav-size-height)
     transition padding-left 0.2s
     box-sizing border-box
     overflow-x hidden
+
+    &.no-header
+      padding-top 0
+      min-height 100vh
 
     &-wrapper
       padding 16px 20px 0

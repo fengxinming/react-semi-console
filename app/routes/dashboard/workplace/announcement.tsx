@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { Link, Card, Skeleton, Tag, Typography } from '@arco-design/web-react';
+import { Card, Skeleton, Tag, Typography } from 'antd';
 import { useTranslation } from 'react-i18next';
 import styles from './style.module.styl';
 import { fetchAnnouncement, dashboardKeys } from '~/api/dashboard';
@@ -7,13 +7,13 @@ import { fetchAnnouncement, dashboardKeys } from '~/api/dashboard';
 function getTagColor(type: string) {
   switch (type) {
     case 'activity':
-      return 'orangered';
+      return 'volcano';
     case 'info':
       return 'cyan';
     case 'notice':
-      return 'arcoblue';
+      return 'blue';
     default:
-      return 'arcoblue';
+      return 'blue';
   }
 }
 
@@ -27,16 +27,16 @@ export default function Announcement() {
   });
 
   return (
-    <Card bordered={false}>
+    <Card variant="borderless">
       <div className="flex justify-between">
-        <Typography.Title heading={6}>{t('workplace.announcement')}</Typography.Title>
-        <Link>{t('workplace.seeMore')}</Link>
+        <Typography.Title level={5}>{t('workplace.announcement')}</Typography.Title>
+        <Typography.Link>{t('workplace.seeMore')}</Typography.Link>
       </div>
-      <Skeleton loading={loading} text={{ rows: 5, width: '100%' }} animation>
+      <Skeleton loading={loading} paragraph={{ rows: 5, width: '100%' }} title={false} active>
         <div>
           {data.map((d) => (
             <div key={d.key} className={styles['announcement-item']}>
-              <Tag color={getTagColor(d.type)} size="small">
+              <Tag color={getTagColor(d.type)}>
                 {t(`workplace.${d.type}`)}
               </Tag>
               <span className={styles['announcement-text']}>{d.content}</span>

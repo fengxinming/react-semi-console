@@ -1,18 +1,15 @@
 import dayjs from 'dayjs';
 import type { Dayjs } from 'dayjs';
-import { Form, Input, Select, DatePicker, Button, Grid } from '@arco-design/web-react';
-import { IconRefresh, IconSearch } from '@arco-design/web-react/icon';
+import { Form, Input, Select, DatePicker, Button, Row, Col } from 'antd';
+import { ReloadOutlined, SearchOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import { ContentType, FilterType, Status } from './constants';
 import styles from './style.module.styl';
-import { SearchFormProps } from './types';
-
-const { Row, Col } = Grid;
-const { useForm } = Form;
+import type { SearchFormProps } from './types';
 
 export default function SearchForm({ onSearch }: SearchFormProps) {
   const { t, i18n } = useTranslation();
-  const [form] = useForm();
+  const [form] = Form.useForm();
 
   const colSpan = i18n.language === 'zh-CN' ? 8 : 12;
 
@@ -36,17 +33,17 @@ export default function SearchForm({ onSearch }: SearchFormProps) {
       >
         <Row gutter={24}>
           <Col span={colSpan}>
-            <Form.Item label={t('searchTable.columns.id')} field="id">
+            <Form.Item label={t('searchTable.columns.id')} name="id">
               <Input placeholder={t('searchForm.id.placeholder')} allowClear />
             </Form.Item>
           </Col>
           <Col span={colSpan}>
-            <Form.Item label={t('searchTable.columns.name')} field="name">
+            <Form.Item label={t('searchTable.columns.name')} name="name">
               <Input placeholder={t('searchForm.name.placeholder')} allowClear />
             </Form.Item>
           </Col>
           <Col span={colSpan}>
-            <Form.Item label={t('searchTable.columns.contentType')} field="contentType">
+            <Form.Item label={t('searchTable.columns.contentType')} name="contentType">
               <Select
                 placeholder={t('searchForm.all.placeholder')}
                 options={ContentType.map((item, index) => ({ label: item, value: index }))}
@@ -56,7 +53,7 @@ export default function SearchForm({ onSearch }: SearchFormProps) {
             </Form.Item>
           </Col>
           <Col span={colSpan}>
-            <Form.Item label={t('searchTable.columns.filterType')} field="filterType">
+            <Form.Item label={t('searchTable.columns.filterType')} name="filterType">
               <Select
                 placeholder={t('searchForm.all.placeholder')}
                 options={FilterType.map((item, index) => ({ label: item, value: index }))}
@@ -66,16 +63,16 @@ export default function SearchForm({ onSearch }: SearchFormProps) {
             </Form.Item>
           </Col>
           <Col span={colSpan}>
-            <Form.Item label={t('searchTable.columns.createdTime')} field="createdTime">
+            <Form.Item label={t('searchTable.columns.createdTime')} name="createdTime">
               <DatePicker.RangePicker
                 allowClear
-                style={{ width: '100%' }}
+                className="w-full"
                 disabledDate={(current: Dayjs) => current.isAfter(dayjs())}
               />
             </Form.Item>
           </Col>
           <Col span={colSpan}>
-            <Form.Item label={t('searchTable.columns.status')} field="status">
+            <Form.Item label={t('searchTable.columns.status')} name="status">
               <Select
                 placeholder={t('searchForm.all.placeholder')}
                 options={Status.map((item, index) => ({ label: item, value: index }))}
@@ -87,10 +84,10 @@ export default function SearchForm({ onSearch }: SearchFormProps) {
         </Row>
       </Form>
       <div className={styles['right-button']}>
-        <Button type="primary" icon={<IconSearch />} onClick={handleSubmit}>
+        <Button type="primary" icon={<SearchOutlined />} onClick={handleSubmit}>
           {t('searchTable.form.search')}
         </Button>
-        <Button icon={<IconRefresh />} onClick={handleReset}>
+        <Button icon={<ReloadOutlined />} onClick={handleReset}>
           {t('searchTable.form.reset')}
         </Button>
       </div>

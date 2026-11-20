@@ -1,10 +1,17 @@
 .container
   display flex
   height 100vh
+  // 右侧表单区底色：antd colorBgContainer（浅色 #FFFFFF / 深色由 darkAlgorithm 推导）；
+  // 显式声明，避免依赖 html/body（不在 cssVar 作用域内，取不到变量）
+  // / right-hand form panel background (antd colorBgContainer)
+  background-color var(--ant-color-bg-container)
 
   .banner
     width 550px
     background linear-gradient(163.85deg, #1d2129 0%, #00308f 100%)
+    // 窄视口下允许 banner 收缩、内容裁切，避免右侧表单被挤出视口（对齐参考站行为）
+    // / allow banner to shrink on narrow viewports so the form is never pushed off-screen
+    overflow hidden
 
   .content
     flex 1
@@ -29,7 +36,9 @@
     margin-left 4px
     margin-right 4px
     font-size 20px
-    color var(--color-text-1)
+    // logo 固定在深色 banner 上，用 antd colorTextLightSolid（实色/深色背景上的文字）
+    // / the logo sits on the dark banner; antd token for text on a solid background
+    color var(--ant-color-text-light-solid)
 
 .banner
   display flex
@@ -53,19 +62,27 @@
     flex-direction column
     justify-content center
     align-items center
-    height 100%
+    // antd Carousel(slick) fade 模式下 slide 为 absolute 定位，height:100% 参照链断裂导致内容贴顶；
+    // 用 100vh 显式撑满（banner 即 100vh），恢复垂直居中对齐参考站
+    // / fade-mode slides are absolutely positioned so height:100% collapses;
+    // explicit 100vh restores vertical centering to match the reference site
+    height 100vh
 
   &-title
     font-weight 500
     font-size 20px
     line-height 28px
-    color var(--color-fill-1)
+    // 位于深色 banner 上，用 antd colorTextLightSolid / text on the dark banner → colorTextLightSolid
+    color var(--ant-color-text-light-solid)
 
   &-sub-title
     margin-top 8px
     font-size 14px
     line-height 22px
-    color var(--color-text-3)
+    // 位于深色 banner 上；同 token 降不透明度表达次级文字
+    // / on the dark banner; same token with reduced opacity for secondary emphasis
+    color var(--ant-color-text-light-solid)
+    opacity 0.65
 
   &-image
     margin-top 30px
@@ -78,13 +95,13 @@
   &-title
     font-size 24px
     font-weight 500
-    color var(--color-text-1)
+    color var(--ant-color-text)
     line-height 32px
 
   &-sub-title
     font-size 16px
     line-height 24px
-    color var(--color-text-3)
+    color var(--ant-color-text-tertiary)
 
   &-register-btn
-    color var(--color-text-3) !important
+    color var(--ant-color-text-tertiary) !important

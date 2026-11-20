@@ -1,32 +1,41 @@
-import { Message, Select } from '@arco-design/web-react';
-import { IconLanguage } from '@arco-design/web-react/icon';
+import { App, Dropdown } from 'antd';
+import { GlobalOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
-import { Language, useSettingsStore } from '~/store';
+import { useSettingsStore } from '~/store';
 import IconButton from './IconButton';
+import type { Language } from '~/store/types';
 
 export default function LangSelect() {
   const { t } = useTranslation();
   const language = useSettingsStore((s) => s.lang);
   const setSettings = useSettingsStore((s) => s.setSettings);
+  const { message } = App.useApp();
+
+  const items = [
+    {
+      key: 'zh-CN',
+      label: '中文',
+    },
+    {
+      key: 'en-US',
+      label: 'English',
+    },
+  ];
 
   return (
-    <Select
-      triggerElement={<IconButton icon={<IconLanguage />} />}
-      options={[
-        { label: '中文', value: 'zh-CN' },
-        { label: 'English', value: 'en-US' },
-      ]}
-      value={language}
-      triggerProps={{
-        autoAlignPopupWidth: false,
-        autoAlignPopupMinWidth: true,
-        position: 'br',
+    <Dropdown
+      trigger={['hover']}
+      menu={{
+        items,
+        selectable: true,
+        selectedKeys: [language],
+        onClick: ({ key }) => {
+          setSettings({ lang: key as Language });
+          message.info(t('settings.language.tip'));
+        },
       }}
-      trigger="hover"
-      onChange={(value: Language) => {
-        setSettings({ lang: value });
-        Message.info(t('settings.language.tip'));
-      }}
-    />
+    >
+      <IconButton icon={<GlobalOutlined />} />
+    </Dropdown>
   );
 }

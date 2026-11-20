@@ -1,4 +1,4 @@
-import { Card, Spin, Typography } from '@arco-design/web-react';
+import { Card, Spin, Typography } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { useSettingsStore } from '~/store';
 import { useLoaderData, useNavigation } from 'react-router';
@@ -6,7 +6,7 @@ import type { WorkplaceLoaderData } from './types';
 import { Pie } from '@ant-design/charts';
 import type { PercentageItem } from '~/api/types';
 
-/** 内容占比：由 clientLoader 提供数据，这里直接 useLoaderData 取用。 */
+/** 内容占比：由路由 loader 提供数据，这里直接 useLoaderData 取用。 */
 export default function ContentPercentage() {
   const { t } = useTranslation();
   const { contentPercentage } = useLoaderData<WorkplaceLoaderData>();
@@ -67,9 +67,9 @@ export default function ContentPercentage() {
   };
 
   return (
-    <Card bordered={false}>
-      <Typography.Title heading={6}>{t('workplace.contentPercentage')}</Typography.Title>
-      <Spin loading={loading} block>
+    <Card variant="borderless">
+      <Typography.Title level={5}>{t('workplace.contentPercentage')}</Typography.Title>
+      <Spin spinning={loading} className="w-full">
         <div className="h-[339px]">
           <Pie {...chartSpec} theme={theme} />
         </div>

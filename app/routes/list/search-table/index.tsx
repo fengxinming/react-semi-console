@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
-import { Table, Card, PaginationProps, Button, Space, Typography } from '@arco-design/web-react';
-import { IconDownload, IconPlus } from '@arco-design/web-react/icon';
+import { Table, Card, Button, Space, Typography } from 'antd';
+import type { TablePaginationConfig } from 'antd';
+import { PlusOutlined, DownloadOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import PermissionWrapper from '~/components/PermissionWrapper';
 import SearchForm from './SearchForm';
@@ -22,12 +23,11 @@ export default function SearchTable() {
 
   const columns = useMemo(() => getColumns(t, tableCallback), [t]);
 
-  const [pagination, setPagination] = useState<PaginationProps>({
-    sizeCanChange: true,
-    showTotal: true,
+  // 分页类型直接用 antd 导出的 TablePaginationConfig，避免在本文件内定义类型
+  // / Reuse antd's exported TablePaginationConfig instead of declaring a local type here
+  const [pagination, setPagination] = useState<TablePaginationConfig>({
     pageSize: 10,
     current: 1,
-    pageSizeChangeResetCurrent: true,
   });
   const [formParams, setFormParams] = useState<Record<string, any>>({});
 
@@ -40,9 +40,9 @@ export default function SearchTable() {
     formParams,
   );
 
-  function onChangeTable(pagination: PaginationProps) {
-    const { current = 1, pageSize = 10 } = pagination;
-    setPagination((p) => ({ ...p, current, pageSize }));
+  function onChangeTable(pag: TablePaginationConfig) {
+    const { current: c = 1, pageSize: ps = 10 } = pag;
+    setPagination((p) => ({ ...p, current: c, pageSize: ps }));
   }
 
   function handleSearch(params: Record<string, any>) {
@@ -51,29 +51,34 @@ export default function SearchTable() {
   }
 
   return (
-    <Card bordered={false}>
-      <Title heading={6}>{t('menu.list.searchTable')}</Title>
+    <Card variant="borderless">
+      <Title level={5}>{t('menu.list.searchTable')}</Title>
       <SearchForm onSearch={handleSearch} />
       <PermissionWrapper per={[{ resource: 'menu.list.searchTable', actions: ['write'] }]}>
         <div className="flex justify-between mb-[20px]">
           <Space>
-            <Button type="primary" icon={<IconPlus />}>
+            <Button type="primary" icon={<PlusOutlined />}>
               {t('searchTable.operations.add')}
             </Button>
             <Button>{t('searchTable.operations.upload')}</Button>
           </Space>
           <Space>
-            <Button icon={<IconDownload />}>{t('searchTable.operation.download')}</Button>
+            <Button icon={<DownloadOutlined />}>{t('searchTable.operation.download')}</Button>
           </Space>
         </div>
       </PermissionWrapper>
       <Table
         rowKey="id"
         loading={loading}
-        onChange={onChangeTable}
-        pagination={{ ...pagination, total: data.total }}
+        onChange={(pag) => onChangeTable(pag)}
+        pagination={{
+          ...pagination,
+          total: data.total,
+          showSizeChanger: true,
+          showTotal: (total: number) => `共 ${total} 条`,
+        }}
         columns={columns}
-        data={data.list}
+        dataSource={data.list}
       />
     </Card>
   );

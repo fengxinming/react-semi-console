@@ -1,6 +1,6 @@
 import { Pie } from '@ant-design/charts';
 // import type { PieConfig } from '@ant-design/charts';
-import { Typography, Card } from '@arco-design/web-react';
+import { Typography, Card } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { useLoaderData } from 'react-router';
 import { useSettingsStore } from '~/store';
@@ -13,7 +13,7 @@ const { Title } = Typography;
 // 5 种 type 的固定配色(手写图例与各环饼共用,保证颜色一致)
 const SOURCE_COLORS = ['#249eff', '#846BCE', '#21CCFF', '#86DF6C', '#0E42D2'];
 
-/** 内容发布来源:分面多环饼(参考 FactMultiPie,每类一个环饼 + 中心类目名 + 百分比标签)。数据由 clientLoader 提供。 */
+/** 内容发布来源:分面多环饼(参考 FactMultiPie,每类一个环饼 + 中心类目名 + 百分比标签)。数据由路由 loader 提供。 */
 export default function SourcePie() {
   const { t } = useTranslation();
   const theme = useSettingsStore((s) => s.theme);
@@ -22,8 +22,8 @@ export default function SourcePie() {
   const categories = Array.from(new Set(data.map((d) => d.category)));
 
   return (
-    <Card bordered={false} className="w-full">
-      <Title heading={6}>{t('multiDAnalysis.card.title.contentSource')}</Title>
+    <Card variant="borderless" className="w-full">
+      <Title level={5}>{t('multiDAnalysis.card.title.contentSource')}</Title>
       <div className="min-h-[240px]">
         <div className="flex">
           {categories.map((cat) => (

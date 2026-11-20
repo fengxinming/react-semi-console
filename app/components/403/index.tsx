@@ -1,4 +1,4 @@
-import { Result, Button } from '@arco-design/web-react';
+import { Result, Button } from 'antd';
 import { useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import styles from './style.module.styl';
@@ -9,14 +9,16 @@ export default function Exception403() {
   return (
     <div className={styles.wrapper}>
       <Result
-        className={styles.result}
         status="403"
         subTitle={t('exception.result.403.description')}
-        extra={
-          <Button key="back" type="primary" onClick={() => navigate('/dashboard/workplace')}>
-            {t('exception.result.403.back')}
-          </Button>
-        }
+        extra={[
+          <Button key="backPrev" className="!mr-[16px]" onClick={() => navigate(-1)}>
+            {t('exception.result.backPrev')}
+          </Button>,
+          <Button key="backHome" type="primary" onClick={() => navigate('/')}>
+            {t('exception.result.backHome')}
+          </Button>,
+        ]}
       />
     </div>
   );

@@ -1,20 +1,21 @@
 import {
-  IconDashboard,
-  IconList,
-  IconEdit,
-  IconUser,
-  IconBug,
-  IconApps,
-  IconFile,
-  IconSettings,
-} from '@arco-design/web-react/icon';
+  AppstoreOutlined,
+  BugOutlined,
+  DashboardOutlined,
+  EditOutlined,
+  FileOutlined,
+  SettingOutlined,
+  UnorderedListOutlined,
+  UserOutlined,
+} from '@ant-design/icons';
 import type { MenuRoute } from './types';
+import Exception500 from '~/components/500';
 
 export const menuRoutes: MenuRoute[] = [
   {
     path: '/dashboard',
     name: 'menu.dashboard',
-    icon: <IconDashboard />,
+    icon: <DashboardOutlined />,
     children: [
       {
         path: '/dashboard/workplace',
@@ -32,7 +33,7 @@ export const menuRoutes: MenuRoute[] = [
   {
     path: '/visualization',
     name: 'menu.visualization',
-    icon: <IconApps />,
+    icon: <AppstoreOutlined />,
     children: [
       {
         path: '/visualization/data-analysis',
@@ -54,7 +55,7 @@ export const menuRoutes: MenuRoute[] = [
   {
     path: '/list',
     name: 'menu.list',
-    icon: <IconList />,
+    icon: <UnorderedListOutlined />,
     children: [
       {
         path: '/list/search-table',
@@ -67,7 +68,7 @@ export const menuRoutes: MenuRoute[] = [
   {
     path: '/form',
     name: 'menu.form',
-    icon: <IconEdit />,
+    icon: <EditOutlined />,
     children: [
       {
         path: '/form/group',
@@ -86,7 +87,7 @@ export const menuRoutes: MenuRoute[] = [
   {
     path: '/profile',
     name: 'menu.profile',
-    icon: <IconUser />,
+    icon: <UserOutlined />,
     children: [
       {
         path: '/profile/basic',
@@ -98,7 +99,7 @@ export const menuRoutes: MenuRoute[] = [
   {
     path: '/result',
     name: 'menu.result',
-    icon: <IconFile />,
+    icon: <FileOutlined />,
     children: [
       {
         path: '/result/success',
@@ -111,30 +112,30 @@ export const menuRoutes: MenuRoute[] = [
   {
     path: '/exception',
     name: 'menu.exception',
-    icon: <IconBug />,
+    icon: <BugOutlined />,
 
     children: [
+      // {
+      //   path: '/exception/403',
+      //   name: 'menu.exception.403',
+      //   view: 'routes/403/index.tsx',
+      // },
+      // {
+      //   path: '/exception/404',
+      //   name: 'menu.exception.404',
+      //   view: 'routes/404/index.tsx',
+      // },
       {
-        path: '/exception/403',
-        name: 'menu.exception.403',
-        view: 'routes/exception/403/index.tsx',
-      },
-      {
-        path: '/exception/404',
-        name: 'menu.exception.404',
-        view: 'routes/exception/404/index.tsx',
-      },
-      {
-        path: '/exception/500',
+        path: '/500',
         name: 'menu.exception.500',
-        view: 'routes/exception/500/index.tsx',
+        view: <Exception500 />,
       },
     ],
   },
   {
     path: '/user',
     name: 'menu.user',
-    icon: <IconSettings />,
+    icon: <SettingOutlined />,
     children: [
       { path: '/user/info', name: 'menu.user.info', view: 'routes/user/info/index.tsx' },
       { path: '/user/setting', name: 'menu.user.setting', view: 'routes/user/setting/index.tsx' },

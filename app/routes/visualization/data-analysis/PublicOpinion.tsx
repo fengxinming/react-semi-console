@@ -1,12 +1,10 @@
 import { memo } from 'react';
-import { Card, Grid, Typography } from '@arco-design/web-react';
+import { Card, Row, Col, Typography } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { useLoaderData, useNavigation } from 'react-router';
 import type { DataAnalysisLoaderData } from './types';
 import PublicOpinionCard from './PublicOpinionCard';
 import styles from './style.module.styl';
-
-const { Row, Col } = Grid;
 
 function PublicOpinion() {
   const { t } = useTranslation();
@@ -19,8 +17,8 @@ function PublicOpinion() {
   }));
 
   return (
-    <Card bordered={false} className="w-full">
-      <Typography.Title heading={6}>{t('dataAnalysis.title.publicOpinion')}</Typography.Title>
+    <Card variant="borderless" className="w-full">
+      <Typography.Title level={5}>{t('dataAnalysis.title.publicOpinion')}</Typography.Title>
       <div className={styles.wrapper}>
         <Row gutter={20}>
           {formatData.map((item) => (

@@ -1,34 +1,26 @@
-import { type ReactNode } from 'react';
-import { Grid, Card, Typography, Divider, Skeleton, Link } from '@arco-design/web-react';
-import { IconCalendar, IconFile, IconMessage, IconCaretUp } from '@arco-design/web-react/icon';
+import { Row, Col, Card, Typography, Divider, Skeleton } from 'antd';
+import { CalendarOutlined, FileOutlined, MessageOutlined, CaretUpOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import { useLoaderData, useNavigation } from 'react-router';
 import { useSettingsStore, useUserStore } from '~/store';
 import { Line } from '@ant-design/charts';
 import styles from './style.module.styl';
 import type { OverviewData } from '~/api/types';
-import type { WorkplaceLoaderData } from './types';
+import type { WorkplaceLoaderData, StatisticItemProps } from './types';
 
-const { Row, Col } = Grid;
+const { Title, Paragraph, Link } = Typography;
 
-function StatisticItem({
-  icon,
-  title,
-  count,
-  loading,
-  unit,
-}: {
-  icon?: ReactNode;
-  title?: ReactNode;
-  count?: ReactNode;
-  loading?: boolean;
-  unit?: ReactNode;
-}) {
+function StatisticItem({ icon, title, count, loading, unit }: StatisticItemProps) {
   return (
     <div className={styles['stat-item']}>
       <div className={styles['stat-icon']}>{icon}</div>
       <div>
-        <Skeleton loading={loading} text={{ rows: 2, width: 54 }} animation>
+        <Skeleton
+          loading={loading}
+          paragraph={{ rows: 2, width: ['54px', '54px'] }}
+          title={false}
+          active
+        >
           <div className={styles['stat-title']}>{title}</div>
           <div className={styles['stat-count']}>
             {count}
@@ -78,49 +70,50 @@ export default function Overview() {
   };
 
   return (
-    <Card bordered={false}>
-      <Typography.Title heading={5}>
+    <Card variant="borderless">
+      <Title level={5}>
         {t('workplace.welcomeBack')}, {userName}
-      </Typography.Title>
+      </Title>
       <Divider />
       <Row>
         <Col flex={1}>
           <StatisticItem
-            icon={<IconCalendar />}
+            icon={<CalendarOutlined />}
             title={t('workplace.totalOnlyData')}
             count={overview.allContents}
             loading={loading}
             unit={t('workplace.pecs')}
           />
         </Col>
-        <Divider type="vertical" />
+        <Divider orientation="vertical" />
         <Col flex={1}>
           <StatisticItem
-            icon={<IconFile />}
+            icon={<FileOutlined />}
             title={t('workplace.contentInMarket')}
             count={overview.liveContents}
             loading={loading}
             unit={t('workplace.pecs')}
           />
         </Col>
-        <Divider type="vertical" />
+        <Divider orientation="vertical" />
         <Col flex={1}>
           <StatisticItem
-            icon={<IconMessage />}
+            icon={<MessageOutlined />}
             title={t('workplace.comments')}
             count={overview.increaseComments}
             loading={loading}
             unit={t('workplace.pecs')}
           />
         </Col>
-        <Divider type="vertical" />
+        <Divider orientation="vertical" />
         <Col flex={1}>
           <StatisticItem
-            icon={<IconCaretUp />}
+            icon={<CaretUpOutlined />}
             title={t('workplace.growth')}
             count={
               <span>
-                {overview.growthRate} <IconCaretUp className={styles['growth-icon']} />
+                {overview.growthRate}{' '}
+                <CaretUpOutlined className={styles['growth-icon']} />
               </span>
             }
             loading={loading}
@@ -130,10 +123,10 @@ export default function Overview() {
       <Divider />
       <div>
         <div className={styles['chart-header']}>
-          <Typography.Paragraph className="text-[16px] font-medium">
+          <Paragraph className="text-[16px] font-medium">
             {t('workplace.contentData')}
             <span className={styles['chart-sub-title']}>({t('workplace.1year')})</span>
-          </Typography.Paragraph>
+          </Paragraph>
           <Link>{t('workplace.seeMore')}</Link>
         </div>
         <div className="h-[300px] chart-wrapper">

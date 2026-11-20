@@ -12,15 +12,23 @@ NProgress.configure({ showSpinner: false });
  * 颜色随主题色（--primary-6 链路），覆盖样式在 app.styl。
  */
 export default function NavigationProgress() {
-  const active = useNavigation().state !== 'idle';
+  const { state } = useNavigation();
 
   useEffect(() => {
-    if (active) {
+    if (state !== 'idle') {
       NProgress.start();
     } else {
       NProgress.done();
     }
-  }, [active]);
+  }, [state]);
+
+  // 导航抛错时 state 不会回到 idle，错误边界接管又会把本组件卸载。
+  // nprogress 的 trickle 是挂在全局 DOM 上的递归定时器，不显式收尾会一直涨。
+  useEffect(() => {
+    return () => {
+      NProgress.done();
+    };
+  }, []);
 
   return null;
 }

@@ -1,0 +1,271 @@
+/* 全站错误兜底页：左侧线框主视觉 + 右侧信息与调试面板，沿用 HydrateFallback 的明暗科技感 */
+.ep-stage
+  --ep-bg-1 #050a16
+  --ep-bg-2 #0b1830
+  --ep-grid rgba(120, 180, 255, 0.07)
+  --ep-glow rgba(0, 112, 204, 0.28)
+  --ep-line rgba(74, 217, 255, 0.55)
+  --ep-line-soft rgba(0, 112, 204, 0.28)
+  --ep-fg #eaf3ff
+  --ep-muted #8aa4c8
+  --ep-accent #0070cc
+  --ep-accent-2 #4ad9ff
+  --ep-panel rgba(10, 24, 46, 0.62)
+  --ep-border rgba(120, 180, 255, 0.18)
+  position relative
+  display flex
+  align-items center
+  justify-content center
+  min-height 100vh
+  padding 40px
+  box-sizing border-box
+  overflow hidden
+  background linear-gradient(155deg, var(--ep-bg-1), var(--ep-bg-2))
+  color var(--ep-fg)
+  font-family Inter, system-ui, -apple-system, 'Segoe UI', sans-serif
+
+.ep-stage::before
+  content ''
+  position absolute
+  inset -20%
+  pointer-events none
+  background-image linear-gradient(var(--ep-grid) 1px, transparent 1px), linear-gradient(90deg, var(--ep-grid) 1px, transparent 1px)
+  background-size 42px 42px
+  -webkit-mask-image radial-gradient(ellipse at center, #000 20%, transparent 72%)
+  mask-image radial-gradient(ellipse at center, #000 20%, transparent 72%)
+
+.ep-stage::after
+  content ''
+  position absolute
+  inset 0
+  pointer-events none
+  background radial-gradient(circle at 32% 50%, var(--ep-glow), transparent 58%)
+
+.ep-shell
+  position relative
+  z-index 1
+  display grid
+  grid-template-columns minmax(0, 45%) minmax(0, 55%)
+  align-items center
+  gap 64px
+  width unquote('min(1180px, 100%)')
+
+.ep-hero
+  position relative
+  display flex
+  align-items center
+  justify-content center
+  width 100%
+  max-width 440px
+  aspect-ratio unquote('1 / 1')
+  margin 0 auto
+
+.ep-emblem
+  width 100%
+  height 100%
+  overflow visible
+  filter drop-shadow(0 0 18px var(--ep-glow))
+
+.ep-orbit
+  stroke var(--ep-line-soft)
+  stroke-width 1
+  stroke-dasharray 2 10
+  transform-box view-box
+  transform-origin 120px 120px
+  animation ep-spin 24s linear infinite
+
+.ep-wire-outer, .ep-wire-links
+  stroke var(--ep-line-soft)
+
+.ep-wire-inner
+  stroke var(--ep-line)
+
+.ep-nodes circle
+  fill var(--ep-accent-2)
+  filter drop-shadow(0 0 6px var(--ep-accent-2))
+
+.ep-wire-trace
+  stroke var(--ep-accent-2)
+  stroke-dasharray 100
+  stroke-dashoffset 0
+  filter drop-shadow(0 0 8px var(--ep-accent-2))
+  animation ep-draw 1.4s ease-out both
+
+.ep-code
+  position absolute
+  font-size unquote('clamp(72px, 9vw, 132px)')
+  font-weight 200
+  line-height 1
+  letter-spacing 0.02em
+  color var(--ep-fg)
+  text-shadow 0 0 12px var(--ep-accent-2), 0 0 40px var(--ep-glow)
+  pointer-events none
+
+.ep-mark-bar
+  position absolute
+  left 2%
+  bottom 8%
+  width 2px
+  height 46px
+  background linear-gradient(var(--ep-accent-2), transparent)
+
+.ep-mark-cross
+  position absolute
+  left 8%
+  bottom 6%
+  width 18px
+  height 18px
+  border 1px solid var(--ep-line-soft)
+  border-radius 50%
+
+  &::before
+    content ''
+    position absolute
+    left 50%
+    top -4px
+    width 1px
+    height 26px
+    background var(--ep-line)
+
+  &::after
+    content ''
+    position absolute
+    top 50%
+    left -4px
+    width 26px
+    height 1px
+    background var(--ep-line)
+
+.ep-info
+  display flex
+  flex-direction column
+  align-items flex-start
+  min-width 0
+
+.ep-tag
+  display inline-flex
+  align-items center
+  padding 6px 14px
+  border-radius 6px
+  background var(--ep-accent)
+  color #fff
+  font-size 13px
+  font-weight 600
+  letter-spacing 0.08em
+  box-shadow 0 0 18px var(--ep-glow)
+
+.ep-title
+  margin 24px 0 0
+  font-size unquote('clamp(26px, 3vw, 40px)')
+  font-weight 600
+  line-height 1.35
+  color var(--ep-fg)
+
+  // 业务码缺失时标题成为首元素，不留顶部间距
+  &:first-child
+    margin-top 0
+
+.ep-desc
+  margin 12px 0 0
+  max-width 100%
+  // 异常信息完整展示，不截断；保留原始换行，长串自动折行避免撑破布局
+  white-space pre-wrap
+  overflow-wrap anywhere
+  font-family ui-monospace, SFMono-Regular, Menlo, Consolas, monospace
+  font-size 13px
+  line-height 1.6
+  color var(--ep-muted)
+
+.ep-actions
+  display flex
+  flex-wrap wrap
+  gap 12px
+  margin-top 32px
+
+  .arco-btn-primary
+    box-shadow 0 8px 24px var(--ep-glow)
+
+.ep-debug
+  position relative
+  width unquote('min(520px, 100%)')
+  margin-top 36px
+  border 1px solid var(--ep-border)
+  border-radius 10px
+  background var(--ep-panel)
+  backdrop-filter blur(8px)
+  box-shadow 0 12px 40px var(--ep-glow)
+  overflow hidden
+  box-sizing border-box
+
+  &::before
+    content ''
+    position absolute
+    top 0
+    left 0
+    right 0
+    height 1px
+    background linear-gradient(90deg, transparent, var(--ep-accent-2), transparent)
+
+.ep-stack
+  margin 0
+  padding 16px
+  max-height 168px
+  overflow auto
+  font-family ui-monospace, SFMono-Regular, Menlo, Consolas, monospace
+  font-size 12px
+  line-height 1.7
+  white-space pre-wrap
+  word-break break-all
+  color var(--ep-muted)
+
+@keyframes ep-draw
+  from
+    stroke-dashoffset 100
+
+  to
+    stroke-dashoffset 0
+
+@keyframes ep-spin
+  to
+    transform rotate(360deg)
+
+@media (prefers-color-scheme light)
+  .ep-stage
+    --ep-bg-1 #f7faff
+    --ep-bg-2 #e4eeff
+    --ep-grid rgba(0, 112, 204, 0.08)
+    --ep-glow rgba(0, 112, 204, 0.16)
+    --ep-line rgba(0, 112, 204, 0.45)
+    --ep-line-soft rgba(0, 112, 204, 0.18)
+    --ep-fg #10233f
+    --ep-muted #5b7396
+    --ep-accent #165dff
+    --ep-accent-2 #0091ff
+    --ep-panel rgba(255, 255, 255, 0.72)
+    --ep-border rgba(0, 112, 204, 0.18)
+
+@media (max-width 900px)
+  .ep-stage
+    padding 24px
+
+  .ep-shell
+    grid-template-columns 1fr
+    gap 24px
+    max-width 520px
+    justify-items center
+
+  .ep-hero
+    max-width 240px
+
+  .ep-info
+    align-items center
+    width 100%
+    text-align center
+
+  .ep-debug
+    width 100%
+
+@media (prefers-reduced-motion reduce)
+  .ep-stage *, .ep-stage *::before, .ep-stage *::after, .ep-stage::before, .ep-stage::after
+    animation none !important
+    transition none !important

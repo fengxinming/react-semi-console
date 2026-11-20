@@ -6,11 +6,11 @@ const avatar3 =
   '//p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/8361eeb82904210b4f55fab888fe8416.png~tplv-uwbnlip3yd-webp.webp';
 
 const contributors = [
-  { name: '秦臻宇', email: 'qingzhenyu@arco.design', avatar: avatar1 },
-  { name: '于涛', email: 'yuebao@arco.design', avatar: avatar1 },
-  { name: '宁波', email: 'ningbo@arco.design', avatar: avatar2 },
-  { name: '郑曦月', email: 'zhengxiyue@arco.design', avatar: avatar3 },
-  { name: '宁波', email: 'ningbo@arco.design', avatar: avatar2 },
+  { name: '秦臻宇', email: 'qingzhenyu@antd.design', avatar: avatar1 },
+  { name: '于涛', email: 'yuebao@antd.design', avatar: avatar1 },
+  { name: '宁波', email: 'ningbo@antd.design', avatar: avatar2 },
+  { name: '郑曦月', email: 'zhengxiyue@antd.design', avatar: avatar3 },
+  { name: '宁波', email: 'ningbo@antd.design', avatar: avatar2 },
 ];
 
 const projectTitles = [
@@ -22,7 +22,7 @@ const projectTitles = [
   '智能机器人',
 ];
 const projectEnTitles = [
-  'Arco Design System',
+  'Ant Design System',
   'The Volcano Engine',
   'OCR text recognition',
   'Content resource management',
@@ -63,9 +63,16 @@ const ADMIN_PERMS = {
 // 普通用户权限：所有菜单资源均为 ['read']
 const USER_PERMS = Object.fromEntries(Object.keys(ADMIN_PERMS).map((k) => [k, ['read']]));
 
-// 当前登录态（由 login / register / switch-role 写入），供 /user/info 单一来源返回
-let currentRole: string = 'admin';
-let currentPermissions: Record<string, string[]> = ADMIN_PERMS;
+// 角色由 token 决定：mock-token-user / mock-token-admin。
+// 这样刷新页面、或 dev 下 mock 文件每次请求重新加载时，身份都不会丢。
+function roleFromReq(req: any): 'user' | 'admin' {
+  const auth = String(req?.headers?.authorization ?? req?.headers?.Authorization ?? '');
+  return auth.includes('mock-token-user') ? 'user' : 'admin';
+}
+
+function permsForRole(role: 'user' | 'admin') {
+  return role === 'admin' ? ADMIN_PERMS : USER_PERMS;
+}
 
 const ERR_CODES = {
   '0': '操作成功',
@@ -86,25 +93,28 @@ const ERR_CODES = {
 };
 
 export default {
-  'GET /api/user/info': {
-    code: 200,
-    message: 'ok',
-    data: {
-      user: {
-        name: 'Jesse Feng',
-        avatar: avatar1,
-        jobName: '前端开发工程师',
-        organizationName: '前端',
-        locationName: '北京',
-        accountId: 'ulbn-37238531',
-        phoneNumber: '177******33',
-        registrationTime: '2008-02-22 11:10:11',
-        verified: true,
-        email: 'fxm0016@126.com',
+  'GET /api/user/info': (req: any) => {
+    const role = roleFromReq(req);
+    return {
+      code: 200,
+      message: 'ok',
+      data: {
+        user: {
+          name: 'Jesse Feng',
+          avatar: avatar1,
+          jobName: '前端开发工程师',
+          organizationName: '前端',
+          locationName: '北京',
+          accountId: 'ulbn-37238531',
+          phoneNumber: '177******33',
+          registrationTime: '2008-02-22 11:10:11',
+          verified: true,
+          email: 'fxm0016@126.com',
+        },
+        roles: [role],
+        permissions: permsForRole(role),
       },
-      roles: [currentRole],
-      permissions: currentPermissions,
-    },
+    };
   },
   'GET /api/user/projectList': () => ({
     code: 200,
@@ -137,11 +147,6 @@ export default {
       avatar: avatar1,
     })),
   }),
-  'GET /api/user/notice': {
-    code: 200,
-    message: 'ok',
-    data: [],
-  },
   'GET /api/user/verified/enterprise': () => ({
     code: 200,
     message: 'ok',
@@ -182,32 +187,27 @@ export default {
       return { code: 1002, message: ERR_CODES['1002'] };
     }
     const role = body.account === 'user' ? 'user' : 'admin';
-    currentRole = role;
-    currentPermissions = role === 'admin' ? ADMIN_PERMS : USER_PERMS;
     // 仅返回 token；用户资料 + 权限由 /user/info 单一来源提供
     return {
       code: 200,
       message: 'ok',
-      data: { token: 'mock-token-' + Date.now() },
+      data: { token: `mock-token-${role}` },
     };
   },
   'POST /api/register': async () => {
-    currentRole = 'user';
-    currentPermissions = USER_PERMS;
     return {
       code: 200,
       message: 'ok',
-      data: { token: 'mock-token-' + Date.now() },
+      data: { token: 'mock-token-user' },
     };
   },
   'POST /api/user/switch-role': async (req: any) => {
     const body = req.body || {};
-    const role = body.role || 'admin';
-    currentPermissions = role === 'admin' ? ADMIN_PERMS : USER_PERMS;
+    const role = body.role === 'user' ? 'user' : 'admin';
     return {
       code: 200,
       message: 'ok',
-      data: { permissions: currentPermissions },
+      data: { permissions: permsForRole(role), token: `mock-token-${role}` },
     };
   },
 };

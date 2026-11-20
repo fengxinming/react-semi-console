@@ -1,16 +1,17 @@
 .top-row
-  :global(.arco-row)
+  // antd 栅格：Row = .ant-row，Col = .ant-col
+  // / antd grid: Row = .ant-row, Col = .ant-col
+  :global(.ant-row)
     align-items stretch
 
-  :global(.arco-col)
+  :global(.ant-col)
     display flex
     flex-direction column
 
+// 指标卡：Card 根 = .ant-card，卡体 = .ant-card-body
+// / metric card: card root .ant-card, card body .ant-card-body
 .stat-item
-  :global(.arco-spin)
-    width 100%
-
-  :global(.arco-card-body)
+  :global(.ant-card-body)
     padding-top 6px
 
   h6
@@ -30,11 +31,15 @@
       text-align center
       font-size 18px
 
-    :global(.arco-statistic)
+    // antd Statistic 根节点 .ant-statistic
+    // / antd Statistic root .ant-statistic
+    :global(.ant-statistic)
       line-height normal
 
+    // antd Skeleton 段落：className 落在 ul.ant-skeleton-paragraph 上，占位行是其 li
+    // / antd Skeleton paragraph: className lands on ul.ant-skeleton-paragraph, rows are its li
     .skeleton
-      :global(.arco-skeleton-text-row)
+      > li
         height 32px
 
 .content-source
@@ -49,7 +54,7 @@
       display inline-flex
       align-items center
       font-size 12px
-      color var(--color-text-2)
+      color var(--ant-color-text-secondary)
 
     &-dot
       display inline-block
@@ -59,19 +64,21 @@
       border-radius 50%
 
 .card-block
-  :global(.arco-statistic-content)
+  // antd Statistic：内容容器 .ant-statistic-content，数值 .ant-statistic-content-value
+  // / antd Statistic: content wrapper .ant-statistic-content, number .ant-statistic-content-value
+  :global(.ant-statistic-content)
     margin-top 12px
     margin-bottom 4px
     display flex
 
-    :global(.arco-statistic-value)
+    :global(.ant-statistic-content-value)
       font-size 24px
       line-height 28px
 
   .diff
     margin-left 12px
     line-height 20px
-    color s('rgb(var(--red-6))')
+    color var(--ant-color-error)
 
   .diff-increment
-    color s('rgb(var(--green-6))')
+    color var(--ant-color-success)

@@ -1,4 +1,4 @@
-import { Card, Typography, Tag, Space, Descriptions } from '@arco-design/web-react';
+import { Card, Typography, Tag, Space, Descriptions } from 'antd';
 import { useTranslation } from 'react-i18next';
 
 export default function StudioStatus() {
@@ -14,11 +14,11 @@ export default function StudioStatus() {
           {t('monitor.studioStatus.bitRate')}
         </span>
       ),
-      value: '6 Mbps',
+      children: '6 Mbps',
     },
     {
       label: t('monitor.studioStatus.frameRate'),
-      value: '60',
+      children: '60',
     },
     {
       label: (
@@ -29,11 +29,11 @@ export default function StudioStatus() {
           {t('monitor.studioStatus.bitRate')}
         </span>
       ),
-      value: '6 Mbps',
+      children: '6 Mbps',
     },
     {
       label: t('monitor.studioStatus.frameRate'),
-      value: '60',
+      children: '60',
     },
     {
       label: (
@@ -44,34 +44,34 @@ export default function StudioStatus() {
           {t('monitor.studioStatus.bitRate')}
         </span>
       ),
-      value: '6 Mbps',
+      children: '6 Mbps',
     },
     {
       label: t('monitor.studioStatus.frameRate'),
-      value: '60',
+      children: '60',
     },
   ];
 
   const dataPicture = [
-    { label: t('monitor.studioStatus.line'), value: '热备' },
-    { label: 'CDN', value: 'KS' },
-    { label: t('monitor.studioStatus.play'), value: 'FLV' },
-    { label: t('monitor.studioStatus.pictureQuality'), value: '原画' },
+    { label: t('monitor.studioStatus.line'), children: '热备' },
+    { label: 'CDN', children: 'KS' },
+    { label: t('monitor.studioStatus.play'), children: 'FLV' },
+    { label: t('monitor.studioStatus.pictureQuality'), children: '原画' },
   ];
 
   return (
-    <Card bordered={false}>
+    <Card variant="borderless">
       <Space align="start">
-        <Typography.Title heading={6}>
+        <Typography.Title level={5}>
           {t('monitor.studioStatus.title.studioStatus')}
         </Typography.Title>
         <Tag color="green">{t('monitor.studioStatus.smooth')}</Tag>
       </Space>
-      <Descriptions colon=": " layout="horizontal" data={dataStatus} column={2} />
-      <Typography.Title className="mb-[16px]" heading={6}>
+      <Descriptions layout="horizontal" items={dataStatus} column={2} />
+      <Typography.Title className="!mt-[24px]" level={5}>
         {t('monitor.studioStatus.title.pictureInfo')}
       </Typography.Title>
-      <Descriptions colon=": " layout="horizontal" data={dataPicture} column={2} />
+      <Descriptions layout="horizontal" items={dataPicture} column={2} />
     </Card>
   );
 }

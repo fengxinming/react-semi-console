@@ -1,5 +1,5 @@
-import { Skeleton, Statistic, Typography } from '@arco-design/web-react';
-import { IconArrowRise, IconArrowFall } from '@arco-design/web-react/icon';
+import { Skeleton, Statistic, Typography } from 'antd';
+import { RiseOutlined, FallOutlined } from '@ant-design/icons';
 import { Column, Line, Pie } from '@ant-design/charts';
 import { useSettingsStore } from '~/store';
 import type { OverviewItem, ChartPoint } from '~/api/types';
@@ -108,28 +108,28 @@ export default function PublicOpinionCard(props: OverviewItem) {
       <div className="whitespace-nowrap w-[100px]">
         <Statistic
           title={
-            <Typography.Title heading={6} className="m-0">
+            <Typography.Title level={5} className="m-0">
               {title}
             </Typography.Title>
           }
           loading={loading}
           value={count}
-          groupSeparator
+          groupSeparator=","
         />
         <div className="flex">
           <Text type="secondary" className={styles['compare-yesterday-text']}>
             {compareTime}
           </Text>
           <span className={`${styles.diff} ${increment ? styles['diff-increment'] : ''}`}>
-            <Skeleton loading={loading} text={{ rows: 1 }} animation>
+            <Skeleton loading={loading} paragraph={{ rows: 1 }} active>
               {diff}
-              {increment ? <IconArrowRise /> : <IconArrowFall />}
+              {increment ? <RiseOutlined /> : <FallOutlined />}
             </Skeleton>
           </span>
         </div>
       </div>
       <div className="flex-1 flex flex-col-reverse">
-        <Skeleton loading={loading} text={{ rows: 3, width: Array(3).fill('100%') }} animation>
+        <Skeleton loading={loading} paragraph={{ rows: 3, width: Array(3).fill('100%') }} active>
           <MiniChart
             chartType={chartType}
             chartData={(chartData as ChartPoint[]) ?? []}
