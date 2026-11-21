@@ -52,11 +52,23 @@ export const useLayoutStore = create<LayoutUiState>((set, get) => {
       if (prev.menuTrail.length === len && len === 0) {
         return;
       }
-      set({ menuTrail: newMenuTrail });
+
+      const newState: Partial<LayoutUiState> = { menuTrail: newMenuTrail };
       if (len > 0) {
         const last = newMenuTrail[len - 1] as MenuLeaf;
         prev.addTab(last.path, last.name);
+
+        const keys: string[] = [];
+        const lastKeys = prev.openKeys;
+        for (let i = 0, len = newMenuTrail.length - 1; i < len; i++) {
+          const { name } = newMenuTrail[i];
+          if (!lastKeys.includes(name)) {
+            keys.push(name);
+          }
+        }
+        newState.openKeys = lastKeys.concat(keys);
       }
+      set(newState);
     },
     // 获取/变更权限后重算可用菜单，避免每渲染 useMemo
     rebuildMenu(permissions: PermMap) {

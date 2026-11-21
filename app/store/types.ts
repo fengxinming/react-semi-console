@@ -10,6 +10,7 @@ export interface LayoutUiState {
   permissionMenu: MenuRoute[];
   tabs: TabItem[];
   activeKey: string;
+  openKeys: string[];
 
   setCurrentHref: (v: string) => void;
   toggleCollapsed: () => void;

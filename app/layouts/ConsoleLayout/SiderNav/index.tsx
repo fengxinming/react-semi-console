@@ -2,40 +2,24 @@ import { Layout } from '@douyinfe/semi-ui';
 import { IconChevronLeft, IconChevronRight } from '@douyinfe/semi-icons';
 import { useSettingsStore, useLayoutStore } from '~/store';
 import AppMenu from '~/components/AppMenu';
-import type { MenuRoute } from '~/config/types';
-import { memo, useEffect, useState } from 'react';
+
+import { memo } from 'react';
 import styles from './style.module.styl';
 import type { SiderNavProps } from './types';
 import classNames from 'classnames';
 
 const { Sider } = Layout;
 
-function toOpenKeys(menuTrail: MenuRoute[], lastKeys: string[]): string[] {
-  const keys: string[] = [];
-  for (let i = 0, len = menuTrail.length - 1; i < len; i++) {
-    const { name } = menuTrail[i];
-    if (!lastKeys.includes(name)) {
-      keys.push(name);
-    }
-  }
-  return lastKeys.concat(keys);
+function handleOpenKeysChange(openKeys: string[]) {
+  useLayoutStore.setState({ openKeys });
 }
 
 function SiderNav({ className, style }: SiderNavProps = {}) {
   const menuWidth = useSettingsStore((s) => s.menuWidth);
   const collapsed = useLayoutStore((s) => s.collapsed);
   const toggleCollapsed = useLayoutStore((s) => s.toggleCollapsed);
-  const [openKeys, setOpenKeys] = useState<string[]>([]);
-  const menuTrail = useLayoutStore((s) => s.menuTrail);
+  const openKeys = useLayoutStore((s) => s.openKeys);
   const actualWidth = collapsed ? 48 : menuWidth;
-
-  useEffect(() => {
-    if (menuTrail.length > 0) {
-      Promise.resolve().then(() => {
-        setOpenKeys((keys) => toOpenKeys(menuTrail, keys));
-      });
-    }
-  }, [menuTrail]);
 
   return (
     // Semi Sider 无 width/collapsed/collapsible/trigger/breakpoint，宽度改由 style 控制。
@@ -49,7 +33,7 @@ function SiderNav({ className, style }: SiderNavProps = {}) {
           mode="vertical"
           collapse={collapsed}
           openKeys={openKeys}
-          onOpenKeysChange={setOpenKeys}
+          onOpenKeysChange={handleOpenKeysChange}
         />
       </div>
       <div className={styles['collapse-btn']} onClick={toggleCollapsed}>
