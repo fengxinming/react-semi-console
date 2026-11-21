@@ -1,15 +1,15 @@
-# react-antd-console
+# react-semi-console
 
-基于 React 19 + React Router 8（Library 模式，纯客户端 SPA）+ Ant Design 6 的中后台管理模板。界面与功能参考 [Arco Design Pro](https://react-pro.arco.design/)。
+基于 React 19 + React Router 8（Library 模式，纯客户端 SPA）+ Semi Design 的中后台管理模板，覆盖常见中后台页面与权限、布局、图表场景。
 
 ## 技术栈
 
 | 类别 | 选型 |
 |------|------|
 | 框架 | React 19 + React Router 8（Library 模式 / createBrowserRouter，纯 SPA，无 SSR、无服务端产物） |
-| 构建 | Vite 8（`@vitejs/plugin-react`），产物 `dist/` 仅静态文件；`base` 默认为 `/${pkg.name}/`（即 `/react-antd-console/`），可用 `BASE_URL` 环境变量覆盖 |
-| UI | `antd` 6（ConfigProvider + cssVar 主题，暗色走 `darkAlgorithm`）+ `@ant-design/icons`；样式 Stylus module + Tailwind v4 |
-| 图表 / 配色 | `@ant-design/charts` + `@ant-design/colors` |
+| 构建 | Vite 8（`@vitejs/plugin-react`），产物 `dist/` 仅静态文件；`base` 默认为 `/${pkg.name}/`（即 `/react-semi-console/`），可用 `BASE_URL` 环境变量覆盖 |
+| UI | `@douyinfe/semi-ui` 2（ConfigProvider 仅承载 locale；主题走 CSS 变量，暗色切换 `body[theme-mode]`）+ `@douyinfe/semi-icons`；定制主题用 `@douyinfe/semi-vite-plugin`（`cssLayer` 处理与 Tailwind 的层顺序）；样式 Stylus module + Tailwind v4 |
+| 图表 / 配色 | `@visactor/react-vchart`（VChart，spec 统一经 `commons/vchart.ts` 的 `makeSpec` 注入主题；暗色主题在入口注册）；色阶用 `@ant-design/colors` 的色板算法 |
 | 状态 | Zustand（persist）+ `@tanstack/react-query` |
 | 请求 | axios（`app/commons/request.ts` 统一封装拦截） |
 | i18n | i18next + react-i18next |
@@ -21,7 +21,7 @@
 
 ```bash
 pnpm install
-pnpm dev        # 默认端口 5173；因 base 默认带 /react-antd-console/，访问路径以终端输出为准（BASE_URL 可覆盖）
+pnpm dev        # 默认端口 5173；因 base 默认带 /react-semi-console/，访问路径以终端输出为准（BASE_URL 可覆盖）
 ```
 
 登录密码统一为 `admin`：账号填 `user` 登录为普通权限，其他任意账号为 admin 全量权限（mock `user.ts`）。
@@ -43,7 +43,7 @@ pnpm dev        # 默认端口 5173；因 base 默认带 /react-antd-console/，
 index.html              # SPA 文档壳：head 外链 + #root + 入口 script
 app/
 ├── api/                # 纯请求函数（不含 hooks）
-├── commons/            # request(axios封装) / auth(权限判断) / layout(菜单过滤·trail) / html(主题落DOM) / antdApp(App.useApp 单例) / queryClient / types
+├── commons/            # request(axios封装, Toast 静态提示) / auth(权限判断) / layout(菜单过滤·trail) / html(主题落DOM) / queryClient / types
 ├── components/         # 全局组件：AppProviders / AppMenu / NavigationProgress / PermissionWrapper
 ├── config/             # menu.tsx（菜单+权限单一数据源）/ settings.ts / types.ts
 ├── hooks/api/          # react-query hooks（useAuth / useUser / useSearchTable / useNotice / useMonitor）
@@ -52,8 +52,8 @@ app/
 ├── routes/             # 页面，目录命名与菜单 path 对齐（如 list/search-table/）
 ├── store/              # Zustand：user(登录态·权限) / layout(菜单·tabs·布局 UI，useSettingsStore 主题与设置也在此) / types；index.ts 集中跨 store 订阅
 ├── settings.json       # 默认布局配置，抽屉里「复制配置」的 JSON 可直接粘回
-├── styles/             # app.styl（全局主题样式：antd cssVar 作用域说明、nprogress 主题色）/ global.css / _vars.styl
-├── main.tsx            # SPA 入口：挂载前初始化 + createBrowserRouter + createRoot
+├── styles/             # app.styl（全局：body 级 Semi 变量 / nprogress 主题色 / chart tooltip）/ global.css / _vars.styl
+├── main.tsx            # SPA 入口：react19-adapter + 挂载前初始化 + createBrowserRouter + createRoot
 ├── App.tsx             # 根路由组件（Providers / 进度条 / ScrollRestoration / Outlet）；错误边界与首屏占位在 routes.ts 上配置
 └── routes.ts           # 由 menu 配置生成的显式 RouteObject 路由表
 mock/                   # vite-plugin-mock-data 接口模拟
@@ -73,32 +73,40 @@ mock/                   # vite-plugin-mock-data 接口模拟
 
 **路由副作用**：`app/routes.ts` 中 ConsoleLayout 路由的 `middleware` 在 `next()` 之后调 `setCurrentHref(request.url)`，由 store 内部完成 `menuTrail` 计算与 tab 写入。同路由的 `loader` 只负责登录态恢复；middleware 在导航提交阶段执行，首屏不会先闪一次空菜单。
 
-**主题与 DOM 副作用**：主题 token 集中在 `components/AppProviders`（`colorPrimary` 等），暗色用 `darkAlgorithm` 派生；`body` 级的 `theme-mode` / `--app-color-primary` / 色弱滤镜由 `commons/html.ts` 经 store 订阅下发——antd 的 `--ant-*` 只注册在 cssVar 作用域（组件根节点）内，`html`/`body` 上解析不到。
+**主题与 DOM 副作用**：Semi 的主题是 CSS 变量体系——`components/AppProviders` 的 `ConfigProvider` 只传 locale；主色 `--semi-color-primary` 系列由 `commons/html.ts` 的 `setThemeColor` 经色板算法生成后写到 body（运行时换肤），暗色靠 `setTheme` 增删 `body[theme-mode='dark']`（Semi 在 body 下挂了亮/暗两套色盘，浮层自动跟随），色弱是 body 反色滤镜。这些 DOM 副作用统一由 `store/layout.ts` 的 persist 订阅在 rehydrate 时下发，首屏前就绪。`@douyinfe/semi-vite-plugin` 开启 `cssLayer`，配合 `index.html` 顶部的 `@layer` 顺序声明解决 Tailwind v4 Preflight 与 Semi 样式的优先级冲突。
+
+**React 19 适配**：`main.tsx` 顶部必须最先导入 `@douyinfe/semi-ui/react19-adapter`，注入 `createRoot`（React 19 移除了 `ReactDOM.render`，Toast/Modal/Tooltip 等依赖它动态挂载）。
 
 **导航进度条**：`components/NavigationProgress` 基于 nprogress + `useNavigation()`，颜色取 body 上的 `--app-color-primary`（`app.styl` 覆盖）。
 
-## antd v6 迁移注意
+## 组件库约定（Semi Design）
 
-以下 API 在 antd 6 已废弃，项目内已全部替换（新增代码请沿用右列写法）：
+组件库统一使用 Semi Design。新增/修改页面请沿用 Semi 的 API，常见用法速查：
 
-| 废弃 | 平替 |
-|------|------|
-| `Space direction` | `Space orientation` |
-| `Card bordered`（裸写= true） | `Card variant="outlined"` / `variant="borderless"` |
-| `Divider type` | `Divider orientation` |
-| `Descriptions labelStyle` / `contentStyle` | `styles.label` / `styles.content` |
-| `Steps items[].description` | `items[].content` |
-| `Input addonAfter` / `addonBefore` | `Space.Compact` + `Space.Addon` |
-| `Select.Option` / `Select.OptGroup` | `Select` 的 `options` 属性 |
-| `List` 组件 | antd 自带的 `Listy`（须给 `rowKey`，无 `footer` 插槽） |
+| 场景 | Semi 写法 |
+|------|-----------|
+| 图标 | 从 `@douyinfe/semi-icons` 导入 `Icon*`；React 19 入口需先导入 `@douyinfe/semi-ui/react19-adapter` |
+| 表单 | `getFormApi` 拿 formApi + `<Form.Input field="x" rules={...}/>`，校验用 `formApi.validate()`，无 `Form.useForm` / `Form.Item name` |
+| 输入框 | `onChange(value, e)` 首参即字符串值；`allowClear`→`showClear`、`onPressEnter`→`onEnterPress`、密码框用 `Input mode="password"`、`Input.TextArea`→独立 `TextArea` |
+| 选择器 | `options`→`optionList`、`onChange(value)` 单参；多选 `multiple`、tags `allowCreate` |
+| 表格 | `dataSource`/`columns` 同名；`onChange` 是单对象 `{pagination,filters,sorter}`；列类型 `ColumnProps` 从 `@douyinfe/semi-ui/lib/es/table/interface` 导入 |
+| 布局间距 | `Space size`→`spacing`、`direction="vertical"`→`vertical`；`Divider type`→`layout`、`orientation`→`align` |
+| 弹出层 | `placement`→`position`、`title`→`content`（Tooltip）；`Dropdown menu={{items}}`→`menu={[{node:'item',name}]}` |
+| 抽屉 / 提示 | `Drawer`→`SideSheet`（`open`→`visible`、`onClose`→`onCancel`）；`message`→`Toast` 静态方法；`Alert`→`Banner`（`type="error"`→`danger`） |
+| 无对应组件 | `Result`→`Empty`/`Banner`+Icon 拼装；`Statistic`→`Typography.Numeral`/普通元素；`List` 无 `Item.Meta`（用 `dataSource`+`renderItem`，头像+内容两栏自己排）；`Tabs items`→`tabList`+`TabPane`；`Menu`→`Nav` |
+| 主题 / 暗色 | 主色写 body 的 `--semi-color-primary` 系列，暗色切 `body[theme-mode]`；不要在 `ConfigProvider` 上传 `theme`（Semi 无此 prop） |
+
+> 图表已统一迁移到 VChart：spec 经 `commons/vchart.ts` 的 `makeSpec` 注入主题（与 Semi 明暗同步）；G2Plot 的 `angleField`/`colorField`/`shapeField` 等已改写为 VChart 的 `valueField`/`categoryField`/`curveType` 等。数据须包装成 `[{ id, values }]`。
+
+**样式侧统一使用 Semi**：Stylus 里没有其他组件库的类名选择器与变量残留——深色/浅色用 `--semi-color-*`（如 `--semi-color-text-0/1/2`、`--semi-color-bg-0/1`、`--semi-color-fill-0/1`、`--semi-color-border`、`--semi-color-danger`），覆盖组件内部结构用 `:global(.semi-*)`（`semi-card-body` / `semi-card-header` / `semi-tabs-bar` / `semi-tabs-content` / `semi-list-item` / `semi-descriptions-item-th|td` / `semi-skeleton-paragraph` / `semi-form-field-label-left` / `semi-navigation-sub-title` / `semi-layout-sider-children` / `semi-row|col`）。
 
 ## 部署
 
 项目自带两阶段 `Dockerfile`：Node 24 构建 → nginx 静态托管，并配置 history fallback（未匹配路径回退 `index.html`）：
 
 ```bash
-docker build -t react-antd-console .
-docker run -p 3000:3000 react-antd-console
+docker build -t react-semi-console .
+docker run -p 3000:3000 react-semi-console
 ```
 
 本地不用 Docker 时，`pnpm build` 后 `pnpm preview` 直接预览生产构建。换成任意静态服务器时，都需要把深链接回退到 `index.html`。

@@ -5,20 +5,13 @@ html, body
   padding 0
   font-size 12px
 
-// antd v6 的 cssVar 作用域：--ant-* 变量注册在「主题 key 类名 + 组件根类名」组成的
-// 选择器上（源码 cssinjs serializeCSSVar：`:where(.<hash>).<cssVar.key>.<scope>`），
-// 该作用域类由 antd 各组件根节点自动携带。html/body 不在作用域内，
-// 因此原先挂在 html/body 上的 var(--ant-color-bg-layout) 永远解析失败 → 背景透明，
-// 深色模式下就会透出浏览器默认白底，与白色文字形成「白底白字」。
-// 把页面底色挂到 <App> 渲染的 .ant-app 根节点（携带作用域、且铺满视口），
-// 深浅色统一由 token 驱动，不写死色值。
-// / antd v6 registers --ant-* vars on a selector built from `theme key class + component
-// root class` (see cssinjs serializeCSSVar), carried by antd component roots. html/body are
-// outside that scope, so the old `var(--ant-color-bg-layout)` on html/body never resolved and
-// left the page transparent (white canvas in dark mode). Move it to the <App> root.
-.ant-app
+// Semi 把亮/暗两套色盘挂在 body 上（--semi-color-bg-* 等），body 本身在作用域内。
+// 页面底色直接用 Semi 的背景变量，明暗切换（body[theme-mode='dark']）时自动跟随。
+// / Semi mounts both light/dark palettes on body (--semi-color-bg-*), so body itself is in scope.
+html, body
   min-height 100%
-  background-color var(--ant-color-bg-layout)
+  color var(--semi-color-text-0)
+  background-color var(--semi-color-bg-0)
 
 .chart-wrapper
   .g2-tooltip
@@ -45,25 +38,21 @@ body[theme-mode='dark']
       border-radius 6px
       box-shadow none !important
 
-.ant-card
-  h1.ant-typography, .ant-typography-h1, h2.ant-typography, .ant-typography-h2, h3.ant-typography, .ant-typography-h3, h4.ant-typography, .ant-typography-h4, h5.ant-typography, .ant-typography-h5, h6.ant-typography, .ant-typography-h6
+.semi-card
+  h1, h2, h3, h4, h5, h6
     margin-top 0
     margin-bottom 16px
 
-.ant-form-item-required
+.semi-form-field-label-required
   display inline
   vertical-align baseline
 
 /* nprogress 导航进度条：官方默认蓝 #29d 改为项目主题色。
-   #nprogress 挂在 body 下，不在 antd cssVar 作用域内，故用 commons/html.ts 的 setThemeColor
-   同步到 body 上的 --app-color-primary（取值即 antd colorPrimary），
-   而不是 var(--ant-color-primary)。
-   / nprogress bar: replace the default blue with the project primary color. #nprogress lives
-   under body, outside antd's cssVar scope, so setThemeColor (commons/html.ts) mirrors the color
-   onto --app-color-primary on body instead of relying on var(--ant-color-primary). */
+#nprogress 挂在 body 下，commons/html.ts 的 setThemeColor 把主色同步到
+body 上的 --semi-color-primary，与 Semi 主色保持一致。 */
 #nprogress
   .bar
-    background var(--app-color-primary)
+    background var(--semi-color-primary)
 
   .peg
-    box-shadow 0 0 10px var(--app-color-primary), 0 0 5px var(--app-color-primary)
+    box-shadow 0 0 10px var(--semi-color-primary), 0 0 5px var(--semi-color-primary)

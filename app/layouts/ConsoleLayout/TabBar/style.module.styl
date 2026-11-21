@@ -1,20 +1,12 @@
 .tabbar
-  :global(.ant-tabs-nav)
-    --ant-tabs-horizontal-margin 0
-
-  // 页签本身上方两个角的圆角：antd 只对 editable-card + small + top 这一组合设了 2px，
-  // 且选择器是 .ant-tabs-card.ant-tabs-small.ant-tabs-top > .ant-tabs-nav .ant-tabs-tab，权重高；
-  // 这里照抄它的类名、外层再套 .tabbar，靠多一层类把权重压过去。下方两角保持直角。
-  // / Top corners of each tab: antd only sets 2px for the editable-card + small + top combination,
-  // via .ant-tabs-card.ant-tabs-small.ant-tabs-top > .ant-tabs-nav .ant-tabs-tab, which is highly
-  // specific. Mirror its class names under an extra .tabbar scope to win the cascade; the bottom
-  // corners stay square.
   :global
-    .ant-tabs-card.ant-tabs-small.ant-tabs-top
-      .ant-tabs-nav
-        &:before
-          --ant-color-border-secondary var(--jjext-color-divider)
+    .semi-tabs-content
+      padding 0
 
-        .ant-tabs-tab
-          // --ant-border-radius 8px
-          border-radius 0 16px 0 0
+    // Semi Tabs：卡片式页签条外边距清零
+    .semi-tabs-bar
+      margin-bottom 0
+
+    // 页签上方两角圆角（下方保持直角）；选择器与 Semi 卡片式页签结构对齐
+    .semi-tabs-bar-card .semi-tabs-tab
+      border-radius 0 16px 0 0

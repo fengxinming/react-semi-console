@@ -1,7 +1,5 @@
-import dayjs from 'dayjs';
-import type { Dayjs } from 'dayjs';
-import { Form, Input, Select, DatePicker, Button, Row, Col } from 'antd';
-import { ReloadOutlined, SearchOutlined } from '@ant-design/icons';
+import { Form, Button, Row, Col } from '@douyinfe/semi-ui';
+import { IconRefresh, IconSearch } from '@douyinfe/semi-icons';
 import { useTranslation } from 'react-i18next';
 import { ContentType, FilterType, Status } from './constants';
 import styles from './style.module.styl';
@@ -14,11 +12,11 @@ export default function SearchForm({ onSearch }: SearchFormProps) {
   const colSpan = i18n.language === 'zh-CN' ? 8 : 12;
 
   const handleSubmit = () => {
-    onSearch(form.getFieldsValue());
+    onSearch(form.getValues());
   };
 
   const handleReset = () => {
-    form.resetFields();
+    form.reset();
     onSearch({});
   };
 
@@ -33,61 +31,68 @@ export default function SearchForm({ onSearch }: SearchFormProps) {
       >
         <Row gutter={24}>
           <Col span={colSpan}>
-            <Form.Item label={t('searchTable.columns.id')} name="id">
-              <Input placeholder={t('searchForm.id.placeholder')} allowClear />
-            </Form.Item>
+            <Form.Input
+              label={t('searchTable.columns.id')}
+              field="id"
+              placeholder={t('searchForm.id.placeholder')}
+              showClear
+            />
           </Col>
           <Col span={colSpan}>
-            <Form.Item label={t('searchTable.columns.name')} name="name">
-              <Input placeholder={t('searchForm.name.placeholder')} allowClear />
-            </Form.Item>
+            <Form.Input
+              label={t('searchTable.columns.name')}
+              field="name"
+              placeholder={t('searchForm.name.placeholder')}
+              showClear
+            />
           </Col>
           <Col span={colSpan}>
-            <Form.Item label={t('searchTable.columns.contentType')} name="contentType">
-              <Select
-                placeholder={t('searchForm.all.placeholder')}
-                options={ContentType.map((item, index) => ({ label: item, value: index }))}
-                mode="multiple"
-                allowClear
-              />
-            </Form.Item>
+            <Form.Select
+              label={t('searchTable.columns.contentType')}
+              field="contentType"
+              placeholder={t('searchForm.all.placeholder')}
+              optionList={ContentType.map((item, index) => ({ label: item, value: index }))}
+              multiple
+              showClear
+            />
           </Col>
           <Col span={colSpan}>
-            <Form.Item label={t('searchTable.columns.filterType')} name="filterType">
-              <Select
-                placeholder={t('searchForm.all.placeholder')}
-                options={FilterType.map((item, index) => ({ label: item, value: index }))}
-                mode="multiple"
-                allowClear
-              />
-            </Form.Item>
+            <Form.Select
+              label={t('searchTable.columns.filterType')}
+              field="filterType"
+              placeholder={t('searchForm.all.placeholder')}
+              optionList={FilterType.map((item, index) => ({ label: item, value: index }))}
+              multiple
+              showClear
+            />
           </Col>
           <Col span={colSpan}>
-            <Form.Item label={t('searchTable.columns.createdTime')} name="createdTime">
-              <DatePicker.RangePicker
-                allowClear
-                className="w-full"
-                disabledDate={(current: Dayjs) => current.isAfter(dayjs())}
-              />
-            </Form.Item>
+            <Form.DatePicker
+              label={t('searchTable.columns.createdTime')}
+              field="createdTime"
+              type="dateRange"
+              showClear
+              className="w-full"
+              disabledDate={(date?: Date) => (date ? date.getTime() > Date.now() : false)}
+            />
           </Col>
           <Col span={colSpan}>
-            <Form.Item label={t('searchTable.columns.status')} name="status">
-              <Select
-                placeholder={t('searchForm.all.placeholder')}
-                options={Status.map((item, index) => ({ label: item, value: index }))}
-                mode="multiple"
-                allowClear
-              />
-            </Form.Item>
+            <Form.Select
+              label={t('searchTable.columns.status')}
+              field="status"
+              placeholder={t('searchForm.all.placeholder')}
+              optionList={Status.map((item, index) => ({ label: item, value: index }))}
+              multiple
+              showClear
+            />
           </Col>
         </Row>
       </Form>
       <div className={styles['right-button']}>
-        <Button type="primary" icon={<SearchOutlined />} onClick={handleSubmit}>
+        <Button type="primary" theme="solid" icon={<IconSearch />} onClick={handleSubmit}>
           {t('searchTable.form.search')}
         </Button>
-        <Button icon={<ReloadOutlined />} onClick={handleReset}>
+        <Button icon={<IconRefresh />} onClick={handleReset}>
           {t('searchTable.form.reset')}
         </Button>
       </div>

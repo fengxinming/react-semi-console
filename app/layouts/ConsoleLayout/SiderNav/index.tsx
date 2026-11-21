@@ -1,5 +1,5 @@
-import { Layout } from 'antd';
-import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
+import { Layout } from '@douyinfe/semi-ui';
+import { IconChevronLeft, IconChevronRight } from '@douyinfe/semi-icons';
 import { useSettingsStore, useLayoutStore } from '~/store';
 import AppMenu from '~/components/AppMenu';
 import type { MenuRoute } from '~/config/types';
@@ -38,26 +38,22 @@ function SiderNav({ className, style }: SiderNavProps = {}) {
   }, [menuTrail]);
 
   return (
+    // Semi Sider 无 width/collapsed/collapsible/trigger/breakpoint，宽度改由 style 控制。
+    // / Semi Sider has no width/collapsed/collapsible/trigger/breakpoint; control width via style.
     <Sider
       className={classNames(styles['layout-sider'], className)}
-      style={style}
-      width={actualWidth}
-      collapsed={collapsed}
-      onCollapse={toggleCollapsed}
-      trigger={null}
-      collapsible
-      breakpoint="xl"
+      style={{ ...style, width: actualWidth }}
     >
       <div className={styles['menu-wrapper']}>
         <AppMenu
-          mode="inline"
+          mode="vertical"
           collapse={collapsed}
           openKeys={openKeys}
           onOpenKeysChange={setOpenKeys}
         />
       </div>
       <div className={styles['collapse-btn']} onClick={toggleCollapsed}>
-        {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+        {collapsed ? <IconChevronRight /> : <IconChevronLeft />}
       </div>
     </Sider>
   );

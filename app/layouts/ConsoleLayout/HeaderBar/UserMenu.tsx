@@ -1,16 +1,10 @@
 import { useNavigate } from 'react-router';
-import { App, Avatar, Dropdown } from 'antd';
-import {
-  MoreOutlined,
-  PoweroffOutlined,
-  SettingOutlined,
-  UserOutlined,
-} from '@ant-design/icons';
+import { Avatar, Dropdown, Toast } from '@douyinfe/semi-ui';
+import { IconMore, IconQuit, IconSetting, IconUser } from '@douyinfe/semi-icons';
 import { useTranslation } from 'react-i18next';
 import { useUserStore } from '~/store';
 import { useSwitchRole } from '~/hooks/api/useUser';
 import styles from './style.module.styl';
-import type { MenuProps } from 'antd';
 
 export default function UserMenu() {
   const navigate = useNavigate();
@@ -18,9 +12,8 @@ export default function UserMenu() {
   const user = useUserStore((s) => s.user);
   const { mutateAsync: switchRole } = useSwitchRole();
   const logout = useUserStore((s) => s.logout);
-  const { message } = App.useApp();
 
-  const handleClick: MenuProps['onClick'] = async ({ key }) => {
+  const handleClick = async (key: string) => {
     if (key === 'logout') {
       logout();
       navigate('/login');
@@ -30,57 +23,77 @@ export default function UserMenu() {
       navigate('/user/setting');
     } else if (key === 'role-admin') {
       await switchRole('admin');
-      message.info(t('user.role.tip'));
+      Toast.info({ content: t('user.role.tip') });
     } else if (key === 'role-user') {
       await switchRole('user');
-      message.info(t('user.role.tip'));
+      Toast.info({ content: t('user.role.tip') });
     } else {
       navigate(key);
     }
   };
 
-  const items: MenuProps['items'] = [
-    {
-      key: 'info',
-      icon: <UserOutlined className={styles['dropdown-icon']} />,
-      label: t('menu.user.info'),
-    },
-    {
-      key: 'setting',
-      icon: <SettingOutlined className={styles['dropdown-icon']} />,
-      label: t('menu.user.setting'),
-    },
-    {
-      key: 'role',
-      icon: <UserOutlined className={styles['dropdown-icon']} />,
-      label: t('user.role'),
-      children: [
-        { key: 'role-admin', label: t('user.role.admin') },
-        { key: 'role-user', label: t('user.role.user') },
-      ],
-    },
-    {
-      key: 'more',
-      icon: <MoreOutlined className={styles['dropdown-icon']} />,
-      label: t('user.more'),
-      children: [
-        { key: '/dashboard/workplace', label: t('menu.dashboard.workplace') },
-        { key: '/list/card', label: t('menu.list.cardList') },
-      ],
-    },
-    { type: 'divider' },
-    {
-      key: 'logout',
-      icon: <PoweroffOutlined className={styles['dropdown-icon']} />,
-      label: t('common.logout'),
-    },
-  ];
-
   return (
-    <Dropdown menu={{ items, onClick: handleClick }} placement="bottomRight">
-      <Avatar size={32} className="cursor-pointer">
-        {user?.name?.[0] ?? 'A'}
-      </Avatar>
+    <Dropdown
+      position="bottomRight"
+      render={
+        <Dropdown.Menu>
+          <Dropdown.Item
+            icon={<IconUser className={styles['dropdown-icon']} />}
+            onClick={() => void handleClick('info')}
+          >
+            {t('menu.user.info')}
+          </Dropdown.Item>
+          <Dropdown.Item
+            icon={<IconSetting className={styles['dropdown-icon']} />}
+            onClick={() => void handleClick('setting')}
+          >
+            {t('menu.user.setting')}
+          </Dropdown.Item>
+          <Dropdown
+            position="rightTop"
+            render={
+              <Dropdown.Menu>
+                <Dropdown.Item onClick={() => void handleClick('role-admin')}>
+                  {t('user.role.admin')}
+                </Dropdown.Item>
+                <Dropdown.Item onClick={() => void handleClick('role-user')}>
+                  {t('user.role.user')}
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            }
+          >
+            <Dropdown.Item icon={<IconUser className={styles['dropdown-icon']} />}>
+              {t('user.role')}
+            </Dropdown.Item>
+          </Dropdown>
+          <Dropdown
+            position="rightTop"
+            render={
+              <Dropdown.Menu>
+                <Dropdown.Item onClick={() => void handleClick('/dashboard/workplace')}>
+                  {t('menu.dashboard.workplace')}
+                </Dropdown.Item>
+                <Dropdown.Item onClick={() => void handleClick('/list/card')}>
+                  {t('menu.list.cardList')}
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            }
+          >
+            <Dropdown.Item icon={<IconMore className={styles['dropdown-icon']} />}>
+              {t('user.more')}
+            </Dropdown.Item>
+          </Dropdown>
+          <Dropdown.Divider />
+          <Dropdown.Item
+            icon={<IconQuit className={styles['dropdown-icon']} />}
+            onClick={() => void handleClick('logout')}
+          >
+            {t('common.logout')}
+          </Dropdown.Item>
+        </Dropdown.Menu>
+      }
+    >
+      <Avatar className="cursor-pointer">{user?.name?.[0] ?? 'A'}</Avatar>
     </Dropdown>
   );
 }

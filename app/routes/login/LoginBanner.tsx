@@ -1,12 +1,12 @@
-import { Carousel } from 'antd';
+import { Carousel } from '@douyinfe/semi-ui';
 import { useTranslation } from 'react-i18next';
 import styles from './style.module.styl';
 import type { BannerItem } from './types';
 
 const BANNER_IMAGE =
-  'http://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/6c85f43aed61e320ebec194e6a78d6d3.png~tplv-uwbnlip3yd-png.png';
+  'https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/6c85f43aed61e320ebec194e6a78d6d3.png~tplv-uwbnlip3yd-png.png';
 
-/** 登录页左侧轮播：3 条 slogan（走 i18n）+ 配图。移植自参考 arco-design-pro。 */
+/** 登录页左侧轮播：3 条 slogan（走 i18n）+ 配图。 */
 export default function LoginBanner() {
   const { t } = useTranslation();
   const data: BannerItem[] = [1, 2, 3].map((n) => ({
@@ -16,7 +16,7 @@ export default function LoginBanner() {
   }));
 
   return (
-    <Carousel className={styles.carousel} effect="fade">
+    <Carousel className={styles.carousel} animation="fade">
       {data.map((item) => (
         <div key={item.slogan}>
           <div className={styles['carousel-item']}>

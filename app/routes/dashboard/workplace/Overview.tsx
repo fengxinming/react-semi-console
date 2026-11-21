@@ -1,26 +1,22 @@
-import { Row, Col, Card, Typography, Divider, Skeleton } from 'antd';
-import { CalendarOutlined, FileOutlined, MessageOutlined, CaretUpOutlined } from '@ant-design/icons';
+import { Row, Col, Card, Typography, Divider, Skeleton } from '@douyinfe/semi-ui';
+import { IconCalendar, IconFile, IconComment, IconCaretup } from '@douyinfe/semi-icons';
 import { useTranslation } from 'react-i18next';
 import { useLoaderData, useNavigation } from 'react-router';
+import { VChart } from '@visactor/react-vchart';
 import { useSettingsStore, useUserStore } from '~/store';
-import { Line } from '@ant-design/charts';
+import { makeSpec } from '~/commons/vchart';
 import styles from './style.module.styl';
 import type { OverviewData } from '~/api/types';
 import type { WorkplaceLoaderData, StatisticItemProps } from './types';
 
-const { Title, Paragraph, Link } = Typography;
+const { Title, Paragraph, Text } = Typography;
 
 function StatisticItem({ icon, title, count, loading, unit }: StatisticItemProps) {
   return (
     <div className={styles['stat-item']}>
       <div className={styles['stat-icon']}>{icon}</div>
       <div>
-        <Skeleton
-          loading={loading}
-          paragraph={{ rows: 2, width: ['54px', '54px'] }}
-          title={false}
-          active
-        >
+        <Skeleton loading={loading} active>
           <div className={styles['stat-title']}>{title}</div>
           <div className={styles['stat-count']}>
             {count}
@@ -40,80 +36,88 @@ export default function Overview() {
   const userName = user?.name;
 
   const theme = useSettingsStore((s) => s.theme);
-  const chartSpec = {
-    data: overview.chartData ?? [],
-    xField: 'date',
-    yField: 'count',
-    shapeField: 'smooth',
-    axis: {
-      y: {
-        title: false,
-        labelFormatter(text: string) {
-          return `${Number(text) / 1000}k`;
+  const chartSpec = makeSpec(
+    {
+      type: 'area',
+      data: [{ id: 'workplace', values: overview.chartData ?? [] }],
+      xField: 'date',
+      yField: 'count',
+      line: { style: { curveType: 'monotone' } },
+      area: {
+        style: {
+          fill: {
+            gradient: 'linear',
+            x0: 0,
+            y0: 1,
+            x1: 0,
+            y1: 0,
+            stops: [
+              { offset: 0, color: 'rgb(0, 112, 204)' },
+              { offset: 1, color: 'white' },
+            ],
+          },
         },
-        grid: true, // 是否显示网格线
-        gridLineWidth: 2, // 网格线宽度
-        gridLineDash: [4, 4],
       },
-      x: {
-        labelAutoRotate: false,
-        grid: true, // 是否显示网格线
-        gridLineWidth: 2, // 网格线宽度
-        gridLineDash: [4, 4],
-      },
+      axes: [
+        {
+          orient: 'bottom',
+          type: 'band',
+          label: { autoRotate: false },
+          grid: { visible: true, style: { lineWidth: 2, lineDash: [4, 4] } },
+        },
+        {
+          orient: 'left',
+          type: 'linear',
+          title: { visible: false },
+          label: { formatMethod: (text: string) => `${Number(text) / 1000}k` },
+          grid: { visible: true, style: { lineWidth: 2, lineDash: [4, 4] } },
+        },
+      ],
     },
-    area: {
-      style: {
-        fill: 'linear-gradient(-90deg, white 0%, rgb(0, 112, 204) 100%)',
-      },
-    },
-  };
+    theme,
+  );
 
   return (
-    <Card variant="borderless">
-      <Title level={5}>
+    <Card bordered={false}>
+      <Title heading={5}>
         {t('workplace.welcomeBack')}, {userName}
       </Title>
       <Divider />
       <Row>
-        <Col flex={1}>
+        <Col span={6} className={styles['stat-col']}>
           <StatisticItem
-            icon={<CalendarOutlined />}
+            icon={<IconCalendar />}
             title={t('workplace.totalOnlyData')}
             count={overview.allContents}
             loading={loading}
             unit={t('workplace.pecs')}
           />
         </Col>
-        <Divider orientation="vertical" />
-        <Col flex={1}>
+        <Col span={6} className={styles['stat-col']}>
           <StatisticItem
-            icon={<FileOutlined />}
+            icon={<IconFile />}
             title={t('workplace.contentInMarket')}
             count={overview.liveContents}
             loading={loading}
             unit={t('workplace.pecs')}
           />
         </Col>
-        <Divider orientation="vertical" />
-        <Col flex={1}>
+        <Col span={6} className={styles['stat-col']}>
           <StatisticItem
-            icon={<MessageOutlined />}
+            icon={<IconComment />}
             title={t('workplace.comments')}
             count={overview.increaseComments}
             loading={loading}
             unit={t('workplace.pecs')}
           />
         </Col>
-        <Divider orientation="vertical" />
-        <Col flex={1}>
+        <Col span={6} className={styles['stat-col']}>
           <StatisticItem
-            icon={<CaretUpOutlined />}
+            icon={<IconCaretup />}
             title={t('workplace.growth')}
             count={
               <span>
-                {overview.growthRate}{' '}
-                <CaretUpOutlined className={styles['growth-icon']} />
+                {overview.growthRate} <IconCaretup className={styles['growth-icon']} />
               </span>
             }
             loading={loading}
@@ -127,10 +131,10 @@ export default function Overview() {
             {t('workplace.contentData')}
             <span className={styles['chart-sub-title']}>({t('workplace.1year')})</span>
           </Paragraph>
-          <Link>{t('workplace.seeMore')}</Link>
+          <Text link>{t('workplace.seeMore')}</Text>
         </div>
         <div className="h-[300px] chart-wrapper">
-          <Line {...chartSpec} theme={theme} />
+          <VChart spec={chartSpec} />
         </div>
       </div>
     </Card>

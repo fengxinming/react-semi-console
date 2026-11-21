@@ -1,12 +1,12 @@
 .wrapper
   margin-top 16px
 
-  // antd 栅格：Row = .ant-row，Col = .ant-col
-  // / antd grid: Row = .ant-row, Col = .ant-col
-  :global(.ant-row)
+  // Semi 栅格：Row = .semi-row，Col = .semi-col
+  // / Semi grid: Row = .semi-row, Col = .semi-col
+  :global(.semi-row)
     align-items stretch
 
-  :global(.ant-col)
+  :global(.semi-col)
     display flex
     flex-direction column
 
@@ -20,39 +20,36 @@
   border-radius 4px
   min-height 100px
 
-  // 三张迷你统计卡的渐变底色取自 antd 预设色板（blue / green / purple 的第 1→2 档）。
-  // 色板变量在深浅主题下会自动换值，所以原先手写的深色分支已删除。
-  // / The three mini stat cards take their gradient from antd's preset palette
-  // (blue / green / purple, step 1 → 2). These vars swap values per theme, so the
-  // hand-written dark-mode branch was removed.
+  // 三张迷你统计卡的渐变底色取自 blue / green / purple 预设色板的第 1→2 档
+  // / The three mini stat cards take their gradient from the blue / green / purple
+  // preset palette (step 1 → 2)
   &-line
-    background linear-gradient(180deg, var(--ant-blue-1) 0%, var(--ant-blue-2) 100%)
+    background linear-gradient(180deg, #e6f4ff 0%, #bae0ff 100%)
 
   &-interval
-    background linear-gradient(180deg, var(--ant-green-1) 0%, var(--ant-green-2) 100%)
+    background linear-gradient(180deg, #f6ffed 0%, #d9f7be 100%)
 
   &-pie
-    background linear-gradient(180deg, var(--ant-purple-1) 0%, var(--ant-purple-2) 100%)
+    background linear-gradient(180deg, #f9f0ff 0%, #efdbff 100%)
 
-  // antd Statistic：内容容器 .ant-statistic-content，数值 .ant-statistic-content-value
-  // / antd Statistic: content wrapper .ant-statistic-content, number .ant-statistic-content-value
-  :global(.ant-statistic-content)
+  // 数值区（Statistic 已由普通元素替代）
+  // / value area (Statistic replaced by plain elements)
+  .value
     margin-top 24px
     margin-bottom 4px
-
-    :global(.ant-statistic-content-value)
-      font-size 24px
-      line-height 28px
+    font-size 24px
+    line-height 28px
+    font-weight 600
 
   .compare-yesterday-text
     font-size 12px
     font-weight 400
-    color var(--ant-color-text-secondary)
+    color var(--semi-color-text-1)
 
   .diff
     margin-left 8px
     line-height 20px
-    color var(--ant-color-error)
+    color var(--semi-color-danger)
 
   .diff-increment
-    color var(--ant-color-success)
+    color var(--semi-color-success)

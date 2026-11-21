@@ -1,17 +1,16 @@
-import type { MenuProps } from 'antd';
+import type { NavProps } from '@douyinfe/semi-ui/lib/es/navigation';
 import type { MenuRoute } from '~/config/types';
 
-/** 菜单排列模式：直接复用 antd Menu 的 mode（inline=侧边内联展开，horizontal=顶部）
- *  / Menu mode: reuse antd `Menu`'s own mode (inline = sider with inline submenus,
- *  horizontal = top bar) */
-export type MenuMode = NonNullable<MenuProps['mode']>;
+/** 菜单排列模式：直接复用 Semi Nav 的 mode（vertical=侧边展开，horizontal=顶部）
+ *  / Menu mode: reuse Semi `Nav`'s own mode (vertical = sider, horizontal = top bar) */
+export type MenuMode = NonNullable<NavProps['mode']>;
 
 export interface AppMenuProps {
-  /** 排列模式，直接透传给 antd Menu / Passed straight through to antd Menu */
+  /** 排列模式，直接透传给 Semi Nav / Passed straight through to Semi Nav */
   mode?: MenuMode;
-  /** 折叠状态（inline 模式）/ Collapsed state (inline mode) */
+  /** 折叠状态（vertical 模式）/ Collapsed state (vertical mode) */
   collapse?: boolean;
-  /** 展开的子菜单 key（inline 模式）/ Expanded submenu keys (inline mode) */
+  /** 展开的子菜单 key（vertical 模式）/ Expanded submenu keys (vertical mode) */
   openKeys?: string[];
   /** 展开子菜单回调 / Callback when submenu open state changes */
   onOpenKeysChange?: (keys: string[]) => void;

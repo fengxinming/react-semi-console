@@ -1,4 +1,4 @@
-import { Row, Col, Space } from 'antd';
+import { Row, Col, Space } from '@douyinfe/semi-ui';
 import {
   fetchPopularContents,
   fetchContentPercentage,
@@ -26,8 +26,8 @@ export async function loader(): Promise<WorkplaceLoaderData> {
 
 export default function Workplace() {
   return (
-    <div className="flex w-full">
-      <Space size={16} orientation="vertical" className={styles.left}>
+    <div className={`${styles.workplace} flex w-full`}>
+      <Space spacing={16} vertical className={styles.left} style={{ alignItems: 'stretch' }}>
         <Overview />
         <Row gutter={16}>
           <Col span={12}>
@@ -38,7 +38,12 @@ export default function Workplace() {
           </Col>
         </Row>
       </Space>
-      <Space className={styles.right} size={16} orientation="vertical">
+      <Space
+        className={styles.right}
+        spacing={16}
+        vertical
+        style={{ alignItems: 'stretch' }}
+      >
         <Shortcuts />
         <CarouselWidget />
         <Announcement />

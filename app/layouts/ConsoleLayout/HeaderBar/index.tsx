@@ -12,7 +12,7 @@ import Logo from './Logo';
 export default function HeaderBar() {
   return (
     <div className={styles.navbar}>
-      <div className="flex items-center w-[calc(100%-540px)]">
+      <div className="flex items-center flex-1 min-w-[140px]">
         <Logo />
       </div>
       <ul className={styles.right}>

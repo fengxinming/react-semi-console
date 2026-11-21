@@ -1,6 +1,6 @@
 import { Outlet } from 'react-router';
 import { Navigate } from 'react-router';
-import { Layout, Skeleton } from 'antd';
+import { Layout, Skeleton } from '@douyinfe/semi-ui';
 import HeaderBar from './HeaderBar';
 import SiderNav from './SiderNav';
 import BreadcrumbNav from './BreadcrumbNav';

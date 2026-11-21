@@ -1,4 +1,4 @@
-import { Card, Steps, Typography, Row, Col, Space, Button, Table, Badge } from 'antd';
+import { Card, Steps, Typography, Row, Col, Space, Button, Table, Badge } from '@douyinfe/semi-ui';
 import { useTranslation } from 'react-i18next';
 import { useLoaderData, useNavigation } from 'react-router';
 import { fetchBasicProfile, fetchAdjustment } from '~/api/profile';
@@ -28,32 +28,28 @@ export default function ProfileBasic() {
       <Card>
         <Row justify="space-between" align="middle">
           <Col span={16}>
-            <Title level={5}>{t('basicProfile.title.form')}</Title>
+            <Title heading={5}>{t('basicProfile.title.form')}</Title>
           </Col>
           <Col span={8}>
             <Space className="w-full flex justify-end">
               <Button>{t('basicProfile.cancel')}</Button>
-              <Button type="primary">{t('basicProfile.goBack')}</Button>
+              <Button type="primary" theme="solid">{t('basicProfile.goBack')}</Button>
             </Space>
           </Col>
         </Row>
 
-        <Steps
-          current={data.status}
-          className={styles.steps}
-          items={[
-            { title: t('basicProfile.steps.commit') },
-            { title: t('basicProfile.steps.approval') },
-            { title: t('basicProfile.steps.finish') },
-          ]}
-        />
+        <Steps current={data.status} className={styles.steps}>
+          <Steps.Step title={t('basicProfile.steps.commit')} />
+          <Steps.Step title={t('basicProfile.steps.approval')} />
+          <Steps.Step title={t('basicProfile.steps.finish')} />
+        </Steps>
       </Card>
 
       <ProfileItem data={data} type="current" loading={pending} />
       <ProfileItem data={preData} type="origin" loading={pending} />
 
       <Card>
-        <Title level={5}>{t('basicProfile.adjustment.record')}</Title>
+        <Title heading={5}>{t('basicProfile.adjustment.record')}</Title>
         <Table
           loading={pending}
           dataSource={tableData}
@@ -71,9 +67,15 @@ export default function ProfileBasic() {
               title: t('basicProfile.adjustment.status'),
               render: (_: unknown, record: AdjustmentItem) =>
                 record.status ? (
-                  <Badge status="success" text={t('basicProfile.adjustment.success')} />
+                  <span className="inline-flex items-center gap-2">
+                    <Badge dot type="success" />
+                    {t('basicProfile.adjustment.success')}
+                  </span>
                 ) : (
-                  <Badge status="processing" text={t('basicProfile.adjustment.waiting')} />
+                  <span className="inline-flex items-center gap-2">
+                    <Badge dot type="primary" />
+                    {t('basicProfile.adjustment.waiting')}
+                  </span>
                 ),
             },
             {
@@ -84,7 +86,9 @@ export default function ProfileBasic() {
               title: t('basicProfile.adjustment.operation'),
               onHeaderCell: () => ({ style: { paddingLeft: '15px' } }),
               render: () => (
-                <Button type="link">{t('basicProfile.adjustment.operation.view')}</Button>
+                <Button theme="borderless" type="tertiary">
+                  {t('basicProfile.adjustment.operation.view')}
+                </Button>
               ),
             },
           ]}

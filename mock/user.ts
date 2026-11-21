@@ -1,16 +1,16 @@
 const avatar1 =
-  '//p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/a8c8cdb109cb051163646151a4a5083b.png~tplv-uwbnlip3yd-webp.webp';
+  'https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/a8c8cdb109cb051163646151a4a5083b.png~tplv-uwbnlip3yd-webp.webp';
 const avatar2 =
-  '//p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp';
+  'https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp';
 const avatar3 =
-  '//p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/8361eeb82904210b4f55fab888fe8416.png~tplv-uwbnlip3yd-webp.webp';
+  'https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/8361eeb82904210b4f55fab888fe8416.png~tplv-uwbnlip3yd-webp.webp';
 
 const contributors = [
-  { name: '秦臻宇', email: 'qingzhenyu@antd.design', avatar: avatar1 },
-  { name: '于涛', email: 'yuebao@antd.design', avatar: avatar1 },
-  { name: '宁波', email: 'ningbo@antd.design', avatar: avatar2 },
-  { name: '郑曦月', email: 'zhengxiyue@antd.design', avatar: avatar3 },
-  { name: '宁波', email: 'ningbo@antd.design', avatar: avatar2 },
+  { name: '秦臻宇', email: 'qingzhenyu@semi.design', avatar: avatar1 },
+  { name: '于涛', email: 'yuebao@semi.design', avatar: avatar1 },
+  { name: '宁波', email: 'ningbo@semi.design', avatar: avatar2 },
+  { name: '郑曦月', email: 'zhengxiyue@semi.design', avatar: avatar3 },
+  { name: '宁波', email: 'ningbo@semi.design', avatar: avatar2 },
 ];
 
 const projectTitles = [
@@ -22,7 +22,7 @@ const projectTitles = [
   '智能机器人',
 ];
 const projectEnTitles = [
-  'Ant Design System',
+  'Semi Design System',
   'The Volcano Engine',
   'OCR text recognition',
   'Content resource management',

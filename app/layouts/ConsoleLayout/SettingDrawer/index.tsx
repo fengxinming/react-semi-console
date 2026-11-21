@@ -1,5 +1,16 @@
-import { Alert, App, Button, Divider, Drawer, InputNumber, Radio, Space, Switch } from 'antd';
-import { SettingOutlined } from '@ant-design/icons';
+import {
+  Banner,
+  Button,
+  Divider,
+  InputNumber,
+  Radio,
+  RadioGroup,
+  SideSheet,
+  Space,
+  Switch,
+  Toast,
+} from '@douyinfe/semi-ui';
+import { IconSetting } from '@douyinfe/semi-icons';
 import { useTranslation } from 'react-i18next';
 import type { NavMode } from '~/store/types';
 import { useSettingsStore } from '~/store';
@@ -17,7 +28,6 @@ function Row({ label, children }: SettingRowProps) {
 
 export default function SettingDrawer({ visible, onClose }: SettingDrawerProps) {
   const { t } = useTranslation();
-  const { message } = App.useApp();
   const navbar = useSettingsStore((s) => s.navbar);
   const menu = useSettingsStore((s) => s.menu);
   const footer = useSettingsStore((s) => s.footer);
@@ -41,31 +51,31 @@ export default function SettingDrawer({ visible, onClose }: SettingDrawerProps) 
       navMode,
     };
     void navigator.clipboard?.writeText(JSON.stringify(config, null, 2));
-    message.success(t('settings.copySettings.message'));
+    Toast.success({ content: t('settings.copySettings.message') });
   };
 
   return (
-    <Drawer
-      // antd v6 起 width 已废弃，改用 size（size 支持数值宽度）/ antd v6 deprecates `width`, use `size` (accepts a number)
-      size={300}
+    <SideSheet
+      // Semi SideSheet 的 width 同名，直接传数值宽度 / SideSheet keeps `width` (accepts a number)
+      width={300}
       title={
         <span className="flex items-center gap-[8px]">
-          <SettingOutlined />
+          <IconSetting />
           {t('settings.title')}
         </span>
       }
-      open={visible}
-      onClose={onClose}
-      // 原 Arco Drawer 用 okText/cancelText/onOk 把按钮渲染在 **底部 footer**，
-      // 迁移时曾误放进 header 的 extra（跑到顶部且挤得标题折行）。
-      // 这里改用 antd Drawer 的 footer，恢复按钮在底部右侧、与参考站一致。
-      // / Arco's okText/cancelText/onOk rendered these buttons in the **bottom footer**; the
-      // migration wrongly moved them into the header `extra` (top, squeezing the title into two
-      // lines). Use antd's `footer` to restore the bottom-right placement, matching the reference.
+      visible={visible}
+      onCancel={onClose}
+      // 设置抽屉的操作按钮放在 **底部 footer**；
+      // 避免放进 header 的 extra（会跑到顶部并挤得标题折行）。
+      // / Place the drawer actions in the **bottom footer**;
+      // avoid the header `extra` slot, which would put them on top and squeeze the title.
       footer={
         <Space>
-          <Button onClick={onClose}>{t('settings.close')}</Button>
-          <Button type="primary" onClick={copyConfig}>
+          <Button type="secondary" onClick={onClose}>
+            {t('settings.close')}
+          </Button>
+          <Button type="primary" theme="solid" onClick={copyConfig}>
             {t('settings.copySettings')}
           </Button>
         </Space>
@@ -80,16 +90,15 @@ export default function SettingDrawer({ visible, onClose }: SettingDrawerProps) 
       <div className="mb-[16px]">
         <label className="text-[14px] font-medium mb-[8px]">{t('settings.content')}</label>
         <Row label={t('settings.navMode')}>
-          <Radio.Group
-            optionType="button"
-            buttonStyle="solid"
-            size="small"
+          <RadioGroup
+            type="button"
+            buttonSize="small"
             value={navMode}
             onChange={(e) => setSettings({ navMode: e.target.value as NavMode })}
           >
-            <Radio.Button value="inline">{t('settings.navMode.inline')}</Radio.Button>
-            <Radio.Button value="horizontal">{t('settings.navMode.horizontal')}</Radio.Button>
-          </Radio.Group>
+            <Radio value="inline">{t('settings.navMode.inline')}</Radio>
+            <Radio value="horizontal">{t('settings.navMode.horizontal')}</Radio>
+          </RadioGroup>
         </Row>
         <Row label={t('settings.navbar')}>
           <Switch size="small" checked={navbar} onChange={(v) => setSettings({ navbar: v })} />
@@ -105,7 +114,7 @@ export default function SettingDrawer({ visible, onClose }: SettingDrawerProps) 
             className="!w-[80px]"
             size="small"
             value={menuWidth}
-            onChange={(v) => v != null && setSettings({ menuWidth: Number(v) })}
+            onChange={(v) => v !== '' && v != null && setSettings({ menuWidth: Number(v) })}
           />
         </Row>
         <Divider />
@@ -123,7 +132,7 @@ export default function SettingDrawer({ visible, onClose }: SettingDrawerProps) 
         <Divider />
       </div>
 
-      <Alert showIcon type="info" title={t('settings.alertContent')} className="mt-[8px]" />
-    </Drawer>
+      <Banner type="info" description={t('settings.alertContent')} className="mt-[8px]" />
+    </SideSheet>
   );
 }

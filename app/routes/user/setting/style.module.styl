@@ -1,7 +1,7 @@
-// 原 .arco-avatar-trigger-icon-button 是 arco Upload 悬浮图标角标，antd Upload 无对应节点，
-// 直接删除该规则（JSX 中也未渲染该角标）
-// / The old .arco-avatar-trigger-icon-button was arco Upload's hover badge; antd Upload has no
-// equivalent node and the JSX renders no such badge, so the rule is removed.
+// 头像悬浮换图角标（组件库 Upload 自带节点）在本页 JSX 中并未渲染，相关规则历史上已删除，
+// 此文件只保留页面自身的布局样式。
+// / The avatar hover "change photo" badge (a node Upload would render) is not rendered by this
+// page's JSX, so those rules were removed earlier; this file only carries the page's own layout.
 
 .info-content
   flex 1
@@ -23,7 +23,7 @@
     &-title
       margin-right 16px
       font-weight 500
-      color var(--ant-color-text-secondary)
+      color var(--semi-color-text-1)
       padding-top 30px
       padding-bottom 20px
 
@@ -32,12 +32,12 @@
       width 0
       flex 1
       justify-content space-between
-      border-bottom 1px solid var(--ant-color-border)
+      border-bottom 1px solid var(--semi-color-border)
       padding-top 30px
       padding-bottom 20px
 
     &-placeholder
-      color var(--ant-color-text-tertiary)
+      color var(--semi-color-text-2)
 
 .verified
   padding 0 16px
@@ -48,7 +48,7 @@
 
   &-enterprise
     padding 16px
-    background-color var(--ant-color-fill-tertiary)
+    background-color var(--semi-color-fill-2)
 
     td
       width 30%

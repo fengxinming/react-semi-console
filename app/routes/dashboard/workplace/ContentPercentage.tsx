@@ -1,9 +1,10 @@
-import { Card, Spin, Typography } from 'antd';
+import { Card, Spin, Typography } from '@douyinfe/semi-ui';
+import { VChart } from '@visactor/react-vchart';
 import { useTranslation } from 'react-i18next';
 import { useSettingsStore } from '~/store';
 import { useLoaderData, useNavigation } from 'react-router';
+import { makeSpec } from '~/commons/vchart';
 import type { WorkplaceLoaderData } from './types';
-import { Pie } from '@ant-design/charts';
 import type { PercentageItem } from '~/api/types';
 
 /** 内容占比：由路由 loader 提供数据，这里直接 useLoaderData 取用。 */
@@ -12,66 +13,35 @@ export default function ContentPercentage() {
   const { contentPercentage } = useLoaderData<WorkplaceLoaderData>();
   const loading = useNavigation().state !== 'idle';
   const theme = useSettingsStore((s) => s.theme);
-  const chartSpec = {
-    data: contentPercentage,
-    angleField: 'count',
-    colorField: 'type',
-    radius: 0.7,
+  const sum = contentPercentage.reduce((a, b) => a + b.count, 0);
+  const chartSpec = makeSpec({
+    type: 'pie',
+    data: [{ id: 'content', values: contentPercentage }],
+    valueField: 'count',
+    categoryField: 'type',
+    outerRadius: 0.7,
     innerRadius: 0.5,
-    scale: {
-      color: {
-        range: ['#21CCFF', '#313CA9', '#249EFF'],
-      },
-    },
-    legend: {
-      color: {
-        position: 'bottom',
-        layout: {
-          justifyContent: 'center',
-        },
-      },
-    },
+    color: ['#21CCFF', '#313CA9', '#249EFF'],
+    legends: { visible: true, orient: 'bottom' },
     label: {
-      text: (d: PercentageItem) => `${(d.percent * 100).toFixed(2)}%`,
+      visible: true,
       position: 'outside',
+      formatMethod: (_text: string, datum: PercentageItem) => `${(datum.percent * 100).toFixed(2)}%`,
     },
-    annotations: [
-      {
-        type: 'text',
-        style: {
-          text: '内容量',
-          x: '50%',
-          y: '47%',
-          textAlign: 'center',
-          fontSize: 14,
-          fontWeight: 500,
-          color: 'rgb(--var(color-text-1))',
-        },
-      },
-      {
-        type: 'text',
-        style: {
-          text() {
-            const sum = contentPercentage.reduce((a, b) => a + b.count, 0);
-            return Number(sum).toLocaleString();
-          },
-          x: '50%',
-          y: '53%',
-          textAlign: 'center',
-          fontSize: 16,
-          fontWeight: 700,
-          color: 'rgb(--var(color-text-1))',
-        },
-      },
-    ],
-  };
+    indicator: {
+      visible: true,
+      trigger: 'none',
+      title: { visible: true, style: { text: '内容量', fontSize: 14, fontWeight: 500 } },
+      content: [{ visible: true, style: { text: Number(sum).toLocaleString(), fontSize: 16, fontWeight: 700 } }],
+    },
+  }, theme);
 
   return (
-    <Card variant="borderless">
-      <Typography.Title level={5}>{t('workplace.contentPercentage')}</Typography.Title>
+    <Card bordered={false}>
+      <Typography.Title heading={5}>{t('workplace.contentPercentage')}</Typography.Title>
       <Spin spinning={loading} className="w-full">
         <div className="h-[339px]">
-          <Pie {...chartSpec} theme={theme} />
+          <VChart spec={chartSpec} />
         </div>
       </Spin>
     </Card>

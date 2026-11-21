@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Card, Table, Typography } from 'antd';
+import { Card, Table, Typography } from '@douyinfe/semi-ui';
 import { useTranslation } from 'react-i18next';
 import { useLoaderData, useNavigation } from 'react-router';
 import type { DataAnalysisLoaderData } from './types';
@@ -20,13 +20,13 @@ export default function AuthorTable() {
       {
         title: t('dataAnalysis.authorTable.content'),
         dataIndex: 'contentCount',
-        sorter: (a: AuthorItem, b: AuthorItem) => a.contentCount - b.contentCount,
+        sorter: (a?: AuthorItem, b?: AuthorItem) => (a?.contentCount ?? 0) - (b?.contentCount ?? 0),
         render: (value: number) => value.toLocaleString(),
       },
       {
         title: t('dataAnalysis.authorTable.click'),
         dataIndex: 'clickCount',
-        sorter: (a: AuthorItem, b: AuthorItem) => a.clickCount - b.clickCount,
+        sorter: (a?: AuthorItem, b?: AuthorItem) => (a?.clickCount ?? 0) - (b?.clickCount ?? 0),
         render: (value: number) => value.toLocaleString(),
       },
     ],
@@ -34,8 +34,8 @@ export default function AuthorTable() {
   );
 
   return (
-    <Card variant="borderless" className="w-full">
-      <Title level={5}>{t('dataAnalysis.title.authorsList')}</Title>
+    <Card bordered={false} className="w-full">
+      <Title heading={5}>{t('dataAnalysis.title.authorsList')}</Title>
       <div className="h-[378px]">
         <Table
           rowKey="id"

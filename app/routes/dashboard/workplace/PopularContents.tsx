@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { Card, Radio, Table, Typography } from 'antd';
-import { CaretDownOutlined, CaretUpOutlined } from '@ant-design/icons';
+import { Card, RadioGroup, Table, Typography } from '@douyinfe/semi-ui';
+import { IconCaretup, IconCaretdown } from '@douyinfe/semi-icons';
 import { useTranslation } from 'react-i18next';
 import { useLoaderData, useNavigation } from 'react-router';
 import type { WorkplaceLoaderData } from './types';
@@ -8,7 +8,7 @@ import type { PopularItem } from '~/api/types';
 
 import styles from './style.module.styl';
 
-const { Title, Paragraph, Link } = Typography;
+const { Title, Paragraph, Text } = Typography;
 
 // 热门内容榜：由路由 loader 提供数据，这里直接 useLoaderData 取用
 const TITLES = [
@@ -53,16 +53,16 @@ export default function PopularContents() {
     {
       title: t('workplace.column.increase'),
       dataIndex: 'increase',
-      sorter: (a: PopularItem, b: PopularItem) => a.increase - b.increase,
+      sorter: (a?: PopularItem, b?: PopularItem) => (a?.increase ?? 0) - (b?.increase ?? 0),
       width: 110,
       render: (text: number) => (
         <span>
           {`${(text * 100).toFixed(2)}%`}
           <span className="ml-[4px]">
             {text < 0 ? (
-              <CaretUpOutlined className={styles['caret-green']} />
+              <IconCaretup className={styles['caret-green']} />
             ) : (
-              <CaretDownOutlined className={styles['caret-red']} />
+              <IconCaretdown className={styles['caret-red']} />
             )}
           </span>
         </span>
@@ -71,13 +71,13 @@ export default function PopularContents() {
   ];
 
   return (
-    <Card variant="borderless">
+    <Card bordered={false}>
       <div className="flex justify-between">
-        <Title level={5}>{t('workplace.popularContents')}</Title>
-        <Link>{t('workplace.seeMore')}</Link>
+        <Title heading={5}>{t('workplace.popularContents')}</Title>
+        <Text link>{t('workplace.seeMore')}</Text>
       </div>
-      <Radio.Group
-        optionType="button"
+      <RadioGroup
+        type="button"
         value={type}
         onChange={(e) => setType(e.target.value)}
         options={[
@@ -93,7 +93,7 @@ export default function PopularContents() {
         dataSource={filtered}
         loading={loading}
         tableLayout="fixed"
-        pagination={{ pageSize: 5, simple: true }}
+        pagination={{ pageSize: 5, size: 'small' }}
       />
     </Card>
   );

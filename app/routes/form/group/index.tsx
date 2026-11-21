@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { App, Typography, Card, Form, Select, Input, Row, Col, Space, Button } from 'antd';
+import { Typography, Card, Form, Row, Col, Space, Button, Toast } from '@douyinfe/semi-ui';
 import { useTranslation } from 'react-i18next';
 import { submitGroupForm } from '~/api/form';
 import styles from './style.module.styl';
@@ -10,13 +10,12 @@ export default function GroupForm() {
   const { t } = useTranslation();
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
-  const { message } = App.useApp();
 
   const submit = (values: Record<string, unknown>) => {
     setLoading(true);
     submitGroupForm(values)
       .then(() => {
-        message.success(t('groupForm.submitSuccess'));
+        Toast.success(t('groupForm.submitSuccess'));
       })
       .finally(() => {
         setLoading(false);
@@ -24,205 +23,169 @@ export default function GroupForm() {
   };
 
   const handleSubmit = () => {
-    form.validateFields().then((values) => {
+    form.validate().then((values) => {
       submit(values as Record<string, unknown>);
     });
   };
 
   const handleReset = () => {
-    form.resetFields();
+    form.reset();
   };
 
   return (
     <div className={styles.container}>
       <Form layout="vertical" form={form} className={styles['form-group']}>
-        <Card variant="borderless">
-          <Title level={5}>{t('groupForm.title.video')}</Title>
+        <Card bordered={false}>
+          <Title heading={5}>{t('groupForm.title.video')}</Title>
           <Row gutter={80}>
             <Col span={8}>
-              <Form.Item
+              <Form.Select
                 label={t('groupForm.form.label.video.mode')}
-                name="video.mode"
-                initialValue={'custom'}
-              >
-                <Select
-                  placeholder={t('groupForm.placeholder.video.mode')}
-                  // antd v6 废弃了 Select.Option 子组件，改用 options 属性
-                  // / antd v6 deprecates Select.Option; use the options prop
-                  options={[
-                    { value: 'custom', label: '自定义' },
-                    { value: 'mode1', label: '模式1' },
-                    { value: 'mode2', label: '模式2' },
-                  ]}
-                />
-              </Form.Item>
+                field="video.mode"
+                initValue={'custom'}
+                placeholder={t('groupForm.placeholder.video.mode')}
+                optionList={[
+                  { value: 'custom', label: '自定义' },
+                  { value: 'mode1', label: '模式1' },
+                  { value: 'mode2', label: '模式2' },
+                ]}
+              />
             </Col>
             <Col span={8}>
-              <Form.Item
+              <Form.Select
                 label={t('groupForm.form.label.video.acquisition.resolution')}
-                name="video.acquisition.resolution"
-              >
-                <Select
-                  placeholder={t('groupForm.placeholder.video.acquisition.resolution')}
-                  options={[
-                    { value: 'resolution1', label: '分辨率1' },
-                    { value: 'resolution2', label: '分辨率2' },
-                    { value: 'resolution3', label: '分辨率3' },
-                  ]}
-                />
-              </Form.Item>
+                field="video.acquisition.resolution"
+                placeholder={t('groupForm.placeholder.video.acquisition.resolution')}
+                optionList={[
+                  { value: 'resolution1', label: '分辨率1' },
+                  { value: 'resolution2', label: '分辨率2' },
+                  { value: 'resolution3', label: '分辨率3' },
+                ]}
+              />
             </Col>
             <Col span={8}>
-              {/* antd v6：Input 的 addonAfter 已废弃，后缀改用 Space.Compact + Space.Addon 组合。
-                  表单绑定必须落在 Input 上，所以 name 移到内层 noStyle 的 Form.Item，
-                  它的校验错误会自动冒泡到外层 Form.Item 显示（见 form/FormItem 的 notifyParentMetaChange）。
-                  / antd v6: Input's addonAfter is deprecated; compose the suffix with Space.Compact +
-                  Space.Addon. The binding must stay on the Input, so `name` moves to the inner noStyle
-                  Form.Item, whose errors bubble up to the outer item (see FormItem's
-                  notifyParentMetaChange). */}
-              <Form.Item label={t('groupForm.form.label.video.acquisition.frameRate')}>
-                <Space.Compact block>
-                  <Form.Item name="video.acquisition.frameRate" noStyle>
-                    <Input placeholder={t('groupForm.placeholder.video.acquisition.frameRate')} />
-                  </Form.Item>
-                  <Space.Addon>fps</Space.Addon>
-                </Space.Compact>
-              </Form.Item>
+              {/* 单位后缀用 Semi Input 的 addonAfter 拼在输入框右侧。
+                  / The unit suffix is rendered via Semi Input's addonAfter. */}
+              <Form.Input
+                label={t('groupForm.form.label.video.acquisition.frameRate')}
+                field="video.acquisition.frameRate"
+                placeholder={t('groupForm.placeholder.video.acquisition.frameRate')}
+                addonAfter="fps"
+              />
             </Col>
           </Row>
           <Row gutter={80}>
             <Col span={8}>
-              <Form.Item
+              <Form.Select
                 label={t('groupForm.form.label.video.encoding.resolution')}
-                name="video.encoding.resolution"
-              >
-                <Select
-                  placeholder={t('groupForm.placeholder.video.encoding.resolution')}
-                  options={[
-                    { value: 'resolution1', label: '分辨率1' },
-                    { value: 'resolution2', label: '分辨率2' },
-                    { value: 'resolution3', label: '分辨率3' },
-                  ]}
-                />
-              </Form.Item>
+                field="video.encoding.resolution"
+                placeholder={t('groupForm.placeholder.video.encoding.resolution')}
+                optionList={[
+                  { value: 'resolution1', label: '分辨率1' },
+                  { value: 'resolution2', label: '分辨率2' },
+                  { value: 'resolution3', label: '分辨率3' },
+                ]}
+              />
             </Col>
             <Col span={8}>
-              <Form.Item label={t('groupForm.form.label.video.encoding.rate.min')}>
-                <Space.Compact block>
-                  <Form.Item name="video.encoding.rate.min" noStyle>
-                    <Input placeholder={t('groupForm.placeholder.video.encoding.rate.min')} />
-                  </Form.Item>
-                  <Space.Addon>bps</Space.Addon>
-                </Space.Compact>
-              </Form.Item>
+              <Form.Input
+                label={t('groupForm.form.label.video.encoding.rate.min')}
+                field="video.encoding.rate.min"
+                placeholder={t('groupForm.placeholder.video.encoding.rate.min')}
+                addonAfter="bps"
+              />
             </Col>
             <Col span={8}>
-              <Form.Item label={t('groupForm.form.label.video.encoding.rate.max')}>
-                <Space.Compact block>
-                  <Form.Item name="video.encoding.rate.max" noStyle>
-                    <Input placeholder={t('groupForm.placeholder.video.encoding.rate.max')} />
-                  </Form.Item>
-                  <Space.Addon>bps</Space.Addon>
-                </Space.Compact>
-              </Form.Item>
+              <Form.Input
+                label={t('groupForm.form.label.video.encoding.rate.max')}
+                field="video.encoding.rate.max"
+                placeholder={t('groupForm.placeholder.video.encoding.rate.max')}
+                addonAfter="bps"
+              />
             </Col>
           </Row>
           <Row gutter={80}>
             <Col span={8}>
-              <Form.Item label={t('groupForm.form.label.video.encoding.rate.default')}>
-                <Space.Compact block>
-                  <Form.Item name="video.encoding.rate.default" noStyle>
-                    <Input placeholder={t('groupForm.placeholder.video.encoding.rate.default')} />
-                  </Form.Item>
-                  <Space.Addon>bps</Space.Addon>
-                </Space.Compact>
-              </Form.Item>
+              <Form.Input
+                label={t('groupForm.form.label.video.encoding.rate.default')}
+                field="video.encoding.rate.default"
+                placeholder={t('groupForm.placeholder.video.encoding.rate.default')}
+                addonAfter="fps"
+              />
             </Col>
             <Col span={8}>
-              <Form.Item label={t('groupForm.form.label.video.encoding.frameRate')}>
-                <Space.Compact block>
-                  <Form.Item name="video.encoding.frameRate" noStyle>
-                    <Input placeholder={t('groupForm.placeholder.video.encoding.frameRate')} />
-                  </Form.Item>
-                  <Space.Addon>fps</Space.Addon>
-                </Space.Compact>
-              </Form.Item>
+              <Form.Input
+                label={t('groupForm.form.label.video.encoding.frameRate')}
+                field="video.encoding.frameRate"
+                placeholder={t('groupForm.placeholder.video.encoding.frameRate')}
+                addonAfter="fps"
+              />
             </Col>
             <Col span={8}>
-              <Form.Item label={t('groupForm.form.label.video.encoding.profile')}>
-                <Space.Compact block>
-                  <Form.Item name="video.encoding.profile" noStyle>
-                    <Input placeholder={t('groupForm.placeholder.video.encoding.profile')} />
-                  </Form.Item>
-                  <Space.Addon>bps</Space.Addon>
-                </Space.Compact>
-              </Form.Item>
+              <Form.Input
+                label={t('groupForm.form.label.video.encoding.profile')}
+                field="video.encoding.profile"
+                placeholder={t('groupForm.placeholder.video.encoding.profile')}
+                addonAfter="bps"
+              />
             </Col>
           </Row>
         </Card>
-        <Card variant="borderless">
-          <Title level={5}>{t('groupForm.title.audio')}</Title>
+        <Card bordered={false}>
+          <Title heading={5}>{t('groupForm.title.audio')}</Title>
           <Row gutter={80}>
             <Col span={8}>
-              <Form.Item
+              <Form.Select
                 label={t('groupForm.form.label.audio.mode')}
-                initialValue={'custom'}
-                name="audio.mode"
-              >
-                <Select
-                  placeholder={t('groupForm.placeholder.audio.mode')}
-                  options={[
-                    { value: 'custom', label: '自定义' },
-                    { value: 'mode1', label: '模式1' },
-                    { value: 'mode2', label: '模式2' },
-                  ]}
-                />
-              </Form.Item>
+                initValue={'custom'}
+                field="audio.mode"
+                placeholder={t('groupForm.placeholder.audio.mode')}
+                optionList={[
+                  { value: 'custom', label: '自定义' },
+                  { value: 'mode1', label: '模式1' },
+                  { value: 'mode2', label: '模式2' },
+                ]}
+              />
             </Col>
             <Col span={8}>
-              <Form.Item
+              <Form.Select
                 label={t('groupForm.form.label.audio.acquisition.channels')}
-                name="audio.acquisition.channels"
-              >
-                <Select
-                  placeholder={t('groupForm.placeholder.audio.acquisition.channels')}
-                  options={[
-                    { value: '1', label: '1' },
-                    { value: '2', label: '2' },
-                    { value: '3', label: '3' },
-                  ]}
-                />
-              </Form.Item>
+                field="audio.acquisition.channels"
+                placeholder={t('groupForm.placeholder.audio.acquisition.channels')}
+                optionList={[
+                  { value: '1', label: '1' },
+                  { value: '2', label: '2' },
+                  { value: '3', label: '3' },
+                ]}
+              />
             </Col>
             <Col span={8}>
-              <Form.Item label={t('groupForm.form.label.audio.encoding.rate')}>
-                <Space.Compact block>
-                  <Form.Item name="audio.encoding.rate" noStyle>
-                    <Input placeholder={t('groupForm.placeholder.audio.encoding.rate')} />
-                  </Form.Item>
-                  <Space.Addon>bps</Space.Addon>
-                </Space.Compact>
-              </Form.Item>
+              <Form.Input
+                label={t('groupForm.form.label.audio.encoding.rate')}
+                field="audio.encoding.rate"
+                placeholder={t('groupForm.placeholder.audio.encoding.rate')}
+                addonAfter="bps"
+              />
             </Col>
           </Row>
           <Row gutter={80}>
             <Col span={8}>
-              <Form.Item label={t('groupForm.form.label.audio.encoding.profile')}>
-                <Space.Compact block>
-                  <Form.Item name="audio.encoding.profile" noStyle>
-                    <Input placeholder={t('groupForm.placeholder.audio.encoding.profile')} />
-                  </Form.Item>
-                  <Space.Addon>fps</Space.Addon>
-                </Space.Compact>
-              </Form.Item>
+              <Form.Input
+                label={t('groupForm.form.label.audio.encoding.profile')}
+                field="audio.encoding.profile"
+                placeholder={t('groupForm.placeholder.audio.encoding.profile')}
+                addonAfter="fps"
+              />
             </Col>
           </Row>
         </Card>
-        <Card variant="borderless" className="!mb-[32px]">
-          <Title level={5}>{t('groupForm.title.explanation')}</Title>
-          <Form.Item label={t('groupForm.form.label.explanation')} name="audio.explanation">
-            <Input.TextArea placeholder={t('groupForm.placeholder.explanation')} />
-          </Form.Item>
+        <Card bordered={false} className="!mb-[32px]">
+          <Title heading={5}>{t('groupForm.title.explanation')}</Title>
+          <Form.TextArea
+            label={t('groupForm.form.label.explanation')}
+            field="audio.explanation"
+            placeholder={t('groupForm.placeholder.explanation')}
+          />
         </Card>
       </Form>
       <div className={styles.actions}>
@@ -230,7 +193,7 @@ export default function GroupForm() {
           <Button onClick={handleReset} size="large">
             {t('groupForm.reset')}
           </Button>
-          <Button type="primary" onClick={handleSubmit} loading={loading} size="large">
+          <Button type="primary" theme="solid" onClick={handleSubmit} loading={loading} size="large">
             {t('groupForm.submit')}
           </Button>
         </Space>

@@ -1,13 +1,13 @@
 .container
   :global
-    // arco 的 .arco-list-content / .arco-card-meta-title 在本项目没有对应的 antd 节点
-    // （本页未使用 List / Card.Meta），原规则恒不命中，已删除
-    // / arco's .arco-list-content / .arco-card-meta-title have no antd counterparts here
-    // (this page uses neither List nor Card.Meta), so those rules were removed
+    // 旧的 list-content / card-meta-title 规则在本页没有对应节点
+    // （本页未使用 List / Card.Meta），已删除
+    // / The old list-content and card-meta-title rules had no matching nodes here
+    // (this page uses neither List nor Card.Meta), so they were removed
 
-    // 分组标题由 Typography.Title level={5} 渲染，对应 h5.ant-typography（原写法为 h6）
-    // / group headings come from Typography.Title level={5} → h5.ant-typography
-    h5.ant-typography
+    // 分组标题由 Semi Typography.Title heading={5} 渲染，对应 h5.semi-typography
+    // / group headings come from Semi Typography.Title heading={5} → h5.semi-typography
+    h5.semi-typography
       font-size 14px
       margin-top 16px
       margin-bottom 12px
@@ -15,10 +15,9 @@
 .card-block
   margin-bottom 16px
 
-  // antd Card 头部 = .ant-card-head（原 arco-card-header）
-  // / antd card head = .ant-card-head
-  :global(.ant-card-head)
-    border-bottom none
+  // Semi Card 头部 = .semi-card-header（卡片标题容器，默认 20px 内边距）
+  // / Semi card head = .semi-card-header (title container, 20px padding by default)
+  :global(.semi-card-header)
     height auto
     padding 16px
     padding-bottom 0
@@ -42,15 +41,15 @@
       width 24px
       // 圆形图标底色跟随主题主色，文字用「实底上的文本」token
       // / icon badge follows the theme primary; text uses the on-solid text token
-      color var(--ant-color-text-light-solid)
-      background var(--ant-color-primary)
+      color var(--semi-color-white)
+      background var(--semi-color-primary)
       text-align center
       line-height 24px
       border-radius 50%
       margin-right 8px
 
     .more
-      color var(--ant-color-text-quaternary)
+      color var(--semi-color-text-3)
       font-size 16px
       position absolute
       right 16px
@@ -61,26 +60,26 @@
     .more
       opacity 1
 
-  // antd Descriptions 单元格：标签 .ant-descriptions-item-label，内容 .ant-descriptions-item-content
-  // / antd Descriptions cells: label .ant-descriptions-item-label, value .ant-descriptions-item-content
-  .time, .content > :global(.ant-typography), :global(.ant-descriptions-item-label), :global(.ant-descriptions-item-content)
+  // Semi Descriptions 单元格：标签是 th.semi-descriptions-item-th，内容是 td.semi-descriptions-item-td
+  // / Semi Descriptions cells: label is th.semi-descriptions-item-th, value is td.semi-descriptions-item-td
+  .time, .content > :global(.semi-typography), :global(.semi-descriptions-item-th), :global(.semi-descriptions-item-td)
     font-size 12px
     font-weight 400
-    color var(--ant-color-text-tertiary)
+    color var(--semi-color-text-2)
     padding 0
     line-height 20px
 
-  :global(.ant-descriptions-item-content)
-    color var(--ant-color-text-secondary)
+  :global(.semi-descriptions-item-td)
+    color var(--semi-color-text-1)
     padding-left 6px
 
   .content
     height 48px
 
   &-skeleton
-    // antd Skeleton 段落占位行 = .ant-skeleton-section 下的 ul.ant-skeleton-paragraph 的 li
-    // / antd skeleton paragraph rows = li of ul.ant-skeleton-paragraph under .ant-skeleton-section
-    :global(.ant-skeleton-section .ant-skeleton-paragraph > li:not(:last-child))
+    // Semi Skeleton.Paragraph 的占位行 = .semi-skeleton-paragraph 下的 li
+    // / Semi Skeleton.Paragraph placeholder rows = li inside .semi-skeleton-paragraph
+    :global(.semi-skeleton-paragraph > li:not(:last-child))
       height 14px
       margin-bottom 8px
 
@@ -90,10 +89,10 @@
 
   .description
     margin-top 16px
-    color var(--ant-color-text-tertiary)
+    color var(--semi-color-text-2)
     font-weight 400
 
-  // antd Card 卡体 / antd card body
-  :global(.ant-card-body)
+  // Semi Card 卡体 / Semi card body
+  :global(.semi-card-body)
     padding-top 52px
     padding-bottom 64px

@@ -1,15 +1,35 @@
+.workplace
+  display flex
+  width 100%
+
 .left
-  width calc(100% - 296px)
+  flex 1
+  min-width 0
   margin-right 16px
 
 .right
-  width 280px
+  flex 0 0 280px
+  min-width 0
+
+@media (max-width 1200px)
+  .workplace
+    flex-direction column
+
+  .left
+    flex none
+    width 100%
+    margin-right 0
+    margin-bottom 16px
+
+  .right
+    flex none
+    width 100%
 
 .caret-green
-  color var(--ant-color-success)
+  color var(--semi-color-success)
 
 .caret-red
-  color var(--ant-color-error)
+  color var(--semi-color-danger)
 
 // Overview 统计项
 .stat
@@ -17,7 +37,7 @@
     display flex
     align-items center
     padding-left 20px
-    color var(--ant-color-text)
+    color var(--semi-color-text-0)
 
   &-icon
     display flex
@@ -25,28 +45,40 @@
     justify-content center
     width 54px
     height 54px
-    background-color var(--ant-color-fill-secondary)
+    background-color var(--semi-color-fill-1)
     border-radius 50%
     margin-right 12px
 
     :global
-      .anticon
-        width 50%
-        height 50%
+      .semi-icon
+        font-size 27px
+
+  &-col
+    &:not(:last-child)
+      border-right 1px solid var(--semi-color-border)
+
+    @media (max-width 900px)
+      width 50% !important
+
+    @media (max-width 600px)
+      width 100% !important
+
+      &:not(:last-child)
+        border-right none
 
   &-title
     font-size 12px
-    color var(--ant-color-text)
+    color var(--semi-color-text-0)
 
   &-count
     font-size 22px
     font-weight 600
-    color var(--ant-color-text)
+    color var(--semi-color-text-0)
 
   &-unit
     font-size 12px
     font-weight 400
-    color var(--ant-color-text-secondary)
+    color var(--semi-color-text-1)
     margin-left 8px
 
 .chart
@@ -59,12 +91,12 @@
     font-size 12px
     font-weight 400
     margin-left 4px
-    color var(--ant-color-text-tertiary)
+    color var(--semi-color-text-2)
 
 // Overview
 .growth-icon
   font-size 18px
-  color var(--ant-color-success)
+  color var(--semi-color-success)
 
 // Shortcuts
 .shortcut
@@ -82,13 +114,13 @@
     cursor pointer
 
     ^[1]:hover ^[0]-icon
-      background-color var(--ant-color-primary-bg)
+      background-color var(--semi-color-primary-light-default)
 
       svg
-        color var(--ant-color-primary)
+        color var(--semi-color-primary)
 
     ^[1]:hover ^[0]-title
-      color var(--ant-color-primary)
+      color var(--semi-color-primary)
 
   &-icon
     display flex
@@ -97,7 +129,7 @@
     width 32px
     height 32px
     border-radius 6px
-    background-color var(--ant-color-fill-secondary)
+    background-color var(--semi-color-fill-1)
     margin-bottom 4px
 
     svg
@@ -106,13 +138,13 @@
   &-title
     font-size 12px
     line-height 20px
-    color var(--ant-color-text)
+    color var(--semi-color-text-0)
 
 .recent
   font-weight 500
   font-size 16px
   line-height 24px
-  color var(--ant-color-text)
+  color var(--semi-color-text-0)
   margin-bottom 16px
 
 // Carousel
@@ -121,7 +153,7 @@
   height 160px
 
   &-img
-    width 280px
+    width 100%
     transform translateY(-30px)
 
 // Announcement
@@ -139,7 +171,7 @@
     text-overflow ellipsis
     white-space nowrap
     margin-left 4px
-    color var(--ant-color-text-secondary)
+    color var(--semi-color-text-1)
     text-decoration none
     font-size 13px
     cursor pointer
@@ -150,10 +182,10 @@
   grid-template-columns 50% 50%
 
 .doc-link
-  color var(--ant-color-text-secondary)
+  color var(--semi-color-text-1)
   padding 4px
   box-sizing border-box
   margin-bottom 12px
 
   &:hover
-    color var(--ant-color-primary)
+    color var(--semi-color-primary)

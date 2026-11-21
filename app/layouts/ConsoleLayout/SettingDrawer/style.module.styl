@@ -2,33 +2,6 @@
   display flex
   align-items center
   padding 4px 8px
-  border 1px solid var(--ant-color-border-secondary)
+  border 1px solid var(--semi-color-border)
   border-radius 2px
   cursor pointer
-
-// react-color(SketchPicker) 的全部样式都是源码里行内写死的固定色（面板 #fff、输入框边框 #ccc、
-// 标签 #222、预设色板分隔线 #eee），它本身不提供主题或 CSS 变量能力，无法跟随明/暗主题。
-// 这里改用 antd 的 CSS 变量覆盖这些行内值：变量随主题切换，调色板即自动适配两套主题。
-// 前提已验证：antd Popover 根节点带 `.css-var-app` 作用域（antd popover/index.js 的 cssVarCls），
-// portal 到 body 后浮层内仍能取到 --ant-color-* 变量。
-// 仍需 !important：react-color 用的是行内 style，行内样式优先级高于普通样式表规则。
-.picker-pop
-  // 面板底色：浅色 #fff / 深色 #1f1f1f，外圈描边跟随主题
-  :global(.sketch-picker)
-    background var(--ant-color-bg-elevated) !important
-    box-shadow 0 0 0 1px var(--ant-color-border), 0 8px 16px rgba(0, 0, 0, 0.15) !important
-
-  // 色值输入框：文字、底色、边框（react-color 写死 inset 0 0 0 1px #ccc）
-  // 背景必须显式设透明，否则暗黑模式下 <input> 会露出浏览器默认白底
-  :global(.sketch-picker input)
-    color var(--ant-color-text) !important
-    background transparent !important
-    box-shadow inset 0 0 0 1px var(--ant-color-border) !important
-
-  // hex / r / g / b / a 标签（react-color 写死 #222）
-  :global(.sketch-picker label)
-    color var(--ant-color-text-secondary) !important
-
-  // 预设色板上方分隔线（react-color 写死 1px solid #eee，暗色下会变成亮线）
-  :global(.sketch-picker) > div:last-child
-    border-top-color var(--ant-color-border-secondary) !important

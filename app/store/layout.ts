@@ -5,7 +5,7 @@ import type { PermMap } from '~/commons/types';
 import { menuRoutes } from '~/config/menu';
 import { filterMenuByPerm, findMenuTrail } from '~/commons/layout';
 import { setColorWeak, setLang, setTheme, setThemeColor } from '~/commons/html';
-// 默认配置来自 settings.json，与 react-pro.arco.design 一致：
+// 默认配置来自 settings.json，布局字段与初始模板保持一致：
 // 抽屉里"复制配置"得到的 JSON 可直接粘回本文件，从而真正作用于项目。
 import defaultSettings from '../settings.json';
 import type { MenuLeaf } from '~/config/types';
@@ -24,6 +24,7 @@ export const useLayoutStore = create<LayoutUiState>((set, get) => {
     permissionMenu: [],
     tabs: [{ key: HOME, title: 'menu.dashboard.workplace', closable: false }],
     activeKey: HOME,
+    openKeys: [],
 
     setCurrentHref(v) {
       const prev = get();
@@ -97,7 +98,6 @@ export const useLayoutStore = create<LayoutUiState>((set, get) => {
   };
 });
 
-let subscribeSettings: () => void;
 export const useSettingsStore = create<SettingsState>()(
   persist(
     (set) => ({
@@ -114,7 +114,7 @@ export const useSettingsStore = create<SettingsState>()(
       toggleDark: () => set((s) => ({ theme: s.theme === 'light' ? 'dark' : 'light' })),
     }),
     {
-      name: 'react-antd-console-settings',
+      name: 'react-semi-console-settings',
       // 持久化不在模块加载时自动还原，统一由 app/main.tsx 在挂载前一次性 rehydrate，
       // 保证主题/语言等 DOM 副作用在首屏渲染前就绪。
       skipHydration: true,
@@ -122,34 +122,28 @@ export const useSettingsStore = create<SettingsState>()(
         setColorWeak(colorWeak);
         setLang(lang);
         setTheme(theme);
-        setThemeColor(themeColor);
-
-        if (typeof subscribeSettings === 'function') {
-          subscribeSettings();
-        }
-        subscribeSettings = useSettingsStore.subscribe(
-          ({ theme, colorWeak, themeColor, lang }, prevState) => {
-            // 明暗模式：组件配色由 ConfigProvider 的 algorithm 驱动，这里只补 body[theme-mode] 标记，
-            // 供 antd cssVar 作用域外的样式（charts tooltip 等）判断明暗。
-            if (theme !== prevState.theme) {
-              setTheme(theme);
-            }
-
-            // 主题色：同步到 body 上的 --app-color-primary，供 #nprogress 等 body 级样式使用
-            if (themeColor !== prevState.themeColor) {
-              setThemeColor(themeColor);
-            }
-
-            if (colorWeak !== prevState.colorWeak) {
-              setColorWeak(colorWeak);
-            }
-
-            if (lang !== prevState.lang) {
-              setLang(lang);
-            }
-          },
-        );
+        setThemeColor(themeColor, theme);
       },
     },
   ),
 );
+useSettingsStore.subscribe(({ theme, colorWeak, themeColor, lang }, prevState) => {
+  // 明暗模式：Semi 靠 body[theme-mode='dark'] 切换两套色盘，浮层自动跟随。
+  if (theme !== prevState.theme) {
+    setTheme(theme);
+  }
+
+  // 主题色：写入 body 的 --semi-color-primary 系列，组件即时换肤；
+  // 色阶随明暗不同，故 theme 变化时也要重算。
+  if (themeColor !== prevState.themeColor || theme !== prevState.theme) {
+    setThemeColor(themeColor, theme);
+  }
+
+  if (colorWeak !== prevState.colorWeak) {
+    setColorWeak(colorWeak);
+  }
+
+  if (lang !== prevState.lang) {
+    setLang(lang);
+  }
+});

@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
-import { Table, Card, Button, Space, Typography } from 'antd';
-import type { TablePaginationConfig } from 'antd';
-import { PlusOutlined, DownloadOutlined } from '@ant-design/icons';
+import { Table, Card, Button, Space, Typography } from '@douyinfe/semi-ui';
+import type { TablePaginationProps } from '@douyinfe/semi-ui/lib/es/table/interface';
+import { IconPlus, IconDownload } from '@douyinfe/semi-icons';
 import { useTranslation } from 'react-i18next';
 import PermissionWrapper from '~/components/PermissionWrapper';
 import SearchForm from './SearchForm';
@@ -23,59 +23,60 @@ export default function SearchTable() {
 
   const columns = useMemo(() => getColumns(t, tableCallback), [t]);
 
-  // 分页类型直接用 antd 导出的 TablePaginationConfig，避免在本文件内定义类型
-  // / Reuse antd's exported TablePaginationConfig instead of declaring a local type here
-  const [pagination, setPagination] = useState<TablePaginationConfig>({
+  // 分页类型用 Semi Table 导出的分页配置类型，避免在本文件内定义类型
+  // / Reuse Semi's exported table pagination type instead of declaring a local type here
+  const [pagination, setPagination] = useState<TablePaginationProps>({
     pageSize: 10,
-    current: 1,
+    currentPage: 1,
   });
   const [formParams, setFormParams] = useState<Record<string, any>>({});
 
-  const { current = 1, pageSize = 10 } = pagination;
+  const { currentPage = 1, pageSize = 10 } = pagination;
 
   // 分页 / 筛选条件变化时自动重新拉取（queryKey 带参，参数变化即重取）
   const { data = EMPTY_RESULT, isLoading: loading } = useSearchQuery(
-    current,
+    currentPage,
     pageSize,
     formParams,
   );
 
-  function onChangeTable(pag: TablePaginationConfig) {
-    const { current: c = 1, pageSize: ps = 10 } = pag;
-    setPagination((p) => ({ ...p, current: c, pageSize: ps }));
+  function onChangeTable(pag?: TablePaginationProps) {
+    const { currentPage: c = 1, pageSize: ps = 10 } = pag ?? {};
+    setPagination((p) => ({ ...p, currentPage: c, pageSize: ps }));
   }
 
   function handleSearch(params: Record<string, any>) {
-    setPagination((p) => ({ ...p, current: 1 }));
+    setPagination((p) => ({ ...p, currentPage: 1 }));
     setFormParams(params);
   }
 
   return (
-    <Card variant="borderless">
-      <Title level={5}>{t('menu.list.searchTable')}</Title>
+    <Card bordered={false}>
+      <Title heading={5}>{t('menu.list.searchTable')}</Title>
       <SearchForm onSearch={handleSearch} />
       <PermissionWrapper per={[{ resource: 'menu.list.searchTable', actions: ['write'] }]}>
         <div className="flex justify-between mb-[20px]">
           <Space>
-            <Button type="primary" icon={<PlusOutlined />}>
+            <Button type="primary" theme="solid" icon={<IconPlus />}>
               {t('searchTable.operations.add')}
             </Button>
             <Button>{t('searchTable.operations.upload')}</Button>
           </Space>
           <Space>
-            <Button icon={<DownloadOutlined />}>{t('searchTable.operation.download')}</Button>
+            <Button icon={<IconDownload />}>{t('searchTable.operation.download')}</Button>
           </Space>
         </div>
       </PermissionWrapper>
       <Table
         rowKey="id"
         loading={loading}
-        onChange={(pag) => onChangeTable(pag)}
+        onChange={(changeInfo) => onChangeTable(changeInfo.pagination)}
         pagination={{
           ...pagination,
           total: data.total,
           showSizeChanger: true,
-          showTotal: (total: number) => `共 ${total} 条`,
+          showTotal: true,
+          formatPageText: ({ total } = {}) => `共 ${total} 条`,
         }}
         columns={columns}
         dataSource={data.list}

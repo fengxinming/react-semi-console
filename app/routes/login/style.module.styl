@@ -1,10 +1,10 @@
 .container
   display flex
   height 100vh
-  // 右侧表单区底色：antd colorBgContainer（浅色 #FFFFFF / 深色由 darkAlgorithm 推导）；
-  // 显式声明，避免依赖 html/body（不在 cssVar 作用域内，取不到变量）
-  // / right-hand form panel background (antd colorBgContainer)
-  background-color var(--ant-color-bg-container)
+  // 右侧表单区底色：Semi 的容器级底色 token --semi-color-bg-1（浅色 #FFFFFF / 深色自动推导）；
+  // 显式声明，避免依赖 html/body（不在变量作用域内，取不到值）
+  // / right-hand form panel background: Semi's container-level token --semi-color-bg-1
+  background-color var(--semi-color-bg-1)
 
   .banner
     width 550px
@@ -36,9 +36,9 @@
     margin-left 4px
     margin-right 4px
     font-size 20px
-    // logo 固定在深色 banner 上，用 antd colorTextLightSolid（实色/深色背景上的文字）
-    // / the logo sits on the dark banner; antd token for text on a solid background
-    color var(--ant-color-text-light-solid)
+    // logo 固定在深色 banner 上，用 Semi 的「实色/深色背景上的文字」token
+    // / the logo sits on the dark banner; Semi's token for text on a solid/dark background
+    color var(--semi-color-white)
 
 .banner
   display flex
@@ -62,8 +62,8 @@
     flex-direction column
     justify-content center
     align-items center
-    // antd Carousel(slick) fade 模式下 slide 为 absolute 定位，height:100% 参照链断裂导致内容贴顶；
-    // 用 100vh 显式撑满（banner 即 100vh），恢复垂直居中对齐参考站
+    // Semi Carousel（内部基于 slick）fade 模式下 slide 为 absolute 定位，height:100% 参照链断裂
+    // 导致内容贴顶；用 100vh 显式撑满（banner 即 100vh），恢复垂直居中对齐参考站
     // / fade-mode slides are absolutely positioned so height:100% collapses;
     // explicit 100vh restores vertical centering to match the reference site
     height 100vh
@@ -72,8 +72,8 @@
     font-weight 500
     font-size 20px
     line-height 28px
-    // 位于深色 banner 上，用 antd colorTextLightSolid / text on the dark banner → colorTextLightSolid
-    color var(--ant-color-text-light-solid)
+    // 位于深色 banner 上，用 Semi 的 --semi-color-white / text on the dark banner
+    color var(--semi-color-white)
 
   &-sub-title
     margin-top 8px
@@ -81,7 +81,7 @@
     line-height 22px
     // 位于深色 banner 上；同 token 降不透明度表达次级文字
     // / on the dark banner; same token with reduced opacity for secondary emphasis
-    color var(--ant-color-text-light-solid)
+    color var(--semi-color-white)
     opacity 0.65
 
   &-image
@@ -95,13 +95,13 @@
   &-title
     font-size 24px
     font-weight 500
-    color var(--ant-color-text)
+    color var(--semi-color-text-0)
     line-height 32px
 
   &-sub-title
     font-size 16px
     line-height 24px
-    color var(--ant-color-text-tertiary)
+    color var(--semi-color-text-2)
 
   &-register-btn
-    color var(--ant-color-text-tertiary) !important
+    color var(--semi-color-text-2) !important

@@ -1,9 +1,9 @@
 .navbar
   display flex
   justify-content space-between
-  border-bottom 1px solid var(--ant-color-border-secondary)
+  border-bottom 1px solid var(--semi-color-border)
   box-sizing border-box
-  background-color var(--ant-color-bg-layout)
+  background-color var(--semi-color-bg-0)
   height 100%
   width 100%
 
@@ -16,14 +16,18 @@
   display flex
   align-items center
   width 100%
+  min-width 0
   padding-left 20px
   box-sizing border-box
 
 .logo-name
-  color var(--ant-color-text)
+  color var(--semi-color-text-0)
   font-weight 500
   font-size 20px
   margin-left 10px
+  white-space nowrap
+  overflow hidden
+  text-overflow ellipsis
 
 .collapse-toggle
   display inline-flex
@@ -33,18 +37,21 @@
   height 32px
   border-radius 4px
   cursor pointer
-  color var(--ant-color-text-secondary)
+  color var(--semi-color-text-1)
   margin-left 20px
 
   &:hover
-    background var(--ant-color-fill-secondary)
-    color var(--ant-color-primary)
+    background var(--semi-color-fill-1)
+    color var(--semi-color-primary)
 
 .username
   cursor pointer
 
 .right
   display flex
+  flex-shrink 1
+  min-width 0
+  overflow-x auto
   list-style none
   padding-right 20px
   margin 0
@@ -53,61 +60,58 @@
     padding 0 8px
     display flex
     align-items center
+    flex-shrink 0
 
   a
     text-decoration none
-    color var(--ant-color-text)
+    color var(--semi-color-text-0)
 
 .menu-wide
   width 640px
 
 .icon-button
   font-size 16px
-  border 1px solid var(--ant-color-border-secondary)
+  border 1px solid var(--semi-color-border)
 
   > svg
     vertical-align -3px
 
-// 消息浮层：外框（背景/圆角/阴影）由 antd Popover 容器提供，这里只负责尺寸与滚动，
+// 消息浮层：外框（背景/圆角/阴影）由 Semi Popover 容器提供，这里只负责尺寸与滚动，
 // 否则会形成内外两层框，中间多出一圈空白
-// / Notice popup: the outer frame (background/radius/shadow) comes from antd's Popover container;
+// / Notice popup: the outer frame (background/radius/shadow) comes from Semi's Popover container;
 // this only handles size and scrolling, otherwise you get a double frame with a blank gutter.
 .notice-panel
   width 400px
   max-height 800px
   overflow-y auto
 
-  // antd Tabs：头部导航 .ant-tabs-nav，面板区 .ant-tabs-body
-  // / antd Tabs: header nav .ant-tabs-nav, panel area .ant-tabs-body
-  :global(.ant-tabs-nav)
+  // Semi Tabs：头部导航 .semi-tabs-bar，面板区 .semi-tabs-content
+  // / Semi Tabs: header bar .semi-tabs-bar, panel area .semi-tabs-content
+  :global(.semi-tabs-bar)
     padding 8px 16px
-    // .ant-tabs-nav::before 已画好 1px 分隔线，不再重复描边；
-    // 另外清掉 antd 自带的 16px 下外边距，否则标签分隔线与列表之间会空出一条
-    // / .ant-tabs-nav::before already draws the 1px divider, so no extra border;
-    // also clear antd's 16px bottom margin, which would leave a gap above the list
+    // 清掉 Tabs 自带的下外边距，否则标签分隔线与列表之间会空出一条
+    // / clear Tabs' default bottom margin, which would leave a gap above the list
     margin 0
 
-  :global(.ant-tabs-body)
+  :global(.semi-tabs-content)
     padding-top 0
 
-  // 列表项左右留白与 Tabs 的 16px 对齐（Listy 默认 padding 为 12px 16px，
+  // 列表项左右留白与 Tabs 的 16px 对齐（Semi List 默认内边距不同，
   // 这里显式写出来，避免 token 变化后内容贴到弹层边缘）
-  // / Align the list item's horizontal padding with the Tabs' 16px (Listy defaults to
-  // 12px 16px; written out explicitly so a token change cannot push content to the edge)
-  :global(.ant-listy-item)
+  // / Align the list item's horizontal padding with the Tabs' 16px
+  :global(.semi-list-item)
     padding 12px 16px
 
-    // Listy 默认带 hover 底色与末项分隔线，原 List 没有，这里还原
-    // / Listy ships a hover background and a trailing divider by default, while the previous
-    // List had neither, so both are reverted
+    // Semi List 默认带 hover 底色与末项分隔线，这里还原成原视觉
+    // / Semi List ships a hover background and a trailing divider by default; revert both
     &:hover
       background-color transparent
 
     &:last-child
       border-bottom none
 
-// Listy 的 itemRender 里自己拼的两栏布局，取代原 List.Item.Meta
-// / Two-column layout composed inside Listy's itemRender, replacing List.Item.Meta
+// 列表项里自己拼的两栏布局，取代原 List.Item.Meta
+// / Two-column layout composed inside the list item, replacing List.Item.Meta
 .notice-item
   display flex
   align-items flex-start
@@ -118,26 +122,25 @@
   flex 1
   min-width 0
 
-// 取代原 .ant-list-item-meta-title（antd 用 h4，自带 4px 下外边距）
-// / Replaces .ant-list-item-meta-title (antd uses an h4 with a 4px bottom margin)
+// 列表项标题：用 Typography.Title 渲染，清掉默认外边距
+// / List item title rendered with Typography.Title, with default margins cleared
 .notice-item-title
   margin 0 0 4px
 
 .notice-empty
   padding 24px 0
   text-align center
-  color var(--ant-color-text-tertiary)
+  color var(--semi-color-text-2)
 
 .notice-content
   white-space nowrap
   overflow hidden
   text-overflow ellipsis
-  color var(--ant-color-text-secondary)
+  color var(--semi-color-text-1)
   font-size 13px
 
-// 取代原 antd 的 .ant-list-footer（它自带 12px 上下内边距，Listy 没有 footer 插槽）
-// / Replaces antd's .ant-list-footer, which carried a 12px vertical padding (Listy has no
-// footer slot)
+// 弹层底部操作区（Semi List 无 footer 插槽，单独渲染）
+// / Popup footer actions (Semi List has no footer slot, so it is rendered separately)
 .notice-footer
   display flex
   padding 12px 0
@@ -148,14 +151,14 @@
   width 50%
 
   &:first-child
-    border-right 1px solid var(--ant-color-border-secondary)
+    border-right 1px solid var(--semi-color-border)
 
-// 搜索框：className 直接落在 antd Input 的根节点上（带 prefix 时即 .ant-input-affix-wrapper），
-// 因此背景与圆角写在 .search-box 自身；内部 input 由 antd 置为 transparent
-// / search input: className lands on antd Input's root (.ant-input-affix-wrapper when it has a
-// prefix), so the background/radius go on .search-box itself; antd keeps the inner input transparent
+// 搜索框：className 直接落在 Semi Input 的根节点上（即 .semi-input-wrapper），
+// 因此背景与圆角写在 .search-box 自身
+// / search input: className lands on Semi Input's root (.semi-input-wrapper), so the
+// background/radius go on .search-box itself
 .search-box
-  background-color var(--ant-color-fill-secondary)
+  background-color var(--semi-color-fill-1)
   border-radius 16px
 
   svg
@@ -167,14 +170,18 @@
   cursor pointer
 
   &:hover
-    background var(--ant-color-fill-secondary)
+    background var(--semi-color-fill-1)
 
 .search-empty
   padding 24px 0
   text-align center
-  color var(--ant-color-text-tertiary)
+  color var(--semi-color-text-2)
 
 .dropdown-icon
   margin-right 8px
   font-size 16px
   vertical-align text-bottom
+
+@media (max-width: 768px)
+  .logo-name
+    display none

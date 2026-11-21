@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router';
-import { Input, Modal } from 'antd';
-import { SearchOutlined } from '@ant-design/icons';
+import { Input, Modal } from '@douyinfe/semi-ui';
+import { IconSearch } from '@douyinfe/semi-icons';
 import { useTranslation } from 'react-i18next';
 import { menuRoutes } from '~/config/menu';
 import type { SearchResult } from './types';
@@ -67,25 +67,25 @@ export default function SearchEntry() {
       <Input
         className={`${styles['search-box']}`}
         placeholder={t('navbar.search.placeholder')}
-        allowClear
+        showClear
         onClick={() => setSearchOpen(true)}
-        prefix={<SearchOutlined />}
+        prefix={<IconSearch />}
       />
       <Modal
         title={t('navbar.search.title')}
-        open={searchOpen}
+        visible={searchOpen}
         footer={null}
         onCancel={() => setSearchOpen(false)}
         className="w-[520px]"
       >
         <Input
-          allowClear
+          showClear
           autoFocus
           placeholder={t('navbar.search.placeholder')}
           value={keyword}
-          onChange={(e) => setKeyword(e.target.value)}
+          onChange={(value) => setKeyword(value)}
           className="mb-[12px]"
-          prefix={<SearchOutlined />}
+          prefix={<IconSearch />}
         />
         <div className="max-h-[320px] overflow-auto">
           {searchResults.map((r) => (

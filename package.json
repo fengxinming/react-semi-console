@@ -1,15 +1,15 @@
 {
-  "name": "react-antd-console",
+  "name": "react-semi-console",
   "version": "1.0.0",
   "private": true,
-  "description": "基于 React 19 + React Router 8（Library 模式，纯客户端 SPA）+ Ant Design 6 的中后台管理模板",
-  "homepage": "https://github.com/fengxinming/react-antd-console#readme",
+  "description": "基于 React 19 + React Router 8（Library 模式，纯客户端 SPA）+ Semi Design 的中后台管理模板",
+  "homepage": "https://github.com/fengxinming/react-semi-console#readme",
   "bugs": {
-    "url": "https://github.com/fengxinming/react-antd-console/issues"
+    "url": "https://github.com/fengxinming/react-semi-console/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/fengxinming/react-antd-console.git"
+    "url": "git+https://github.com/fengxinming/react-semi-console.git"
   },
   "license": "MIT",
   "author": "Jesse Feng <fxm0016@126.com>",
@@ -25,18 +25,17 @@
     "typecheck": "tsc -p tsconfig.app.json --noEmit && tsc -p tsconfig.node.json --noEmit"
   },
   "dependencies": {
-    "@ant-design/charts": "^2",
     "@ant-design/colors": "^8.0.1",
-    "@ant-design/icons": "^6.3.4",
+    "@douyinfe/semi-icons": "^2.105.0",
+    "@douyinfe/semi-ui": "^2.105.0",
     "@tanstack/react-query": "^5.102.8",
-    "antd": "^6.6.5",
+    "@visactor/react-vchart": "2.2.2",
     "axios": "^1.20.0",
     "classnames": "^2.5.1",
     "dayjs": "^1.11.23",
     "i18next": "^26.4.0",
     "nprogress": "^0.2.0",
     "react": "^19.2.7",
-    "react-color": "^2.19.3",
     "react-dom": "^19.2.7",
     "react-i18next": "^17.0.12",
     "react-router": "^8",
@@ -45,11 +44,11 @@
     "zustand": "^5.0.15"
   },
   "devDependencies": {
+    "@douyinfe/semi-vite-plugin": "^2.105.0",
     "@tailwindcss/vite": "^4.3.3",
     "@types/node": "^22",
     "@types/nprogress": "^0.2.3",
     "@types/react": "^19.2.7",
-    "@types/react-color": "^3.0.13",
     "@types/react-dom": "^19.2.5",
     "@types/react-transition-group": "^4.4.12",
     "@vitejs/plugin-react": "^6.2.1",

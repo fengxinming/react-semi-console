@@ -1,8 +1,13 @@
 import type { ProfileItemProps, ProfileBlockItem } from './types';
-import { Descriptions, Card, Skeleton } from 'antd';
+import { Descriptions, Card, Skeleton, Typography } from '@douyinfe/semi-ui';
 import { useTranslation } from 'react-i18next';
 
-const skeleton = <Skeleton paragraph={{ rows: 1, style: { width: '200px' } }} active />;
+const skeleton = (
+  <Skeleton
+    active
+    placeholder={<Skeleton.Paragraph rows={1} style={{ width: '200px' }} />}
+  />
+);
 
 export default function ProfileItem({ data, type, loading }: ProfileItemProps) {
   const { t } = useTranslation();
@@ -75,21 +80,21 @@ export default function ProfileItem({ data, type, loading }: ProfileItemProps) {
     <Card>
       <div>
         {blockDataList.map(({ title: blockTitle, data: blockData }, index) => (
-          <Descriptions
-            key={blockTitle}
-            colon
-            // antd v6：labelStyle / contentStyle 已废弃，改用 styles.label / styles.content
-            // / antd v6: labelStyle / contentStyle are deprecated; use styles.label / styles.content
-            styles={{
-              label: { textAlign: 'right', width: 200, paddingRight: 10 },
-              content: { width: 400 },
-            }}
-            title={blockTitle}
-            items={(loading ? blockData.map((item) => ({ ...item, value: skeleton })) : blockData).map(
-              (item) => ({ label: item.label, children: item.value }),
-            )}
-            style={index > 0 ? { marginTop: 20 } : {}}
-          />
+          <div key={blockTitle} style={index > 0 ? { marginTop: 20 } : {}}>
+            <Typography.Title heading={5}>{blockTitle}</Typography.Title>
+            {/* Semi Descriptions 用 data（key 对应 label，value 对应内容）；
+                label 样式通过每项的 keyStyle 设置。
+                / Semi Descriptions uses `data` with key as label; keyStyle controls label style. */}
+            <Descriptions
+              data={(loading ? blockData.map((item) => ({ ...item, value: skeleton })) : blockData).map(
+                (item) => ({
+                  key: item.label,
+                  value: item.value,
+                  keyStyle: { textAlign: 'right', width: 200, paddingRight: 10 },
+                }),
+              )}
+            />
+          </div>
         ))}
       </div>
     </Card>

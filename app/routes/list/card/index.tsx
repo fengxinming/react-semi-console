@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Card, Tabs, Input, Typography, Row, Col } from 'antd';
+import { Card, Tabs, Input, Typography, Row, Col, TabPane } from '@douyinfe/semi-ui';
+import { IconSearch } from '@douyinfe/semi-icons';
 import { useTranslation } from 'react-i18next';
 import { useLoaderData, useNavigation } from 'react-router';
 import { fetchCardList } from '~/api/list';
@@ -47,29 +48,29 @@ export default function CardList() {
   );
 
   return (
-    <Card variant="borderless">
-      <Title level={5}>{t('menu.list.cardList')}</Title>
+    <Card bordered={false}>
+      <Title heading={5}>{t('menu.list.cardList')}</Title>
       <Tabs
         activeKey={activeKey}
         onChange={setActiveKey}
         tabBarExtraContent={
-          <Input.Search
+          <Input
+            prefix={<IconSearch />}
             className="!w-[240px]"
             placeholder={t(`cardList.tab.${activeKey}.placeholder`)}
           />
         }
-        items={[
-          { key: 'all', label: t('cardList.tab.title.all') },
-          { key: 'quality', label: t('cardList.tab.title.quality') },
-          { key: 'service', label: t('cardList.tab.title.service') },
-          { key: 'rules', label: t('cardList.tab.title.rules') },
-        ]}
-      />
+      >
+        <TabPane itemKey="all" tab={t('cardList.tab.title.all')} />
+        <TabPane itemKey="quality" tab={t('cardList.tab.title.quality')} />
+        <TabPane itemKey="service" tab={t('cardList.tab.title.service')} />
+        <TabPane itemKey="rules" tab={t('cardList.tab.title.rules')} />
+      </Tabs>
       <div className={styles.container}>
         {activeKey === 'all' ? (
           Object.entries(data).map(([key, list]) => (
             <div key={key}>
-              <Title level={5}>{t(`cardList.tab.title.${key}`)}</Title>
+              <Title heading={5}>{t(`cardList.tab.title.${key}`)}</Title>
               {getCardList(list, key as CardType)}
             </div>
           ))

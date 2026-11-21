@@ -1,4 +1,5 @@
-import { Result, Button } from 'antd';
+import { Button, Empty } from '@douyinfe/semi-ui';
+import { IconAlertCircle } from '@douyinfe/semi-icons';
 import { useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import styles from './style.module.styl';
@@ -8,18 +9,24 @@ export default function Exception500() {
   const { t } = useTranslation();
   return (
     <div className={styles.wrapper}>
-      <Result
-        status="500"
-        subTitle={t('exception.result.500.description')}
-        extra={[
-          <Button key="backPrev" className="!mr-[16px]" onClick={() => navigate(-1)}>
+      <Empty
+        image={<IconAlertCircle style={{ fontSize: 72 }} />}
+        description={t('exception.result.500.description')}
+      >
+        <div>
+          <Button
+            key="backPrev"
+            type="secondary"
+            className="!mr-[16px]"
+            onClick={() => navigate(-1)}
+          >
             {t('exception.result.backPrev')}
-          </Button>,
-          <Button key="backHome" type="primary" onClick={() => navigate('/')}>
+          </Button>
+          <Button key="backHome" type="primary" theme="solid" onClick={() => navigate('/')}>
             {t('exception.result.backHome')}
-          </Button>,
-        ]}
-      />
+          </Button>
+        </div>
+      </Empty>
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import { Row, Col, Space } from 'antd';
+import { Row, Col, Space } from '@douyinfe/semi-ui';
 import {
   fetchPublicOpinion,
   fetchContentPublishing,
@@ -22,7 +22,7 @@ export async function loader(): Promise<DataAnalysisLoaderData> {
 
 export default function DataAnalysis() {
   return (
-    <Space size={16} orientation="vertical" className="w-full">
+    <Space spacing={16} vertical className="w-full" style={{ alignItems: 'stretch' }}>
       <PublicOpinion />
       <Row gutter={16}>
         <Col span={14}>

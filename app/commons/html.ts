@@ -1,29 +1,36 @@
+import { generate } from '@ant-design/colors';
 import i18n from '~/i18n';
 import type { Language, Theme } from '~/store/types';
 
 /**
- * 切换主题：给 body 加 theme-mode 属性。
- * 组件配色已由 antd ConfigProvider 的 darkAlgorithm 驱动，但 @ant-design/charts 的 tooltip
- * 等样式仍靠 DOM 标记判断明暗（见 app.styl）。
- * / Switch theme: set body[theme-mode]. Component colors come from antd ConfigProvider's
- * darkAlgorithm, but DOM-driven styles such as @ant-design/charts tooltips still read this
- * marker (see app.styl).
+ * 切换明暗：给 body 增删 theme-mode="dark"。
+ * Semi 在 body 下同时挂载亮/暗两套色盘，靠这个属性切换（官方机制）。
+ * 浮层（Toast/Tooltip/Popover 等 portal 到 body）因此自动跟随明暗。
  */
 export function setTheme(theme: Theme) {
-  document.body.setAttribute('theme-mode', theme);
+  if (theme === 'dark') {
+    document.body.setAttribute('theme-mode', 'dark');
+  } else {
+    document.body.removeAttribute('theme-mode');
+  }
 }
 
 /**
- * 主题色：把当前主色写入 body 上的 CSS 自定义属性 --app-color-primary。
- * antd 的 --ant-* 变量只注册在 cssVar 作用域内（见 app.styl 开头注释），
- * 挂在 body 下的元素（如 #nprogress）解析不到，故在此同步一份供其使用，避免硬编码色值。
- * / Theme color: mirror the primary color onto the --app-color-primary custom property on body.
- * antd's --ant-* vars only exist inside the cssVar scope (see the header comment in app.styl),
- * so elements under body (e.g. #nprogress) cannot resolve them; this keeps those styles
- * token-driven instead of hardcoded.
+ * 主题色：把主色及其色阶写入 body 的 --semi-color-primary 系列变量。
+ * Semi 组件从这些 CSS 变量取色，运行时覆盖即可换肤，无需重编译主题包。
+ * 色阶由 @ant-design/colors 的 generate 生成 10 档，取其中几档映射到 Semi 的 hover/active/light。
  */
-export function setThemeColor(themeColor: string) {
-  document.body.style.setProperty('--app-color-primary', themeColor);
+export function setThemeColor(themeColor: string, theme: Theme) {
+  const palette = generate(themeColor, { theme: theme === 'dark' ? 'dark' : 'default' });
+  const body = document.body.style;
+  body.setProperty('--semi-color-primary', themeColor);
+  // palette[5] 略深、palette[6] 更深；hover/active 取相邻档，保证交互态可辨识
+  body.setProperty('--semi-color-primary-hover', palette[5] ?? themeColor);
+  body.setProperty('--semi-color-primary-active', palette[6] ?? themeColor);
+  // light 系列取浅色档，用于浅色填充背景/文字
+  body.setProperty('--semi-color-primary-light-default', palette[0] ?? themeColor);
+  body.setProperty('--semi-color-primary-light-hover', palette[1] ?? themeColor);
+  body.setProperty('--semi-color-primary-light-active', palette[2] ?? themeColor);
 }
 
 /**

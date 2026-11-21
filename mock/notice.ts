@@ -1,11 +1,11 @@
-// 通知/消息 mock —— 对齐参考站 Arco Pro 的 MessageBox 数据结构
+// 通知/消息 mock —— 消息中心数据结构
 // 三个 Tab: message(消息) / notice(通知) / todo(待办),均带未读标记。
 const notices = [
   {
     id: "1",
     tab: "message",
-    name: "Antd",
-    content: "欢迎使用 Antd 控制台,新版本已上线。",
+    name: "Semi",
+    content: "欢迎使用 Semi 控制台,新版本已上线。",
     time: "2026-09-02 09:12",
     read: false,
     avatar: "",
@@ -86,7 +86,7 @@ const notices = [
 
 // 模拟新消息到达的内容池(不含 mockjs,纯 Math.random)
 const INCOMING_POOL = [
-  { tab: "message", name: "Antd", content: "您关注的看板有新的数据更新。" },
+  { tab: "message", name: "Semi", content: "您关注的看板有新的数据更新。" },
   { tab: "message", name: "系统", content: "定时任务执行完成,详情请查看日志。" },
   { tab: "notice", name: "安全", content: "检测到新设备登录,请确认是否为本人操作。" },
   { tab: "notice", name: "运维", content: "服务器负载已恢复正常,可关注监控面板。" },

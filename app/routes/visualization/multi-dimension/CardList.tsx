@@ -1,10 +1,11 @@
 import { useMemo } from 'react';
-import { Statistic, Typography, Row, Col, Card, Skeleton } from 'antd';
-import { RiseOutlined, FallOutlined } from '@ant-design/icons';
+import { Typography, Row, Col, Card, Skeleton } from '@douyinfe/semi-ui';
+import { IconAscend, IconDescend } from '@douyinfe/semi-icons';
 import { useTranslation } from 'react-i18next';
 import { useLoaderData, useNavigation } from 'react-router';
-import { Column, Line } from '@ant-design/charts';
+import { VChart } from '@visactor/react-vchart';
 import { useSettingsStore } from '~/store';
+import { makeSpec } from '~/commons/vchart';
 import cs from 'classnames';
 import type { CardBlockData } from '~/api/types';
 import type { MultiDimensionLoaderData } from './types';
@@ -17,68 +18,72 @@ function CardBlock(props: CardBlockData) {
   const theme = useSettingsStore((s) => s.theme);
 
   const data = chartData ?? [];
-  const lineSpec = {
-    data,
-    xField: 'x',
-    yField: 'y',
-    scale: { color: { range: ['#165DFF', 'rgba(106,161,255,0.3)'] } },
-    colorField: 'name',
-    shapeField: 'smooth',
-    style: {
-      lineWidth: 2,
-      lineDash: (d: { name?: string }) => (d.name === '类目2' ? [8, 10] : [0, 0]),
+  const lineSpec = makeSpec(
+    {
+      type: 'line',
+      data: [{ id: 'card-line', values: data }],
+      xField: 'x',
+      yField: 'y',
+      seriesField: 'name',
+      color: ['#165DFF', 'rgba(106,161,255,0.3)'],
+      line: { style: { curveType: 'monotone', lineWidth: 2 } },
+      axes: [
+        { orient: 'bottom', visible: false },
+        { orient: 'left', visible: false },
+      ],
+      legends: { visible: false },
+      tooltip: { visible: false },
+      padding: { top: 0, left: 10, bottom: 0, right: 10 },
     },
-    axis: { x: false, y: false },
-    legend: false,
-    tooltip: false,
-    padding: [0, 10, 0, 10],
-  };
-  const columnSpec = {
-    data,
-    xField: 'x',
-    yField: 'y',
-    style: {
-      fill: (d: { x: number }) => (Number(d.x) % 2 === 0 ? '#86DF6C' : '#468DFF'),
-      maxWidth: 10,
+    theme,
+  );
+  const columnSpec = makeSpec(
+    {
+      type: 'bar',
+      data: [{ id: 'card-column', values: data }],
+      xField: 'x',
+      yField: 'y',
+      bar: {
+        style: {
+          fill: (d: { x: number }) => (Number(d.x) % 2 === 0 ? '#86DF6C' : '#468DFF'),
+        },
+      },
+      barMaxWidth: 10,
+      axes: [
+        { orient: 'bottom', visible: false },
+        { orient: 'left', visible: false },
+      ],
+      legends: { visible: false },
+      tooltip: { visible: false },
+      padding: { top: 0, left: 10, bottom: 0, right: 10 },
     },
-    axis: { x: false, y: false },
-    legend: false,
-    tooltip: false,
-    padding: [0, 10, 0, 10],
-  };
+    theme,
+  );
 
   return (
-    <Card variant="borderless" className={styles['card-block']}>
-      <div className="flex">
-        <Statistic
-          title={
-            <Title level={5} className="!m-0">
-              {title}
-            </Title>
-          }
-          loading={loading}
-          value={count}
-          prefix={
-            <Skeleton loading={loading} paragraph={{ rows: 1 }} className="w-[100px]" active>
-              <span
-                className={cs(styles['diff'], {
-                  [styles['diff-increment']]: increment,
-                })}
-              >
-                {diff}
-                {increment ? <RiseOutlined /> : <FallOutlined />}
-              </span>
-            </Skeleton>
-          }
-          groupSeparator=","
-        />
+    <Card bordered={false} className={styles['card-block']}>
+      <div className="flex flex-col">
+        <Title heading={5} className="!m-0">
+          {title}
+        </Title>
+        <div className="flex items-center">
+          <Skeleton loading={loading} active>
+            <span
+              className={cs(styles['diff'], {
+                [styles['diff-increment']]: increment,
+              })}
+            >
+              {diff}
+              {increment ? <IconAscend /> : <IconDescend />}
+            </span>
+          </Skeleton>
+          <span className={cs(styles.value, 'ml-[8px]')}>
+            {Number(count ?? 0).toLocaleString()}
+          </span>
+        </div>
       </div>
       <div className="w-full h-[80px]">
-        {chartType === 'interval' ? (
-          <Column {...columnSpec} theme={theme} />
-        ) : (
-          <Line {...lineSpec} theme={theme} />
-        )}
+        {chartType === 'interval' ? <VChart spec={columnSpec} /> : <VChart spec={lineSpec} />}
       </div>
     </Card>
   );

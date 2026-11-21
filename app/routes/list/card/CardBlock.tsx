@@ -1,16 +1,16 @@
 import { useState } from 'react';
 import cs from 'classnames';
-import { Button, Switch, Tag, Card, Descriptions, Typography, Dropdown, Skeleton } from 'antd';
+import { Button, Switch, Tag, Card, Descriptions, Typography, Dropdown, Skeleton } from '@douyinfe/semi-ui';
 import {
-  StarFilled,
-  LikeFilled,
-  SunFilled,
-  SmileFilled,
-  EditFilled,
-  CheckCircleFilled,
-  CloseCircleFilled,
-  MoreOutlined,
-} from '@ant-design/icons';
+  IconStar,
+  IconLikeThumb,
+  IconSun,
+  IconEmoji,
+  IconEdit,
+  IconTickCircle,
+  IconAlertCircle,
+  IconMore,
+} from '@douyinfe/semi-icons';
 import { useTranslation } from 'react-i18next';
 import PermissionWrapper from '~/components/PermissionWrapper';
 import type { CardBlockProps } from './types';
@@ -19,11 +19,11 @@ import styles from './style.module.styl';
 const { Paragraph } = Typography;
 
 const IconList = [
-  { key: 'star', Comp: StarFilled },
-  { key: 'thumbUp', Comp: LikeFilled },
-  { key: 'sun', Comp: SunFilled },
-  { key: 'smile', Comp: SmileFilled },
-  { key: 'pen', Comp: EditFilled },
+  { key: 'star', Comp: IconStar },
+  { key: 'thumbUp', Comp: IconLikeThumb },
+  { key: 'sun', Comp: IconSun },
+  { key: 'smile', Comp: IconEmoji },
+  { key: 'pen', Comp: IconEdit },
 ].map(({ key, Comp }) => <Comp key={key} />);
 
 const EMPTY_CARD: CardBlockProps['card'] = {};
@@ -62,7 +62,7 @@ export default function CardBlock({
       return (
         <>
           <PermissionWrapper per={[{ resource: /^menu.list.*/, actions: ['read'] }]}>
-            <Button type="primary" className="!ml-[12px]" loading={loading}>
+            <Button type="primary" theme="solid" className="!ml-[12px]" loading={loading}>
               {t('cardList.options.qualityInspection')}
             </Button>
           </PermissionWrapper>
@@ -91,7 +91,7 @@ export default function CardBlock({
   const getStatus = () => {
     if (type === 'rules' && status) {
       return (
-        <Tag color="green" icon={<CheckCircleFilled />} className="ml-[12px]">
+        <Tag color="green" prefixIcon={<IconTickCircle />} className="ml-[12px]">
           {t('cardList.tag.activated')}
         </Tag>
       );
@@ -99,13 +99,13 @@ export default function CardBlock({
     switch (status) {
       case 1:
         return (
-          <Tag color="green" icon={<CheckCircleFilled />} className="ml-[12px]">
+          <Tag color="green" prefixIcon={<IconTickCircle />} className="ml-[12px]">
             {t('cardList.tag.opened')}
           </Tag>
         );
       case 2:
         return (
-          <Tag color="red" icon={<CloseCircleFilled />} className="ml-[12px]">
+          <Tag color="red" prefixIcon={<IconAlertCircle />} className="ml-[12px]">
             {t('cardList.tag.expired')}
           </Tag>
         );
@@ -118,9 +118,9 @@ export default function CardBlock({
     if (loading) {
       return (
         <Skeleton
-          paragraph={{ rows: type !== 'quality' ? 3 : 2 }}
           active
           className={styles['card-block-skeleton']}
+          placeholder={<Skeleton.Paragraph rows={type !== 'quality' ? 3 : 2} />}
         />
       );
     }
@@ -128,49 +128,31 @@ export default function CardBlock({
       return <Paragraph>{card.description}</Paragraph>;
     }
     return (
-      // antd v6：Descriptions 的 children / Descriptions.Item 写法已废弃，统一改用 items（附带 key 避免列表告警）
-      // / antd v6 deprecates Descriptions' children / Descriptions.Item; use `items` (with keys to avoid list warnings)
+      // Semi Descriptions 用 data（key 对应 label，value 对应内容）
+      // / Semi Descriptions uses `data` (key is the label, value is the content)
       <Descriptions
         column={2}
-        items={[
-          {
-            key: 'qualityCount',
-            label: t('cardList.quality.qualityCount'),
-            children: card.qualityCount,
-          },
-          {
-            key: 'duration',
-            label: t('cardList.quality.duration'),
-            children: `${card.duration}s`,
-          },
-          {
-            key: 'randomCount',
-            label: t('cardList.quality.randomCount'),
-            children: card.randomCount,
-          },
+        data={[
+          { key: t('cardList.quality.qualityCount'), value: card.qualityCount },
+          { key: t('cardList.quality.duration'), value: `${card.duration}s` },
+          { key: t('cardList.quality.randomCount'), value: card.randomCount },
         ]}
       />
     );
   };
 
-  // antd v6 废弃了 Card 的 bordered，平替是 variant：
-  // 裸 bordered（等价 true）→ variant="outlined"，bordered={false} → variant="borderless"。
-  // 这里原来是裸 bordered，故写 outlined。
-  // / antd v6 deprecates Card's `bordered` in favor of `variant`: a bare `bordered`
-  // (equivalent to true) maps to variant="outlined"; bordered={false} maps to
-  // variant="borderless". This was a bare `bordered`, hence outlined.
+  // Semi Card 用 bordered 控制边框。
+  // / Semi Card uses `bordered` to control the border.
   return (
     <Card
       className={cs(styles['card-block'], styles[`${type}-card`])}
-      variant="outlined"
-      size="small"
+      bordered
       title={
         loading ? (
           <Skeleton
             active
-            paragraph={{ rows: 1, width: ['100%'] }}
-            title={false}
             className={styles['card-block-skeleton'] + ' w-[120px] h-[24px]'}
+            placeholder={<Skeleton.Paragraph rows={1} />}
           />
         ) : (
           <>
@@ -183,18 +165,16 @@ export default function CardBlock({
               {card.title}
               {getStatus()}
               <Dropdown
-                menu={{
-                  items: [
-                    { key: 'op1', label: t('cardList.dropdown.operation1') },
-                    { key: 'op2', label: t('cardList.dropdown.operation2') },
-                  ],
-                }}
-                trigger={['click']}
-                open={visible}
-                onOpenChange={setVisible}
+                menu={[
+                  { node: 'item', name: t('cardList.dropdown.operation1') },
+                  { node: 'item', name: t('cardList.dropdown.operation2') },
+                ]}
+                trigger="click"
+                visible={visible}
+                onVisibleChange={setVisible}
               >
                 <div className={styles.more}>
-                  <MoreOutlined />
+                  <IconMore />
                 </div>
               </Dropdown>
             </div>

@@ -1,11 +1,11 @@
-import { Typography, Row, Col, Result, Card } from 'antd';
+import { Typography, Row, Col, Empty, Card } from '@douyinfe/semi-ui';
 import { useTranslation } from 'react-i18next';
 import UserInfoHeader from './UserInfoHeader';
 import MyProject from './MyProject';
 import MyTeam from './MyTeam';
 import LatestNews from './LatestNews';
 
-const { Title } = Typography;
+const { Title, Text } = Typography;
 
 export default function UserInfo() {
   const { t } = useTranslation();
@@ -15,18 +15,18 @@ export default function UserInfo() {
       <UserInfoHeader />
       <Row gutter={16}>
         <Col span={16}>
-          <Card variant="borderless" className="mt-[16px]">
+          <Card bordered={false} className="mt-[16px]">
             <div className="flex justify-between">
-              <Title level={5}>{t('userInfo.title.project')}</Title>
-              <Typography.Link>{t('userInfo.btn.more')}</Typography.Link>
+              <Title heading={5}>{t('userInfo.title.project')}</Title>
+              <Text link>{t('userInfo.btn.more')}</Text>
             </div>
             <MyProject />
           </Card>
         </Col>
         <Col span={8}>
-          <Card variant="borderless" className="mt-[16px]">
+          <Card bordered={false} className="mt-[16px]">
             <div className="flex justify-between">
-              <Title level={5}>{t('userInfo.title.team')}</Title>
+              <Title heading={5}>{t('userInfo.title.team')}</Title>
             </div>
             <MyTeam />
           </Card>
@@ -34,24 +34,22 @@ export default function UserInfo() {
       </Row>
       <Row gutter={16}>
         <Col span={16}>
-          <Card variant="borderless" className="mt-[16px]">
+          <Card bordered={false} className="mt-[16px]">
             <div className="flex justify-between">
-              <Title level={5}>{t('userInfo.title.news')}</Title>
-              <Typography.Link>{t('userInfo.btn.all')}</Typography.Link>
+              <Title heading={5}>{t('userInfo.title.news')}</Title>
+              <Text link>{t('userInfo.btn.all')}</Text>
             </div>
             <LatestNews />
           </Card>
         </Col>
         <Col span={8}>
-          <Card variant="borderless" className="mt-[16px]">
+          <Card bordered={false} className="mt-[16px]">
             <div className="flex justify-between">
-              <Title level={5}>{t('userInfo.title.notice')}</Title>
+              <Title heading={5}>{t('userInfo.title.notice')}</Title>
             </div>
-            <Result
-              status="404"
-              subTitle={t('userInfo.notice.empty')}
-              className="!pt-[60px] !pb-[130px]"
-            />
+            {/* 空状态：保留原 subTitle 文案与类名 */}
+            {/* / Empty state: keep the original subTitle text and className */}
+            <Empty description={t('userInfo.notice.empty')} className="!pt-[60px] !pb-[130px]" />
           </Card>
         </Col>
       </Row>

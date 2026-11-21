@@ -1,9 +1,9 @@
-import { Button, Card, Radio, Tabs, Table, Tag, Typography } from 'antd';
-import type { TableColumnType } from 'antd';
+import { Button, Card, Radio, RadioGroup, Tabs, Table, Tag, Typography } from '@douyinfe/semi-ui';
+import type { ColumnProps } from '@douyinfe/semi-ui/lib/es/table/interface';
 import { useTranslation } from 'react-i18next';
 
 const COVER_IMG =
-  'http://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/c788fc704d32cf3b1136c7d45afc2669.png~tplv-uwbnlip3yd-webp.webp';
+  'https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/c788fc704d32cf3b1136c7d45afc2669.png~tplv-uwbnlip3yd-webp.webp';
 
 const DATA = [
   {
@@ -18,7 +18,7 @@ const DATA = [
 export default function DataStatistic() {
   const { t } = useTranslation();
 
-  const columns: TableColumnType<(typeof DATA)[number]>[] = [
+  const columns: ColumnProps<(typeof DATA)[number]>[] = [
     {
       title: t('monitor.list.title.order'),
       render: (_col, _record, index) => <span>{index + 1}</span>,
@@ -55,22 +55,22 @@ export default function DataStatistic() {
     <Card>
       <Tabs
         defaultActiveKey="liveMethod"
-        items={[
-          { key: 'liveMethod', label: t('monitor.tab.title.liveMethod') },
-          { key: 'onlineUsers', label: t('monitor.tab.title.onlineUsers') },
+        tabList={[
+          { itemKey: 'liveMethod', tab: t('monitor.tab.title.liveMethod') },
+          { itemKey: 'onlineUsers', tab: t('monitor.tab.title.onlineUsers') },
         ]}
       />
       <div className="py-[20px]">
-        <Radio.Group defaultValue="3" buttonStyle="solid">
-          <Radio.Button value="1">{t('monitor.liveMethod.normal')}</Radio.Button>
-          <Radio.Button value="2">{t('monitor.liveMethod.flowControl')}</Radio.Button>
-          <Radio.Button value="3">{t('monitor.liveMethod.video')}</Radio.Button>
-          <Radio.Button value="4">{t('monitor.liveMethod.web')}</Radio.Button>
-        </Radio.Group>
+        <RadioGroup defaultValue="3" type="button">
+          <Radio value="1">{t('monitor.liveMethod.normal')}</Radio>
+          <Radio value="2">{t('monitor.liveMethod.flowControl')}</Radio>
+          <Radio value="3">{t('monitor.liveMethod.video')}</Radio>
+          <Radio value="4">{t('monitor.liveMethod.web')}</Radio>
+        </RadioGroup>
 
         <div>
           <div className="flex justify-between mt-[16px]">
-            <Button type="link">{t('monitor.editCarousel')}</Button>
+            <Button theme="borderless" type="tertiary">{t('monitor.editCarousel')}</Button>
             <Button disabled>{t('monitor.startCarousel')}</Button>
           </div>
           <div className="mt-[16px]">
@@ -78,7 +78,7 @@ export default function DataStatistic() {
               columns={columns}
               dataSource={DATA}
               rowKey="id"
-              rowSelection={{ type: 'checkbox' }}
+              rowSelection
               pagination={false}
             />
             <Typography.Text type="secondary" className="block mt-[16px] text-center">

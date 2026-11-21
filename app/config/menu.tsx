@@ -1,13 +1,13 @@
 import {
-  AppstoreOutlined,
-  BugOutlined,
-  DashboardOutlined,
-  EditOutlined,
-  FileOutlined,
-  SettingOutlined,
-  UnorderedListOutlined,
-  UserOutlined,
-} from '@ant-design/icons';
+  IconAlertTriangle,
+  IconAppCenter,
+  IconApps,
+  IconEdit,
+  IconFile,
+  IconMenu,
+  IconSetting,
+  IconUser,
+} from '@douyinfe/semi-icons';
 import type { MenuRoute } from './types';
 import Exception500 from '~/components/500';
 
@@ -15,7 +15,7 @@ export const menuRoutes: MenuRoute[] = [
   {
     path: '/dashboard',
     name: 'menu.dashboard',
-    icon: <DashboardOutlined />,
+    icon: <IconAppCenter />,
     children: [
       {
         path: '/dashboard/workplace',
@@ -33,7 +33,7 @@ export const menuRoutes: MenuRoute[] = [
   {
     path: '/visualization',
     name: 'menu.visualization',
-    icon: <AppstoreOutlined />,
+    icon: <IconApps />,
     children: [
       {
         path: '/visualization/data-analysis',
@@ -55,7 +55,7 @@ export const menuRoutes: MenuRoute[] = [
   {
     path: '/list',
     name: 'menu.list',
-    icon: <UnorderedListOutlined />,
+    icon: <IconMenu />,
     children: [
       {
         path: '/list/search-table',
@@ -68,7 +68,7 @@ export const menuRoutes: MenuRoute[] = [
   {
     path: '/form',
     name: 'menu.form',
-    icon: <EditOutlined />,
+    icon: <IconEdit />,
     children: [
       {
         path: '/form/group',
@@ -87,7 +87,7 @@ export const menuRoutes: MenuRoute[] = [
   {
     path: '/profile',
     name: 'menu.profile',
-    icon: <UserOutlined />,
+    icon: <IconUser />,
     children: [
       {
         path: '/profile/basic',
@@ -99,7 +99,7 @@ export const menuRoutes: MenuRoute[] = [
   {
     path: '/result',
     name: 'menu.result',
-    icon: <FileOutlined />,
+    icon: <IconFile />,
     children: [
       {
         path: '/result/success',
@@ -112,7 +112,7 @@ export const menuRoutes: MenuRoute[] = [
   {
     path: '/exception',
     name: 'menu.exception',
-    icon: <BugOutlined />,
+    icon: <IconAlertTriangle />,
 
     children: [
       // {
@@ -135,7 +135,7 @@ export const menuRoutes: MenuRoute[] = [
   {
     path: '/user',
     name: 'menu.user',
-    icon: <SettingOutlined />,
+    icon: <IconSetting />,
     children: [
       { path: '/user/info', name: 'menu.user.info', view: 'routes/user/info/index.tsx' },
       { path: '/user/setting', name: 'menu.user.setting', view: 'routes/user/setting/index.tsx' },

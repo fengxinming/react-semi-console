@@ -1,17 +1,16 @@
+// 头部原本有一条给「头像悬浮换图角标」着色的规则；该角标只有旧组件库的 Upload 才渲染，
+// 头像现在是纯 Semi Avatar、不再可换，节点不存在，规则一并删除。
+// / The header used to colour an avatar hover "change photo" badge. That badge only existed
+// because the old Upload rendered it; the avatar is now a plain Semi Avatar with no upload, so
+// the node is gone and the rule went with it.
 .header
   height 200px
   display flex
   justify-content center
   align-items center
-  color var(--ant-color-text)
+  color var(--semi-color-text-0)
   border-radius 4px
   position relative
-
-  :global(.ant-avatar-trigger-icon-button)
-    color var(--ant-color-primary)
-
-    :global(.anticon)
-      vertical-align -1px
 
   .user-msg
     line-height 20px
@@ -40,46 +39,41 @@
   cursor pointer
 
   :global
-    h5.ant-typography
+    // Semi Typography.Title heading={5} 渲染为 h5.semi-typography
+    // / Semi Typography.Title heading={5} renders as h5.semi-typography
+    h5.semi-typography
       margin-top 0
       margin-bottom 6px
       font-size 14px
 
-    .ant-typography-secondary
+    // Semi Typography.Text type="secondary" → .semi-typography-secondary
+    // / Semi Typography.Text type="secondary" → .semi-typography-secondary
+    .semi-typography-secondary
       font-size 12px
       margin-left 12px
 
-// antd v6 起 List 废弃，改用 Listy：列表项类名由 .ant-list-item 变为 .ant-listy-item。
-// Listy 默认给每项加了 hover 底色与末项分隔线，而这两个列表没有交互语义、原 List 也没有，
-// 因此一并还原，保持视觉不变。
-// / antd v6 deprecates List in favor of Listy, whose item class is .ant-listy-item.
-// Listy adds a hover background and a trailing divider by default; these lists are not
-// interactive and the previous List had neither, so both are reverted for visual parity.
+// 列表项由 Semi List 渲染，类名 .semi-list-item；Semi 默认不给列表项加 hover 底色与
+// 末项分隔线（分隔线只在 split 模式下出现），因此这里只需改写内边距。
+// / List items come from Semi List as .semi-list-item. Semi adds neither a hover background
+// nor a trailing divider by default (dividers only appear with `split`), so only padding
+// needs overriding here.
 .team-list
-  :global(.ant-listy-item)
+  :global(.semi-list-item)
     padding 8px 0
-
-    &:hover
-      background-color transparent
 
     &:last-child
       padding-bottom 0
-      border-bottom none
 
 .news-list
-  :global(.ant-listy-item)
+  :global(.semi-list-item)
     padding 24px 4px
-
-    &:hover
-      background-color transparent
 
     &:last-child
       padding-bottom 4px
-      border-bottom none
 
-// 取代原 List.Item.Meta 的外层：头像 + 内容两栏，间距与原 .ant-list-item-meta-avatar 一致
-// / Replaces the outer part of List.Item.Meta: avatar + content columns, spaced like the former
-// .ant-list-item-meta-avatar
+// 取代原 List.Item.Meta 的外层：头像 + 内容两栏，间距与 Meta 头像列一致
+// / Replaces the outer part of List.Item.Meta: avatar + content columns, spaced like Meta's
+// avatar column
 .list-item
   display flex
   align-items flex-start
@@ -92,7 +86,7 @@
   flex 1
   min-width 0
 
-// 取代原 .ant-list-item-meta-title（antd 用 h4，自带 4px 下外边距）
-// / Replaces .ant-list-item-meta-title (antd uses an h4 with a 4px bottom margin)
+// 标题行；旧实现用 h4 自带 4px 下外边距，这里显式归零
+// / Replaces the old List.Item.Meta title row (h4, which carried a 4px bottom margin)
 .list-item-title
   margin 0 0 4px

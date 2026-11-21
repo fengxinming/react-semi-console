@@ -1,24 +1,24 @@
-import { Button, Card, Typography, Space } from 'antd';
-import { ArrowRightOutlined, StopOutlined, SwapOutlined, TagsOutlined } from '@ant-design/icons';
+import { Button, Card, Typography, Space } from '@douyinfe/semi-ui';
+import { IconArrowRight, IconStop, IconSync, IconPriceTag } from '@douyinfe/semi-icons';
 import { useTranslation } from 'react-i18next';
 
 export default function QuickOperation() {
   const { t } = useTranslation();
 
   return (
-    <Card variant="borderless">
-      <Typography.Title level={5}>{t('monitor.title.quickOperation')}</Typography.Title>
-      <Space orientation="vertical" className="w-full" size={10}>
-        <Button block icon={<TagsOutlined />}>
+    <Card bordered={false}>
+      <Typography.Title heading={5}>{t('monitor.title.quickOperation')}</Typography.Title>
+      <Space vertical className="w-full" spacing={10} style={{ alignItems: 'stretch' }}>
+        <Button block icon={<IconPriceTag />}>
           {t('monitor.quickOperation.changeClarity')}
         </Button>
-        <Button block icon={<SwapOutlined />}>
+        <Button block icon={<IconSync />}>
           {t('monitor.quickOperation.switchStream')}
         </Button>
-        <Button block icon={<StopOutlined />}>
+        <Button block icon={<IconStop />}>
           {t('monitor.quickOperation.removeClarity')}
         </Button>
-        <Button block icon={<ArrowRightOutlined />}>
+        <Button block icon={<IconArrowRight />}>
           {t('monitor.quickOperation.pushFlowGasket')}
         </Button>
       </Space>

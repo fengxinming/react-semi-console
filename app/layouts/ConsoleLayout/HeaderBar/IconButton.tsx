@@ -1,5 +1,6 @@
 import { forwardRef } from 'react';
-import { Button, Tooltip } from 'antd';
+import type { Ref } from 'react';
+import { Button, Tooltip } from '@douyinfe/semi-ui';
 import styles from './style.module.styl';
 import type { IconButtonProps } from './types';
 
@@ -26,15 +27,16 @@ const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
   ({ icon, className, onClick, tooltip, ...rest }, ref) => {
     const btn = (
       <Button
-        ref={ref}
+        // Semi Button 是 class 组件，ref 指向实例；对外仍保留 HTMLButtonElement 签名
+        ref={ref as unknown as Ref<Button>}
         icon={icon}
-        shape="circle"
+        circle
         className={cs(styles['icon-button'], className)}
         onClick={onClick}
         {...rest}
       />
     );
-    return tooltip ? <Tooltip title={tooltip}>{btn}</Tooltip> : btn;
+    return tooltip ? <Tooltip content={tooltip}>{btn}</Tooltip> : btn;
   },
 );
 

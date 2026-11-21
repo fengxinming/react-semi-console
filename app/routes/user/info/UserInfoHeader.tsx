@@ -1,5 +1,5 @@
-import { Avatar, Space, Skeleton } from 'antd';
-import { EnvironmentOutlined, HomeOutlined, UserOutlined } from '@ant-design/icons';
+import { Avatar, Space, Skeleton } from '@douyinfe/semi-ui';
+import { IconMapPin, IconHome, IconUser } from '@douyinfe/semi-icons';
 import { useUserStore } from '~/store';
 import type { UserText } from './types';
 import styles from './style.module.styl';
@@ -10,9 +10,8 @@ function Text({ loading, children }: UserText) {
       <Skeleton
         className="inline-block"
         loading={loading}
-        paragraph={{ rows: 1, width: ['100%'] }}
-        title={false}
         active
+        placeholder={<Skeleton.Paragraph rows={1} />}
       >
         {children}
       </Skeleton>
@@ -27,32 +26,31 @@ export default function UserInfoHeader() {
 
   return (
     <div className={styles.header}>
-      <Space size={8} orientation="vertical" align="center" className={styles['header-content']}>
-        <Skeleton loading={loading} avatar={{ shape: 'circle', size: 64 }} title={false} paragraph={false} active>
-          <Avatar size={64}>
+      <Space spacing={8} vertical align="center" className={styles['header-content']}>
+        <Skeleton
+          loading={loading}
+          active
+          placeholder={<Skeleton.Avatar shape="circle" size="large" />}
+        >
+          <Avatar size="large">
             <img src={userInfo?.avatar} alt="avatar" />
           </Avatar>
         </Skeleton>
-        <Skeleton
-          loading={loading}
-          paragraph={{ rows: 1, width: ['100%'] }}
-          title={false}
-          active
-        >
+        <Skeleton loading={loading} active placeholder={<Skeleton.Paragraph rows={1} />}>
           <div className="font-medium text-[16px]/[24px]">{userInfo?.name}</div>
         </Skeleton>
         <div className={styles['user-msg']}>
-          <Space size={18}>
+          <Space spacing={18}>
             <div className={styles['user-msg']}>
-              <UserOutlined />
+              <IconUser />
               <Text loading={loading}>{userInfo?.jobName}</Text>
             </div>
             <div className={styles['user-msg']}>
-              <HomeOutlined />
+              <IconHome />
               <Text loading={loading}>{userInfo?.organizationName}</Text>
             </div>
             <div className={styles['user-msg']}>
-              <EnvironmentOutlined />
+              <IconMapPin />
               <Text loading={loading}>{userInfo?.locationName}</Text>
             </div>
           </Space>

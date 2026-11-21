@@ -1,11 +1,11 @@
 import { useMemo } from 'react';
-import { Card, Typography, Row, Col, Statistic, Skeleton } from 'antd';
-import { UserOutlined, EditOutlined, HeartOutlined, LikeOutlined } from '@ant-design/icons';
+import { Card, Typography, Row, Col, Skeleton } from '@douyinfe/semi-ui';
+import { IconUser, IconEdit, IconHeartStroked, IconLikeThumb } from '@douyinfe/semi-icons';
 import { useTranslation } from 'react-i18next';
 import { useLoaderData, useNavigation } from 'react-router';
-import { Line } from '@ant-design/charts';
-import type { LineConfig } from '@ant-design/charts';
+import { VChart } from '@visactor/react-vchart';
 import { useSettingsStore } from '~/store';
+import { makeSpec } from '~/commons/vchart';
 import type { MultiDimensionLoaderData } from './types';
 import styles from './style.module.styl';
 
@@ -26,88 +26,66 @@ export default function DataOverview() {
     return [
       {
         title: 'multiDAnalysis.dataOverview.contentProduction',
-        icon: <EditOutlined />,
+        icon: <IconEdit />,
         value: overviewValues[0],
-        // antd 预设色板 CSS 变量为完整色值（如 #ffe7ba），无需再包 rgb()
-        // / antd preset palette CSS vars hold full color values (e.g. #ffe7ba), no rgb() wrapper
-        background: 'var(--ant-orange-2)',
-        color: 'var(--ant-orange-6)',
+        background: '#ffe7ba',
+        color: '#fa8c16',
       },
       {
         title: 'multiDAnalysis.dataOverview.contentClicks',
-        icon: <LikeOutlined />,
+        icon: <IconLikeThumb />,
         value: overviewValues[1],
-        background: 'var(--ant-cyan-2)',
-        color: 'var(--ant-cyan-6)',
+        background: '#b5f5ec',
+        color: '#13c2c2',
       },
       {
         title: 'multiDAnalysis.dataOverview.contextExposure',
-        icon: <HeartOutlined />,
+        icon: <IconHeartStroked />,
         value: overviewValues[2],
-        background: 'var(--ant-color-primary-bg)',
-        color: 'var(--ant-color-primary)',
+        background: 'var(--semi-color-primary-light-default)',
+        color: 'var(--semi-color-primary)',
       },
       {
         title: 'multiDAnalysis.dataOverview.activeUsers',
-        icon: <UserOutlined />,
+        icon: <IconUser />,
         value: overviewValues[3],
-        background: 'var(--ant-purple-1)',
-        color: 'var(--ant-purple-6)',
+        background: '#f9f0ff',
+        color: '#722ed1',
       },
     ];
   }, [overviewValues]);
 
-  const lineSpec: LineConfig = {
-    data: lineData,
-    xField: 'time',
-    yField: 'count',
-    colorField: 'name',
-    shapeField: 'smooth',
-    stack: false,
-    scale: {
-      color: {
-        range: lineColors,
-      },
+  const lineSpec = makeSpec(
+    {
+      type: 'area',
+      data: [{ id: 'overview-line', values: lineData }],
+      xField: 'time',
+      yField: 'count',
+      seriesField: 'name',
+      color: lineColors,
+      area: { style: { fillOpacity: 0.04 } },
+      line: { style: { curveType: 'monotone', lineWidth: 2 } },
+      axes: [
+        { orient: 'bottom', type: 'band', label: { autoRotate: false } },
+        {
+          orient: 'left',
+          type: 'linear',
+          label: { formatMethod: (text: string) => `${Number(text) / 100} k` },
+        },
+      ],
+      legends: { visible: false },
     },
-    area: {
-      style: {
-        fillOpacity: 0.04,
-        // fill: 'linear-gradient(-90deg, white 0%, darkgreen 100%)',
-      },
-    },
-    style: {
-      lineWidth: 2,
-    },
-    axis: {
-      y: {
-        labelFormatter: (v: number) => `${Number(v) / 100} k`,
-        // gridStroke: '#cccccc',
-        // gridLineWidth: 1,
-        // gridStrokeOpacity: 1,
-      },
-      x: {
-        labelAutoRotate: false,
-      },
-    },
-    legend: false,
-    // children: lineColors.map((n) => {
-    //   return {
-    //     type: 'area',
-    //     style: {
-    //       fill: 'linear-gradient(-90deg, white 0%, ' + n + ' 100%)',
-    //     },
-    //   };
-    // }),
-  };
+    theme,
+  );
 
   return (
-    <Card variant="borderless" className="w-full">
-      <Title level={5}>{t('multiDAnalysis.card.title.dataOverview')}</Title>
+    <Card bordered={false} className="w-full">
+      <Title heading={5}>{t('multiDAnalysis.card.title.dataOverview')}</Title>
       <Row justify="space-between">
         {formattedData.map((item) => (
           <Col span={24 / formattedData.length} key={item.title}>
-            <Card variant="borderless" className={styles['stat-item']}>
-              <Title level={5}>{t(item.title)}</Title>
+            <Card bordered={false} className={styles['stat-item']}>
+              <Title heading={5}>{t(item.title)}</Title>
               <div className={styles.content}>
                 <div
                   style={{ backgroundColor: item.background, color: item.color }}
@@ -115,13 +93,8 @@ export default function DataOverview() {
                 >
                   {item.icon}
                 </div>
-                <Skeleton
-                  loading={loading}
-                  active
-                  paragraph={{ rows: 1, className: styles.skeleton }}
-                  className="w-[120px]"
-                >
-                  <Statistic value={item.value ?? 0} groupSeparator="," />
+                <Skeleton loading={loading} active className="w-[120px]">
+                  <span className={styles.skeleton}>{Number(item.value ?? 0).toLocaleString()}</span>
                 </Skeleton>
               </div>
             </Card>
@@ -129,7 +102,7 @@ export default function DataOverview() {
         ))}
         <Col span={24}>
           <div className="h-[360px] chart-wrapper">
-            <Line {...lineSpec} theme={theme} />
+            <VChart spec={lineSpec} />
           </div>
         </Col>
       </Row>

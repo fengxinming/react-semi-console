@@ -1,5 +1,5 @@
-import { Space, Typography } from 'antd';
-import { ControlOutlined, StarOutlined } from '@ant-design/icons';
+import { Space, Typography } from '@douyinfe/semi-ui';
+import { IconSetting, IconStarStroked } from '@douyinfe/semi-icons';
 import classnames from 'classnames';
 import styles from './style.module.styl';
 import type { MessageItemProps, MessageListProps } from './types';
@@ -12,7 +12,7 @@ function MessageItem({ data }: MessageItemProps) {
         [styles['message-item-collected']]: data.isCollect,
       })}
     >
-      <Space size={4} orientation="vertical" className="w-full">
+      <Space spacing={4} vertical className="w-full" style={{ alignItems: 'stretch' }}>
         <Typography.Text type="warning">{data.username}</Typography.Text>
         <Typography.Text>{data.content}</Typography.Text>
         <div className="flex justify-between items-center">
@@ -21,7 +21,7 @@ function MessageItem({ data }: MessageItemProps) {
           </div>
           <div className={styles['message-item-actions']}>
             <div className={styles['message-item-actions-item']}>
-              <ControlOutlined />
+              <IconSetting />
             </div>
             <div
               className={classnames([
@@ -29,7 +29,7 @@ function MessageItem({ data }: MessageItemProps) {
                 styles['message-item-actions-collect'],
               ])}
             >
-              <StarOutlined />
+              <IconStarStroked />
             </div>
           </div>
         </div>

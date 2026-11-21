@@ -1,12 +1,11 @@
 import axios, { type AxiosRequestConfig } from 'axios';
-import { message as staticMessage } from 'antd';
+import { Toast } from '@douyinfe/semi-ui';
 import { createMockAdapter } from 'vite-plugin-mock-data/axios-adapter';
 import i18n from '~/i18n';
 import { useUserStore } from '~/store';
-import { getAntdApp } from '~/commons/antdApp';
 
-/** 优先取 App.useApp 实例（带动态主题）；App 未挂载前（挂载前初始化 / 路由 loader 阶段）退回静态方法 */
-const msg = () => getAntdApp()?.message ?? staticMessage;
+/** 错误提示：Semi Toast 是静态方法，浮层挂到 body，自动跟随明暗主题，无需 context 桥接。 */
+const showError = (text: string) => Toast.error({ content: text });
 
 const service = axios.create({
   baseURL: __BASE_URL__ + 'api',
@@ -27,7 +26,7 @@ service.interceptors.response.use(
   ({ data: res = {} }) => {
     const { code, data, message } = res;
     if (code !== 0 && code !== 200) {
-      msg().error(i18n.t(message) || message || i18n.t('Request Error'));
+      showError(i18n.t(message) || message || i18n.t('Request Error'));
       if (code == null || [1003, 1004, 1005].includes(code)) {
         useUserStore.getState().logout();
       }
@@ -37,7 +36,7 @@ service.interceptors.response.use(
   },
   (err = {}) => {
     const { message } = err;
-    msg().error(i18n.t(message) || message || i18n.t('Request Error'));
+    showError(i18n.t(message) || message || i18n.t('Request Error'));
     return Promise.reject(err);
   },
 );

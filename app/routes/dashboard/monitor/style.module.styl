@@ -1,10 +1,9 @@
 .studio
-  // 原规则 `&-wrapper :global(.arco-card-body)` 企图去掉卡体顶部内边距，但 .arco-card-body 是
-  // .studio-wrapper 的祖先而非后代，该规则一直是死代码；antd 卡体默认 24px 内边距的观感正确，
-  // 因此不再保留这条无效规则。
-  // / The old `&-wrapper :global(.arco-card-body)` rule tried to remove the card body's top
-  // padding, but .arco-card-body is the ancestor of .studio-wrapper, not a descendant, so it was
-  // always dead code. antd's default 24px card body padding renders correctly, so it is dropped.
+  // 原规则 `&-wrapper :global(.xxx-card-body)` 企图去掉卡体顶部内边距，但卡体是 .studio-wrapper
+  // 的祖先而非后代，该规则一直是死代码；Semi 卡体默认 20px 内边距的观感正确，因此不再保留。
+  // / The old `&-wrapper :global(.xxx-card-body)` rule tried to remove the card body's top padding,
+  // but the card body is the ancestor of .studio-wrapper, not a descendant, so it was always dead
+  // code. Semi's default 20px card body padding renders correctly, so the rule stays dropped.
 
   &-preview
     width 100%
@@ -15,8 +14,8 @@
 .chat-panel
   height 100%
 
-  // antd Card 卡体：撑满高度并纵向排列 / antd card body: full height, column layout
-  :global(.ant-card-body)
+  // Semi Card 卡体：撑满高度并纵向排列 / Semi card body: full height, column layout
+  :global(.semi-card-body)
     height 100%
     display flex
     flex-direction column
@@ -38,7 +37,7 @@
     &-item
       margin-right 4px
       font-size 14px
-      color var(--ant-color-text-tertiary)
+      color var(--semi-color-text-2)
       width 20px
       height 20px
       border-radius 50%
@@ -48,17 +47,17 @@
       cursor pointer
 
       &:hover
-        background-color var(--ant-color-fill)
+        background-color var(--semi-color-fill-0)
 
       &:last-child
         margin-right 0
 
   &-collected
     .message-item-actions-collect
-      color var(--ant-color-warning)
+      color var(--semi-color-warning)
 
   &:hover
-    background-color var(--ant-color-fill-secondary)
+    background-color var(--semi-color-fill-1)
 
     .message-item-actions
       opacity 1

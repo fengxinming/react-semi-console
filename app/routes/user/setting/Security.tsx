@@ -1,4 +1,4 @@
-import { Button } from 'antd';
+import { Button } from '@douyinfe/semi-ui';
 import { useTranslation } from 'react-i18next';
 import { useUserStore } from '~/store';
 import styles from './style.module.styl';
@@ -43,7 +43,8 @@ export default function Security() {
               {item.value || item.placeholder}
             </span>
             <span>
-              <Button type="text">
+              {/* 次要操作使用无边框 tertiary 按钮 */}
+              <Button theme="borderless" type="tertiary">
                 {item.value ? t('userSetting.btn.edit') : t('userSetting.btn.set')}
               </Button>
             </span>

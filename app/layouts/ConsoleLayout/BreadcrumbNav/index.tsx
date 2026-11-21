@@ -1,4 +1,4 @@
-import { Breadcrumb } from 'antd';
+import { Breadcrumb } from '@douyinfe/semi-ui';
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLayoutStore } from '~/store';
@@ -8,18 +8,17 @@ function BreadcrumbNav() {
   const menuTrail = useLayoutStore((s) => s.menuTrail);
   const icon = menuTrail[0]?.icon;
 
-  // antd v6 已废弃 Breadcrumb.Item / Breadcrumb.Separator（控制台会报 deprecated），
-  // 统一改用 items 数据驱动 API；首项仍是「图标」面包屑，分隔符交给 antd 默认渲染。
-  // / antd v6 deprecates Breadcrumb.Item / Breadcrumb.Separator (logs a deprecation warning);
-  // switch to the `items` API. The first crumb stays the icon-only entry.
-  const items = [
-    ...(icon ? [{ key: menuTrail[0]?.name, title: icon }] : []),
-    ...menuTrail.map(({ name, path }) => ({ key: path, title: t(name) || name })),
+  // Semi Breadcrumb 用 routes 数据驱动；首项仍是「图标」面包屑，分隔符交给 Semi 默认渲染。
+  // / Semi Breadcrumb uses the `routes` data-driven API; the first crumb stays the
+  // icon-only entry, separators are rendered by Semi by default.
+  const routes = [
+    ...(icon ? [{ name: '', path: menuTrail[0]?.name, icon }] : []),
+    ...menuTrail.map(({ name, path }) => ({ name: t(name) || name, path })),
   ];
 
   return (
-    <div className="py-[16px]">
-      <Breadcrumb items={items} />
+    <div className="py-[8px]">
+      <Breadcrumb routes={routes} />
     </div>
   );
 }

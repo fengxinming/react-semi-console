@@ -1,7 +1,7 @@
 import './style.styl';
 import { useTranslation } from 'react-i18next';
 import { isRouteErrorResponse, useNavigate, useRouteError } from 'react-router';
-import { Button } from 'antd';
+import { Button } from '@douyinfe/semi-ui';
 import AppProviders from '~/components/AppProviders';
 import '~/i18n';
 
@@ -106,7 +106,7 @@ export default function ErrorBoundary() {
               <Button onClick={() => window.location.reload()}>
                 {t('exception.result.refresh')}
               </Button>
-              <Button type="primary" onClick={() => navigate('/', { replace: true })}>
+              <Button type="primary" theme="solid" onClick={() => navigate('/', { replace: true })}>
                 {t('exception.result.backHome')}
               </Button>
             </div>

@@ -1,5 +1,4 @@
-import { Popover, Typography } from 'antd';
-import { SketchPicker } from 'react-color';
+import { ColorPicker, Typography } from '@douyinfe/semi-ui';
 import { generate } from '@ant-design/colors';
 import { useTranslation } from 'react-i18next';
 import { useSettingsStore } from '~/store';
@@ -21,20 +20,17 @@ export default function ColorPanel() {
 
   return (
     <div>
-      <Popover
-        trigger="hover"
-        placement="bottomLeft"
-        content={
-          <div className={styles['picker-pop']}>
-            <SketchPicker color={themeColor} onChangeComplete={(color) => applyColor(color.hex)} />
-          </div>
-        }
+      <ColorPicker
+        usePopover
+        popoverProps={{ trigger: 'hover', position: 'bottomLeft' }}
+        value={ColorPicker.colorStringToValue(themeColor)}
+        onChange={(value) => applyColor(value.hex)}
       >
         <div className={styles['color-box']}>
           <div className="w-[100px] h-[24px] mr-[10px]" style={{ backgroundColor: themeColor }} />
           <span>{themeColor}</span>
         </div>
-      </Popover>
+      </ColorPicker>
       <ul className="flex my-[16px]">
         {list.map((item) => (
           <li key={item} className="flex-1 h-[26px]" style={{ backgroundColor: item }} />

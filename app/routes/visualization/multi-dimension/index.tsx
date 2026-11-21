@@ -1,4 +1,4 @@
-import { Row, Col, Space } from 'antd';
+import { Row, Col, Space } from '@douyinfe/semi-ui';
 import {
   fetchMultiOverview,
   fetchMultiActivity,
@@ -28,7 +28,7 @@ export async function loader(): Promise<MultiDimensionLoaderData> {
 
 export default function MultiDimension() {
   return (
-    <Space size={16} orientation="vertical" className="w-full">
+    <Space spacing={16} vertical className="w-full" style={{ alignItems: 'stretch' }}>
       <div className={styles['top-row']}>
         <Row gutter={20}>
           <Col span={16}>

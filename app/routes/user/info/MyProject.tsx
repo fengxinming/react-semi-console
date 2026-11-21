@@ -1,4 +1,4 @@
-import { Row, Col, Card, Avatar, Typography, Skeleton } from 'antd';
+import { Row, Col, Card, Avatar, AvatarGroup, Typography, Skeleton } from '@douyinfe/semi-ui';
 import { useProjectsQuery } from '~/hooks/api/useUser';
 import type { ProjectItem } from '~/api/types';
 import type { ProjectCardProps } from './types';
@@ -9,33 +9,29 @@ const { Text, Title } = Typography;
 function ProjectCard(props: ProjectCardProps) {
   const { loading, contributors, title, enTitle, contributorsLength } = props;
 
-  // antd v6 废弃了 Card 的 bordered，平替是 variant：
-  // 裸 bordered（等价 true）→ variant="outlined"，bordered={false} → variant="borderless"。
-  // 这里原来是裸 bordered，故写 outlined。
-  // / antd v6 deprecates Card's `bordered` in favor of `variant`: a bare `bordered`
-  // (equivalent to true) maps to variant="outlined"; bordered={false} maps to
-  // variant="borderless". This was a bare `bordered`, hence outlined.
+  // Semi Card 用 bordered 控制边框，裸 bordered（等价 true）即为带边框卡片
+  // / Semi Card uses `bordered` to control the border; a bare `bordered` (equivalent to true) renders a bordered card
   return (
-    <Card variant="outlined" className={styles['project-wrapper']} size="small">
-      <Skeleton loading={loading} paragraph={{ rows: 1 }} title={false} active>
-        <Title level={5}>{title}</Title>
+    <Card bordered className={styles['project-wrapper']}>
+      <Skeleton loading={loading} active placeholder={<Skeleton.Paragraph rows={1} />}>
+        <Title heading={5}>{title}</Title>
       </Skeleton>
 
-      <Skeleton loading={loading} paragraph={{ rows: 1 }} title={false} active>
+      <Skeleton loading={loading} active placeholder={<Skeleton.Paragraph rows={1} />}>
         <Text ellipsis className="!m-0">
           {enTitle}
         </Text>
       </Skeleton>
 
       <div className="mt-[22px]">
-        <Skeleton loading={loading} paragraph={{ rows: 1 }} title={false} active>
-          <Avatar.Group size={24}>
+        <Skeleton loading={loading} active placeholder={<Skeleton.Paragraph rows={1} />}>
+          <AvatarGroup size="extra-small">
             {(contributors ?? []).map((item) => (
               <Avatar key={item.avatar}>
                 <img src={item.avatar} alt={item.name} />
               </Avatar>
             ))}
-          </Avatar.Group>
+          </AvatarGroup>
           <Text type="secondary">等{(contributorsLength ?? 0).toLocaleString()}人</Text>
         </Skeleton>
       </div>

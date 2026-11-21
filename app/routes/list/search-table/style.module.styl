@@ -1,6 +1,6 @@
 .search-form-wrapper
   display flex
-  border-bottom 1px solid var(--ant-color-border-secondary)
+  border-bottom 1px solid var(--semi-color-border)
   margin-bottom 20px
 
   .right-button
@@ -9,17 +9,18 @@
     justify-content space-between
     padding-left 20px
     margin-bottom 20px
-    border-left 1px solid var(--ant-color-border-secondary)
+    border-left 1px solid var(--semi-color-border)
     box-sizing border-box
 
 .search-form
   padding-right 20px
 
-  // antd Form.Item 左对齐标签 = .ant-form-item-label-left
-  // / antd left-aligned form label = .ant-form-item-label-left
-  :global(.ant-form-item-label-left)
-    > label
-      white-space nowrap
+  // Semi Form labelAlign="left" 把类直接加在 <label> 上（.semi-form-field-label-left），
+  // 因此这里直接选中该元素
+  // / Semi Form labelAlign="left" puts the class on the <label> itself
+  // (.semi-form-field-label-left), so it is targeted directly here
+  :global(.semi-form-field-label-left)
+    white-space nowrap
 
 .content-type
   display flex

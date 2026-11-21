@@ -1,28 +1,32 @@
-import { Card, Typography } from 'antd';
+import { Card, Typography } from '@douyinfe/semi-ui';
 import { useTranslation } from 'react-i18next';
 import styles from './style.module.styl';
 
 const links: Record<string, string> = {
-  react: 'https://arco.design/react/docs/start',
-  vue: 'https://arco.design/vue/docs/start',
-  designLab: 'https://arco.design/themes',
-  materialMarket: 'https://arco.design/material/',
+  react: 'https://semi.design/en-US/start/getting-started',
+  components: 'https://semi.design/en-US/components/overview',
+  theme: 'https://semi.design/en-US/start/customize-theme',
+  github: 'https://github.com/DouyinFE/semi-design',
 };
 
 export default function Docs() {
   const { t } = useTranslation();
 
   return (
-    <Card variant="borderless">
+    <Card bordered={false}>
       <div className="flex justify-between">
-        <Typography.Title level={5}>{t('workplace.docs')}</Typography.Title>
-        <Typography.Link>{t('workplace.seeMore')}</Typography.Link>
+        <Typography.Title heading={5}>{t('workplace.docs')}</Typography.Title>
+        <Typography.Text link>{t('workplace.seeMore')}</Typography.Text>
       </div>
       <div className={styles.docs}>
         {Object.entries(links).map(([key, href]) => (
-          <Typography.Link key={key} className={styles['doc-link']} href={href} target="_blank">
+          <Typography.Text
+            link={{ href, target: '_blank' }}
+            key={key}
+            className={styles['doc-link']}
+          >
             {t(`workplace.${key}`)}
-          </Typography.Link>
+          </Typography.Text>
         ))}
       </div>
     </Card>

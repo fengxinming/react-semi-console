@@ -1,55 +1,46 @@
-import { Column } from '@ant-design/charts';
-import type { ColumnConfig } from '@ant-design/charts';
-import { Card, Spin, Typography } from 'antd';
+import { Card, Spin, Typography } from '@douyinfe/semi-ui';
+import { VChart } from '@visactor/react-vchart';
 import { useTranslation } from 'react-i18next';
 import { useSettingsStore } from '~/store';
 import { useLoaderData, useNavigation } from 'react-router';
+import { makeSpec } from '~/commons/vchart';
 import type { DataAnalysisLoaderData } from './types';
 
 const { Title } = Typography;
 
-/** 内容发布比例:堆叠柱(参考 MultiInterval,按 name 堆叠分色)。 */
+/** 内容发布比例:堆叠柱(按 name 堆叠分色)。 */
 export default function PublishingRate() {
   const theme = useSettingsStore((s) => s.theme);
   const { t } = useTranslation();
   const { contentPublishing } = useLoaderData<DataAnalysisLoaderData>();
   const loading = useNavigation().state !== 'idle';
 
-  const config: ColumnConfig = {
-    data: contentPublishing,
+  const config = makeSpec({
+    type: 'bar',
+    data: [{ id: 'rate', values: contentPublishing }],
     xField: 'time',
     yField: 'count',
-    colorField: 'name',
+    seriesField: 'name',
     stack: true,
-    style: {
-      maxWidth: 20,
-    },
-    scale: {
-      color: {
-        range: ['#246EFF', '#00B2FF', '#81E2FF'],
+    barMaxWidth: 20,
+    color: ['#246EFF', '#00B2FF', '#81E2FF'],
+    axes: [
+      { orient: 'bottom', type: 'band' },
+      {
+        orient: 'left',
+        type: 'linear',
+        label: { formatMethod: (text: string) => `${Number(text) / 1000}k` },
       },
-    },
-    axis: {
-      y: {
-        labelFormatter: (v: number) => `${Number(v) / 1000}k`,
-      },
-    },
-    legend: {
-      color: {
-        position: 'bottom',
-        layout: {
-          justifyContent: 'center',
-        },
-      },
-    },
-  };
+    ],
+    legends: { visible: true, orient: 'bottom' },
+  }, theme);
 
   return (
-    <Card variant="borderless" className="w-full">
-      <Title level={5}>{t('dataAnalysis.title.publishingRate')}</Title>
+    <Card bordered={false} className="w-full">
+      <Title heading={5}>{t('dataAnalysis.title.publishingRate')}</Title>
       <Spin spinning={loading} className="w-full">
         <div className="w-full h-[378px]">
-          <Column {...config} theme={theme} />
+          <VChart spec={config} />
         </div>
       </Spin>
     </Card>

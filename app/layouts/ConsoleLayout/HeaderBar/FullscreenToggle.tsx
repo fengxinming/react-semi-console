@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { FullscreenOutlined, FullscreenExitOutlined } from '@ant-design/icons';
+import { IconMaximize, IconMinimize } from '@douyinfe/semi-icons';
 import { useTranslation } from 'react-i18next';
 import screenfull from 'screenfull';
 import IconButton from './IconButton';
@@ -17,7 +17,7 @@ export default function FullscreenToggle() {
 
   return (
     <IconButton
-      icon={isFull ? <FullscreenExitOutlined /> : <FullscreenOutlined />}
+      icon={isFull ? <IconMinimize /> : <IconMaximize />}
       tooltip={t('common.fullscreen')}
       onClick={toggle}
     />

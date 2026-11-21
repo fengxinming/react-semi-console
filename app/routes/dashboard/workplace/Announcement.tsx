@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { Card, Skeleton, Tag, Typography } from 'antd';
+import { Card, Skeleton, Tag, Typography } from '@douyinfe/semi-ui';
 import { useTranslation } from 'react-i18next';
 import styles from './style.module.styl';
 import { fetchAnnouncement, dashboardKeys } from '~/api/dashboard';
@@ -7,7 +7,7 @@ import { fetchAnnouncement, dashboardKeys } from '~/api/dashboard';
 function getTagColor(type: string) {
   switch (type) {
     case 'activity':
-      return 'volcano';
+      return 'orange';
     case 'info':
       return 'cyan';
     case 'notice':
@@ -27,12 +27,16 @@ export default function Announcement() {
   });
 
   return (
-    <Card variant="borderless">
+    <Card bordered={false}>
       <div className="flex justify-between">
-        <Typography.Title level={5}>{t('workplace.announcement')}</Typography.Title>
-        <Typography.Link>{t('workplace.seeMore')}</Typography.Link>
+        <Typography.Title heading={5}>{t('workplace.announcement')}</Typography.Title>
+        <Typography.Text link>{t('workplace.seeMore')}</Typography.Text>
       </div>
-      <Skeleton loading={loading} paragraph={{ rows: 5, width: '100%' }} title={false} active>
+      <Skeleton
+        loading={loading}
+        active
+        placeholder={<Skeleton.Paragraph rows={5} style={{ width: '100%' }} />}
+      >
         <div>
           {data.map((d) => (
             <div key={d.key} className={styles['announcement-item']}>
