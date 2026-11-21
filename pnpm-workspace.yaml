@@ -1,8 +1,4 @@
+allowBuilds:
+  '@parcel/watcher': true
 lockfile: true
 shamefullyHoist: false
-allowBuilds:
-  '@parcel/watcher': set this to true or false
-  esbuild: true
-minimumReleaseAgeExclude:
-  - vite-plugin-mock-data@8.2.2
-  - vp-runtime-helper@8.0.1
